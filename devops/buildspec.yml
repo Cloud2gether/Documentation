@@ -28,7 +28,9 @@ phases:
 
       - echo "=== Installing PostCSS explicitly ==="
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
-      - npm install
+      - npm install --save-dev autoprefixer
+      - npm install --save-dev postcss-cli
+      - npm install -D postcss
 
       - echo "=== Fetching Hugo modules (Docsy) ==="
       - hugo mod get

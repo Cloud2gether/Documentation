@@ -24,7 +24,7 @@ phases:
       - export PATH=$PATH:/usr/local/go/bin
       - go version
       - echo "Fetching Hugo module dependencies (Docsy theme)"
-      - cd $SOURCE_SRC && hugo mod get
+      - hugo mod get
       - echo "Installing npm dependencies"
       - npm install
   pre_build:

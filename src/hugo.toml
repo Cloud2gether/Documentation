@@ -7,6 +7,12 @@ title = 'Cloud2Gether Documentation'
 defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
+[languages]
+  [languages.en]
+    languageName = "English"
+    weight = 1
+    contentDir = "content/en"
+
 # Syntax highlighting
 pygmentsCodeFences = true
 pygmentsUseClasses = false

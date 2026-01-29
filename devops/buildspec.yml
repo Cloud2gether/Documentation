@@ -45,7 +45,7 @@ phases:
     commands:
       - echo "Executing build phase"
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
-      - hugo --gc --minify
+      - hugo --gc --minify -e production
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;
         then

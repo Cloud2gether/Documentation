@@ -135,7 +135,7 @@ pygmentsStyle = "tango"
   proxy = "direct"
   [module.hugoVersion]
     extended = true
-    min = "0.110.0"
+    min = "0.152.2"
   [[module.imports]]
     path = "github.com/google/docsy"
   [[module.imports]]

@@ -207,7 +207,7 @@ Resources:
              FunctionName: 'InvalidateCloudFront'                  
              UserParameters:
                Fn::ToJsonString: 
-                  - DistributionId : "#{PipelineFormationVars.WebSiteDistrubutionId}"                               
+                  - DistributionId : "#{PipelineFormationVars.DocsWebSiteDistrubutionId}"                               
                     AccountId: !Sub "${DevAccountNumber}"
                     paths: [/*]
            RunOrder: 6
@@ -381,7 +381,7 @@ Resources:
              FunctionName: 'InvalidateCloudFront'                  
              UserParameters:
                Fn::ToJsonString: 
-                  - DistributionId : "#{PipelineFormationVars.WebSiteDistrubutionId}"                               
+                  - DistributionId : "#{PipelineFormationVars.DocsWebSiteDistrubutionId}"                               
                     AccountId: !Sub "${ProdAccountNumber}"
                     paths: [/*]
            RunOrder: 6

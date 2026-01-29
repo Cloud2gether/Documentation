@@ -24,10 +24,9 @@ phases:
       - export PATH=$PATH:/usr/local/go/bin
       - go version
       - echo "Fetching Hugo module dependencies (Docsy theme)"
-      - cd $SOURCE_SRC
-      - hugo mod get
-      - echo "Installing npm dependencies"
-      - npm install
+      - cd $SOURCE_SRC && hugo mod get
+      - echo "Installing npm dependencies (PostCSS, Autoprefixer)"
+      - cd $SOURCE_SRC && npm install
   pre_build:
     commands:
       - echo "Executing pre-build phase"
@@ -39,7 +38,7 @@ phases:
     commands:
       - echo "Executing build phase"
       - export PATH=$PATH:/usr/local/go/bin
-      - hugo --gc --minify
+      - cd $SOURCE_SRC && hugo --gc --minify
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;
         then

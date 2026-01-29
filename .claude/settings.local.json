@@ -6,7 +6,8 @@
       "Bash(hugo:*)",
       "WebFetch(domain:docs.datadoghq.com)",
       "WebFetch(domain:cloud2gether.com)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(find:*)"
     ]
   }
 }

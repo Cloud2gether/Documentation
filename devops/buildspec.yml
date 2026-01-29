@@ -14,8 +14,9 @@ phases:
    runtime-versions:
       nodejs: 22
    commands:
-      - echo "Initializing git submodules (Docsy theme)"
-      - git submodule update --init --recursive
+      - echo "Cloning Docsy theme (submodule workaround for CodeBuild)"
+      - rm -rf src/themes/docsy
+      - git clone --depth 1 https://github.com/google/docsy.git src/themes/docsy
       - echo "Installing Hugo"
       - wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
       - dpkg -i hugo_extended_${HUGO_VERSION}_linux-amd64.deb

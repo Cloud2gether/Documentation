@@ -12,7 +12,7 @@ env:
 phases:
   install:
    runtime-versions:
-      nodejs: 22
+      nodejs: 25
    commands:
       - echo "Cloning Docsy theme (submodule workaround for CodeBuild)"
       - rm -rf src/themes/docsy

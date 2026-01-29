@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "WebFetch(domain:www.cloud2gether.com)",
+      "Bash(hugo:*)"
+    ]
+  }
+}

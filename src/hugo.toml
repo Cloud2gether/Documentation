@@ -1,0 +1,114 @@
+baseURL = 'https://docs.cloud2gether.com'
+languageCode = 'en-us'
+title = 'Cloud2Gether Documentation'
+theme = ["docsy"]
+
+# Language settings
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+
+# Syntax highlighting
+pygmentsCodeFences = true
+pygmentsUseClasses = false
+pygmentsUseClassic = false
+pygmentsStyle = "tango"
+
+# Configure markup
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.parser.attribute]
+      block = true
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    hl_inline = false
+    lineAnchors = ""
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    noHl = false
+    style = "tango"
+    tabWidth = 4
+
+# Site params
+[params]
+  description = "Official documentation for Cloud2Gether - The Agentic DevOps Platform"
+  copyright = "Cloud2Gether"
+
+  # Repository configuration for "Edit this page" links
+  github_repo = "https://github.com/cloud2gether/documentation"
+  github_branch = "main"
+
+  # Enable Lunr.js offline search
+  offlineSearch = true
+
+  # User interface configuration
+  [params.ui]
+    # Enable the dark/light mode toggle
+    showLightDarkModeMenu = true
+    # Enable sidebar search
+    sidebar_search_disable = false
+    # Show breadcrumb navigation
+    breadcrumb_disable = false
+    # Sidebar menu foldable
+    sidebar_menu_foldable = true
+    # Sidebar menu cache
+    sidebar_cache_limit = 10
+    # Set to true to disable the About link in the site footer
+    footer_about_disable = false
+
+  # Feedback and page info
+  [params.ui.feedback]
+    enable = true
+    yes = 'Was this page helpful?'
+    no = 'Let us know how we can improve'
+
+  [params.ui.readingtime]
+    enable = true
+
+  # Links configuration
+  [params.links]
+    [[params.links.user]]
+      name = "Website"
+      url = "https://www.cloud2gether.com"
+      icon = "fa fa-globe"
+      desc = "Cloud2Gether main website"
+    [[params.links.developer]]
+      name = "GitHub"
+      url = "https://github.com/cloud2gether"
+      icon = "fab fa-github"
+      desc = "Cloud2Gether on GitHub"
+
+# Menu configuration
+[menu]
+  [[menu.main]]
+    identifier = "docs"
+    name = "Documentation"
+    url = "/docs/"
+    weight = 10
+  [[menu.main]]
+    identifier = "api"
+    name = "API Reference"
+    url = "/docs/api/"
+    weight = 20
+
+# Outputs
+[outputs]
+  home = ["HTML", "JSON"]
+  section = ["HTML"]
+
+# Taxonomies
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+# Module mounts (if using Hugo modules)
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.110.0"

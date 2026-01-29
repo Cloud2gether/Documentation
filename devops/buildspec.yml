@@ -1,0 +1,46 @@
+version: 0.2
+
+env:
+  secrets-manager:
+    SONAR_LOGIN: sonar:LOGIN
+    SONAR_HOST: sonar:HOST
+    SONAR_ORGANIZATION: sonar:ORGANIZATION    
+  variables:
+    SOURCE_SRC: "src"
+    SONAR_PROJECTKEY: "Cloud2gether_Cloud2Gether.WebSite"
+phases:
+  install:
+   runtime-versions:
+      nodejs: 22
+   commands:
+      - echo "Installing source dependencies"
+      - cd $SOURCE_SRC            
+      - npm install --force
+      - npm install -g @angular/cli
+      - npm install -g copy-files-from-to
+  pre_build:
+    commands:
+      - echo "Executing pre-build phase"             
+      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+      - unzip ./sonar-scanner-cli-5.0.1.3006-linux.zip
+      - export PATH=$PATH:./sonar-scanner-5.0.1.3006-linux/bin/
+      - export PULLREQUEST_NUMBER=$(echo $CODEBUILD_WEBHOOK_TRIGGER | grep "pr/" | cut -d "/" -f2)
+  build:
+    commands:
+      - echo "Executing build phase"
+      - npm run build:${C2G_ENV}
+      - echo $PULLREQUEST_NUMBER
+      - if [ -z "$PULLREQUEST_NUMBER" ] ;
+        then
+          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/dist -Dsonar.exclusions=src/fonts/**,src/html/**,src/script/**,src/scss/** -Dsonar.coverage.exclusions=src/tools/gulp/**,src/tools/gulpfile.js;
+        else
+          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/dist -Dsonar.exclusions=src/fonts/**,src/html/**,src/script/**,src/scss/** -Dsonar.coverage.exclusions=src/tools/gulp/**,src/tools/gulpfile.js -Dsonar.pullrequest.key=$PULLREQUEST_NUMBER ;
+        fi
+      - sleep 15
+      - curl -u $SONAR_LOGIN:"" https://sonarcloud.io/api/qualitygates/project_status?projectKey=$SONAR_PROJECTKEY >result.json
+      - cat result.json      
+artifacts:
+  discard-paths: no
+  base-directory: $CODEBUILD_SRC_DIR/dist
+  files:
+    - "**/*"

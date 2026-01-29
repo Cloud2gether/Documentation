@@ -1,0 +1,489 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: DocsWebSite-Pipeline-Template
+Transform: 'AWS::LanguageExtensions'
+
+#Version 2020-10-13
+Parameters:
+  GitHubOwner:
+    Type: String
+    Default: Cloud2gether
+    AllowedPattern: "[A-Za-z0-9-]+"
+
+  GitHubRepo:
+    Type: String
+    Default: Documentation
+
+  DevAccountNumber:
+    Type: String
+    Default: '748622875445'
+
+  ProdAccountNumber:
+    Type: String
+    Default: '792856841274'
+  
+
+  GitHubDevBranch:
+    Type: String
+    Default: dev
+  
+  GitHubProdBranch:
+    Type: String
+    Default: main
+
+  AppSubDomain:
+    Type: String
+    Default: www
+
+  PipelineBucket:
+    Type: String
+    Default: cloud2gether-pipeline
+  
+  ArtifactsBucket:
+    Type: String
+    Default: cloud2gether-artifacts
+
+  DeployStackName:
+     Type: String
+     Default: Documentation
+
+  PipelineName:
+    Type: String
+    Default: Documentation
+
+Resources:
+  CodeBuildDev:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Join [ '-', !Split [ '.', !Sub "${PipelineName}-${GitHubDevBranch}" ]]
+      Description: Definition of build for project
+      ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/CodeBuildServiceRole"
+      Artifacts:
+          Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:7.0
+        EnvironmentVariables:
+          - Name: C2G_ENV
+            Type: PLAINTEXT
+            Value: 'dev'    
+          - Name: ENV_BRANCH_NAME
+            Type: PLAINTEXT
+            Value: !Ref GitHubDevBranch
+      Source:
+        BuildSpec: devops/buildspec.yml
+        Type: GITHUB
+        Location: !Sub "https://github.com/${GitHubOwner}/${GitHubRepo}.git"
+        GitCloneDepth: 0
+        ReportBuildStatus: true
+      TimeoutInMinutes: 20
+      Triggers:
+        Webhook: true
+        FilterGroups:
+          - - Type: EVENT
+              Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED
+            - Type: BASE_REF
+              Pattern: !Sub "^refs/heads/${GitHubDevBranch}$"
+              ExcludeMatchedPattern: false       
+  
+  CodeBuildDevLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/codebuild/${CodeBuildDev}"
+      RetentionInDays: 1 
+
+  CodePipelineDev:
+    Type: AWS::CodePipeline::Pipeline
+    DependsOn: CodeBuildDev
+    Properties:
+      ArtifactStore:
+        Type: S3
+        Location: !Ref PipelineBucket
+        EncryptionKey:
+          Id:
+            Fn::ImportValue: "KMSPipelineKeyArn"
+          Type: KMS
+      RestartExecutionOnUpdate: true
+      Name: !Join [ '-', !Split [ '.', !Sub "${PipelineName}-${GitHubDevBranch}" ]]
+      RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/CodePipelineServiceRole"
+      Stages:
+      - Name: Source
+        Actions:
+        - Name: Source
+          InputArtifacts: []
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Version: 1
+            Provider: GitHub
+          OutputArtifacts:
+          - Name: SourceCode
+          Configuration:
+            Owner: !Ref GitHubOwner
+            Repo: !Ref GitHubRepo
+            Branch: !Ref GitHubDevBranch
+            PollForSourceChanges: false
+            OAuthToken: '{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}' 
+          RunOrder: 1
+      - Name: Build
+        Actions:
+        - Name: BuildProject
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Provider: CodeBuild
+            Version: '1'
+          InputArtifacts:
+            - Name: SourceCode
+          Configuration:
+            ProjectName: !Join [ '-', !Split [ '.', !Sub "${PipelineName}-${GitHubDevBranch}" ]]
+            PrimarySource: SourceCode
+            EnvironmentVariables: '[{"name":"C2G_ENV","value":"dev","type":"PLAINTEXT"}]'
+          OutputArtifacts:
+            - Name: BuildArtifact
+          RunOrder: 2
+      - Name: Deploy
+        Actions:
+         - Name: CreateOrUpdatePipeline
+           ActionTypeId:
+             Category: Deploy
+             Owner: AWS
+             Provider: CloudFormation
+             Version: 1
+           InputArtifacts:
+             - Name: SourceCode
+           OutputArtifacts:
+             - Name: PipelineStackOutput
+           Configuration:
+              ActionMode: CREATE_UPDATE
+              Capabilities: CAPABILITY_NAMED_IAM
+              RoleArn: !Sub "arn:aws:iam::${DevAccountNumber}:role/CloudformationDeployer-Role"            
+              StackName: !Sub "${DeployStackName}"
+              TemplatePath: SourceCode::devops/cloudformation-stack.yaml                            
+              ParameterOverrides: | 
+                {
+                  "CertificateId": "4d873980-5fcc-447b-b8d3-b18a8f91fa58",
+                  "Environment": "dev"                
+                }
+           RunOrder: 3
+           Namespace: PipelineFormationVars           
+           RoleArn: !Sub "arn:aws:iam::${DevAccountNumber}:role/DevOpsAcctCodePipelineCFRole"
+         - Name: S3Deploy
+           ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Provider: S3
+            Version: '1'
+           InputArtifacts:
+              - Name: BuildArtifact
+           Configuration:
+              BucketName: !Ref ArtifactsBucket
+              ObjectKey: !Sub "CodeDeploy/${GitHubRepo}/${GitHubDevBranch}/Latest"
+              Extract: true
+              CannedACL: "bucket-owner-full-control"
+           RunOrder: 4        
+         - Name: S3DeployLatest
+           ActionTypeId:
+              Category: Deploy
+              Owner: AWS
+              Provider: S3
+              Version: '1'
+           InputArtifacts:
+              - Name: BuildArtifact
+           Configuration:
+              BucketName: 'cloud2gether-documentation-dev'
+              Extract: true
+              CannedACL: "bucket-owner-full-control"
+           RunOrder: 5
+         - Name: CloudFront
+           ActionTypeId:
+             Category: Invoke
+             Owner: AWS
+             Provider: Lambda
+             Version: '1'      
+           InputArtifacts:
+              - Name: PipelineStackOutput            
+           Configuration: 
+             FunctionName: 'InvalidateCloudFront'                  
+             UserParameters:
+               Fn::ToJsonString: 
+                  - DistributionId : "#{PipelineFormationVars.WebSiteDistrubutionId}"                               
+                    AccountId: !Sub "${DevAccountNumber}"
+                    paths: [/*]
+           RunOrder: 6
+         - Name: CloudFlare
+           ActionTypeId:
+              Category: Invoke
+              Owner: AWS
+              Provider: Lambda
+              Version: '1'                    
+           Configuration: 
+              FunctionName: 'InvalidateCloudFlare'
+              UserParameters: !Sub "{ \"paths\": [\"https://docs-dev.cloud2gether.com\"] }"            
+           RunOrder: 7
+
+
+#####################################Production###############################################################
+
+  CodeBuildProd:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Join [ '-', !Split [ '.', !Sub "${PipelineName}-${GitHubProdBranch}" ]]
+      Description: Definition of build for project
+      ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/CodeBuildServiceRole"
+      Artifacts:
+          Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:7.0
+        EnvironmentVariables:
+          - Name: C2G_ENV
+            Type: PLAINTEXT
+            Value: 'prod'           
+          - Name: ENV_BRANCH_NAME
+            Type: PLAINTEXT
+            Value: !Ref GitHubProdBranch
+      Source:
+        BuildSpec: devops/buildspec.yml
+        Type: GITHUB
+        Location: !Sub "https://github.com/${GitHubOwner}/${GitHubRepo}.git"
+        GitCloneDepth: 0
+        ReportBuildStatus: true
+      TimeoutInMinutes: 20
+      Triggers:
+        Webhook: true
+        FilterGroups:
+          - - Type: EVENT
+              Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED
+            - Type: BASE_REF
+              Pattern: !Sub "^refs/heads/${GitHubProdBranch}$"
+              ExcludeMatchedPattern: false       
+
+  CodeBuildProdLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/codebuild/${CodeBuildProd}"
+      RetentionInDays: 1 
+
+  CodePipelineProd:
+    Type: AWS::CodePipeline::Pipeline
+    DependsOn: CodeBuildProd
+    Properties:
+      ArtifactStore:
+        Type: S3
+        Location: !Ref PipelineBucket
+        EncryptionKey:
+          Id:
+            Fn::ImportValue: "KMSPipelineKeyArn"
+          Type: KMS
+      RestartExecutionOnUpdate: true
+      Name: !Join [ '-', !Split [ '.', !Sub "${PipelineName}-${GitHubProdBranch}" ]]
+      RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/CodePipelineServiceRole"
+      Stages:
+      - Name: Source
+        Actions:
+        - Name: Source
+          InputArtifacts: []
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Version: 1
+            Provider: GitHub
+          OutputArtifacts:
+          - Name: SourceCode
+          Configuration:
+            Owner: !Ref GitHubOwner
+            Repo: !Ref GitHubRepo
+            Branch: !Ref GitHubProdBranch
+            PollForSourceChanges: false
+            OAuthToken: '{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}' 
+          RunOrder: 1
+      - Name: Build
+        Actions:
+        - Name: BuildProject
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Provider: CodeBuild
+            Version: '1'
+          InputArtifacts:
+            - Name: SourceCode
+          Configuration:
+            ProjectName: !Join [ '-', !Split [ '.', !Sub "${PipelineName}-${GitHubProdBranch}" ]]
+            PrimarySource: SourceCode
+            EnvironmentVariables: '[{"name":"C2G_ENV","value":"prod","type":"PLAINTEXT"}]'
+          OutputArtifacts:
+            - Name: BuildArtifact
+          RunOrder: 2
+      - Name: Deploy
+        Actions:
+         - Name: CreateOrUpdatePipeline
+           ActionTypeId:
+             Category: Deploy
+             Owner: AWS
+             Provider: CloudFormation
+             Version: 1
+           InputArtifacts:
+             - Name: SourceCode
+           OutputArtifacts:
+             - Name: PipelineStackOutput
+           Configuration:
+              ActionMode: CREATE_UPDATE
+              Capabilities: CAPABILITY_NAMED_IAM
+              RoleArn: !Sub "arn:aws:iam::${ProdAccountNumber}:role/CloudformationDeployer-Role"            
+              StackName: !Sub "${DeployStackName}"
+              TemplatePath: SourceCode::devops/cloudformation-stack.yaml                            
+              ParameterOverrides: | 
+                {
+                  "CertificateId": "09da5dd7-2d2b-48cb-a6fb-2a6aef5f4ed3",
+                  "Environment": "prod"                
+                }
+           RunOrder: 3
+           Namespace: PipelineFormationVars           
+           RoleArn: !Sub "arn:aws:iam::${ProdAccountNumber}:role/DevOpsAcctCodePipelineCFRole"
+         - Name: S3Deploy
+           ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Provider: S3
+            Version: '1'
+           InputArtifacts:
+              - Name: BuildArtifact
+           Configuration:
+              BucketName: !Ref ArtifactsBucket
+              ObjectKey: !Sub "CodeDeploy/${GitHubRepo}/${GitHubProdBranch}/Latest"
+              Extract: true
+              CannedACL: "bucket-owner-full-control"
+           RunOrder: 4        
+         - Name: S3DeployLatest
+           ActionTypeId:
+              Category: Deploy
+              Owner: AWS
+              Provider: S3
+              Version: '1'
+           InputArtifacts:
+              - Name: BuildArtifact
+           Configuration:
+              BucketName: 'cloud2gether-documentation-prod'
+              Extract: true
+              CannedACL: "bucket-owner-full-control"
+           RunOrder: 5
+         - Name: CloudFront
+           ActionTypeId:
+             Category: Invoke
+             Owner: AWS
+             Provider: Lambda
+             Version: '1'      
+           InputArtifacts:
+              - Name: PipelineStackOutput            
+           Configuration: 
+             FunctionName: 'InvalidateCloudFront'                  
+             UserParameters:
+               Fn::ToJsonString: 
+                  - DistributionId : "#{PipelineFormationVars.WebSiteDistrubutionId}"                               
+                    AccountId: !Sub "${ProdAccountNumber}"
+                    paths: [/*]
+           RunOrder: 6
+         - Name: CloudFlare
+           ActionTypeId:
+              Category: Invoke
+              Owner: AWS
+              Provider: Lambda
+              Version: '1'                    
+           Configuration: 
+              FunctionName: 'InvalidateCloudFlare'
+              UserParameters: !Sub "{ \"paths\": [\"https://docs.cloud2gether.com\"] }"            
+           RunOrder: 7
+
+
+  ##########################Notifications ######################################################
+
+  GithubDevWebhook:
+    Type: 'AWS::CodePipeline::Webhook'
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: '{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}'
+      RegisterWithThirdParty: 'true'
+      Filters:
+      - JsonPath: "$.ref"
+        MatchEquals: refs/heads/{Branch}
+      TargetPipeline: !Ref CodePipelineDev
+      TargetAction: Source
+      TargetPipelineVersion: !GetAtt CodePipelineDev.Version
+    
+  CodeBuildDevNotification:
+    Type: 'AWS::CodeStarNotifications::NotificationRule'
+    Properties:
+      Name: !Join [ '-', !Split [ '.', !Sub "B-${GitHubRepo}-${GitHubDevBranch}" ]]
+      DetailType: FULL
+      Resource: !Sub ${CodeBuildDev.Arn}
+      EventTypeIds: 
+        - codebuild-project-build-state-stopped
+        - codebuild-project-build-phase-failure
+      Targets: 
+        - TargetType: SNS 
+          TargetAddress: !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:CodeStarNotifications-Devops"  
+
+  PipelineDevNotification:
+    Type: 'AWS::CodeStarNotifications::NotificationRule'
+    Properties:
+      Name: !Join [ '-', !Split [ '.', !Sub "P-${GitHubRepo}-${GitHubDevBranch}" ]]
+      DetailType: FULL
+      Resource: !Sub arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${CodePipelineDev}
+      EventTypeIds: 
+        - codepipeline-pipeline-pipeline-execution-failed
+        - codepipeline-pipeline-pipeline-execution-canceled
+        - codepipeline-pipeline-pipeline-execution-started
+        - codepipeline-pipeline-pipeline-execution-resumed
+        - codepipeline-pipeline-pipeline-execution-succeeded
+        - codepipeline-pipeline-pipeline-execution-superseded
+      Targets: 
+        - TargetType: SNS 
+          TargetAddress: !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:CodeStarNotifications-Devops"
+
+#Production
+  GithubProdWebhook:
+    Type: 'AWS::CodePipeline::Webhook'
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: '{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}'
+      RegisterWithThirdParty: 'true'
+      Filters:
+      - JsonPath: "$.ref"
+        MatchEquals: refs/heads/{Branch}
+      TargetPipeline: !Ref CodePipelineProd
+      TargetAction: Source
+      TargetPipelineVersion: !GetAtt CodePipelineProd.Version
+    
+  CodeBuildProdNotification:
+    Type: 'AWS::CodeStarNotifications::NotificationRule'
+    Properties:
+      Name: !Join [ '-', !Split [ '.', !Sub "B-${GitHubRepo}-${GitHubProdBranch}" ]]
+      DetailType: FULL
+      Resource: !Sub ${CodeBuildProd.Arn}
+      EventTypeIds: 
+        - codebuild-project-build-state-stopped
+        - codebuild-project-build-phase-failure
+      Targets: 
+        - TargetType: SNS 
+          TargetAddress: !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:CodeStarNotifications-Devops"
+ 
+  PipelineProdNotification:
+    Type: 'AWS::CodeStarNotifications::NotificationRule'
+    Properties:
+      Name: !Join [ '-', !Split [ '.', !Sub "P-${GitHubRepo}-${GitHubProdBranch}" ]]
+      DetailType: FULL
+      Resource: !Sub arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${CodePipelineProd}
+      EventTypeIds: 
+        - codepipeline-pipeline-pipeline-execution-failed
+        - codepipeline-pipeline-pipeline-execution-canceled
+        - codepipeline-pipeline-pipeline-execution-started
+        - codepipeline-pipeline-pipeline-execution-resumed
+        - codepipeline-pipeline-pipeline-execution-succeeded
+        - codepipeline-pipeline-pipeline-execution-superseded
+      Targets: 
+        - TargetType: SNS 
+          TargetAddress: !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:CodeStarNotifications-Devops"    

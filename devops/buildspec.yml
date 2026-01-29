@@ -9,6 +9,7 @@ env:
     SOURCE_SRC: "src"
     SONAR_PROJECTKEY: "Cloud2gether_Cloud2Gether.Documentation"
     HUGO_VERSION: "0.155.0"
+    GO_VERSION: "1.21.6"
 phases:
   install:
     runtime-versions:

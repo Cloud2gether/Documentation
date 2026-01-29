@@ -1,15 +1,22 @@
 // Cloud2Gether Brand Colors
-// Adjust these to match your exact brand colors
-$primary: #632CA6;           // Purple - main brand color
-$secondary: #1a1a2e;         // Dark navy
-$success: #28a745;
-$info: #17a2b8;
+$primary: #324DFF;           // Primary blue
+$primary-light: #7CC0FF;     // Light blue
+$secondary: #545778;         // Secondary gray
+$success: #7BD21D;           // Success green
+$info: #7CC0FF;
 $warning: #ffc107;
-$danger: #dc3545;
+$danger: #FF3797;            // Pink/danger
+
+// Accent colors
+$accent-green: #23F7B8;      // Highlight green
 
 // Background colors
-$dark: #0f0f23;              // Very dark (footer background)
-$light: #f8f9fa;             // Light gray
+$dark: #191920;              // Main dark background
+$dark-secondary: #1B1B22;    // Secondary dark
+$dark-box: #13131C;          // Box background
+$grey-300: #282834;
+$grey-600: #21212B;
+$light: #f8f9fa;
 
 // Typography
 $font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

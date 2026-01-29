@@ -54,11 +54,24 @@
   transition: all 0.15s ease;
 
   &:hover {
-    background-color: darken($primary, 10%);
-    border-color: darken($primary, 10%);
+    background-color: lighten($primary, 10%);
+    border-color: lighten($primary, 10%);
     color: #ffffff;
     transform: translateY(-1px);
     box-shadow: $box-shadow;
+  }
+}
+
+// Accent button (green)
+.btn-accent {
+  background-color: $accent-green;
+  border-color: $accent-green;
+  color: $dark;
+  font-weight: 600;
+
+  &:hover {
+    background-color: darken($accent-green, 10%);
+    color: $dark;
   }
 }
 

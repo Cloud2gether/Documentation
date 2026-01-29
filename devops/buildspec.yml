@@ -29,7 +29,7 @@ phases:
       - echo "=== Installing PostCSS explicitly ==="
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
       - npm init -y
-      - npm install --save-dev postcss postcss-cli autoprefixer
+      - npm install -D postcss postcss-cli autoprefixer
       - export PATH=$PATH:$(npm bin)
 
       - echo "=== Verifying PostCSS ==="

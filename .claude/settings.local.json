@@ -3,7 +3,17 @@
     "allow": [
       "Bash(tree:*)",
       "WebFetch(domain:www.cloud2gether.com)",
-      "Bash(hugo:*)"
+      "Bash(hugo:*)",
+      "WebFetch(domain:docs.datadoghq.com)",
+      "WebFetch(domain:cloud2gether.com)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "WebFetch(domain:github.com)",
+      "Bash(git rm:*)",
+      "Bash(npm install)"
     ]
   }
 }

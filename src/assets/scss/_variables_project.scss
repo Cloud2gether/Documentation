@@ -1,0 +1,49 @@
+// Cloud2Gether Brand Colors
+$primary: #324DFF;           // Primary blue
+$primary-light: #7CC0FF;     // Light blue
+$secondary: #545778;         // Secondary gray
+$success: #7BD21D;           // Success green
+$info: #7CC0FF;
+$warning: #ffc107;
+$danger: #FF3797;            // Pink/danger
+
+// Accent colors
+$accent-green: #23F7B8;      // Highlight green
+
+// Background colors
+$dark: #191920;              // Main dark background
+$dark-secondary: #1B1B22;    // Secondary dark
+$dark-box: #13131C;          // Box background
+$grey-300: #282834;
+$grey-600: #21212B;
+$light: #f8f9fa;
+
+// Typography
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+// Navbar
+$navbar-height: 64px;
+$navbar-bg: #ffffff;
+$navbar-border-color: #e5e7eb;
+
+// Sidebar
+$td-sidebar-width: 280px;
+$td-sidebar-bg: #ffffff;
+$td-sidebar-border-color: #e5e7eb;
+
+// Content
+$content-max-width: 900px;
+
+// Shadows
+$enable-shadows: true;
+$box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+// Border radius
+$border-radius: 0.375rem;
+$border-radius-sm: 0.25rem;
+$border-radius-lg: 0.5rem;
+
+// Disable Google Fonts (use system fonts)
+$td-enable-google-fonts: false;

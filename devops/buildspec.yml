@@ -23,14 +23,10 @@ phases:
       - tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
       - export PATH=$PATH:/usr/local/go/bin
       - go version
-      - echo "Cloning Docsy theme"
-      - rm -rf src/themes/docsy
-      - git clone --depth 1 https://github.com/google/docsy.git src/themes/docsy
-      - echo "Fetching Hugo module dependencies"
-      - cd $SOURCE_SRC
-      - hugo mod get
+      - echo "Fetching Hugo module dependencies (Docsy theme)"
+      - cd $SOURCE_SRC && hugo mod get
       - echo "Installing npm dependencies"
-      - npm install
+      - cd $SOURCE_SRC && npm install
   pre_build:
     commands:
       - echo "Executing pre-build phase"
@@ -41,7 +37,8 @@ phases:
   build:
     commands:
       - echo "Executing build phase"
-      - hugo --gc --minify
+      - export PATH=$PATH:/usr/local/go/bin
+      - cd $SOURCE_SRC && hugo --gc --minify
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;
         then

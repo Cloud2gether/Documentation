@@ -23,17 +23,13 @@ phases:
       - echo "=== Installing Go (required for Hugo modules) ==="
       - wget -q https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz
       - tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz
-      - export PATH=$PATH:/usr/local/go/bin
-      - go version
+      - export PATH=$PATH:/usr/local/go/bin && go version
 
-      - echo "=== Installing PostCSS explicitly ==="
-      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
-      - npm install --save-dev autoprefixer
-      - npm install --save-dev postcss-cli
-      - npm install -D postcss
+      - echo "=== Installing PostCSS dependencies ==="
+      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && npm install
 
       - echo "=== Fetching Hugo modules (Docsy) ==="
-      - hugo mod get
+      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && export PATH=$PATH:/usr/local/go/bin && hugo mod get
   pre_build:
     commands:
       # - echo "Executing pre-build phase"
@@ -45,7 +41,7 @@ phases:
     commands:
       - echo "Executing build phase"
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
-      - hugo --gc --minify -e production
+      - export PATH=$PATH:/usr/local/go/bin && hugo --gc --minify -e production
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;
         then

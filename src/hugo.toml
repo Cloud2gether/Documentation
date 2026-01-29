@@ -47,6 +47,19 @@ pygmentsStyle = "tango"
   # Enable Lunr.js offline search
   offlineSearch = true
 
+  # Navbar CTA button
+  navbar_cta_url = "https://app.cloud2gether.com/signup"
+  navbar_cta_text = "Get Started"
+
+  # Navbar login link
+  navbar_login_url = "https://app.cloud2gether.com/login"
+
+  # Social links for footer
+  [params.social]
+    github = "https://github.com/cloud2gether"
+    linkedin = "https://www.linkedin.com/company/cloud2gether"
+    twitter = "https://twitter.com/cloud2gether"
+
   # User interface configuration
   [params.ui]
     # Enable the dark/light mode toggle
@@ -60,7 +73,7 @@ pygmentsStyle = "tango"
     # Sidebar menu cache
     sidebar_cache_limit = 10
     # Set to true to disable the About link in the site footer
-    footer_about_disable = false
+    footer_about_disable = true
 
   # Feedback and page info
   [params.ui.feedback]
@@ -87,15 +100,25 @@ pygmentsStyle = "tango"
 # Menu configuration
 [menu]
   [[menu.main]]
-    identifier = "docs"
-    name = "Documentation"
-    url = "/docs/"
+    identifier = "product"
+    name = "Product"
+    url = "https://www.cloud2gether.com/product"
     weight = 10
   [[menu.main]]
-    identifier = "api"
-    name = "API Reference"
-    url = "/docs/api/"
+    identifier = "pricing"
+    name = "Pricing"
+    url = "https://www.cloud2gether.com/pricing"
     weight = 20
+  [[menu.main]]
+    identifier = "blog"
+    name = "Blog"
+    url = "https://www.cloud2gether.com/blog"
+    weight = 30
+  [[menu.main]]
+    identifier = "docs"
+    name = "Docs"
+    url = "/"
+    weight = 40
 
 # Outputs
 [outputs]

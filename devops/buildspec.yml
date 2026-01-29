@@ -24,8 +24,9 @@ phases:
       - export PATH=$PATH:/usr/local/go/bin
       - go version
       - echo "Installing PostCSS globally (required by Docsy theme)"
-      - npm install -g postcss-cli autoprefixer
       - cd $SOURCE_SRC
+      - npm install -D postcss-cli 
+      - npm install -D autoprefixer
       - echo "Fetching Hugo module dependencies (Docsy theme)"
       - hugo mod get
       - echo "Installing npm dependencies"

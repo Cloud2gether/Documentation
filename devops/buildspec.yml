@@ -38,7 +38,7 @@ phases:
     commands:
       - echo "Executing build phase"
       - export PATH=$PATH:/usr/local/go/bin
-      - cd $SOURCE_SRC && hugo --gc --minify
+      - hugo --gc --minify
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;
         then

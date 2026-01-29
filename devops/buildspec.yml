@@ -26,7 +26,7 @@ phases:
       - echo "Fetching Hugo module dependencies (Docsy theme)"
       - cd $SOURCE_SRC && hugo mod get
       - echo "Installing npm dependencies"
-      - cd $SOURCE_SRC && npm install
+      - npm install
   pre_build:
     commands:
       - echo "Executing pre-build phase"

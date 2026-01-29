@@ -32,16 +32,16 @@ phases:
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && export PATH=$PATH:/usr/local/go/bin && hugo mod get
   pre_build:
     commands:
-      # - echo "Executing pre-build phase"
-      # - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-      # - unzip ./sonar-scanner-cli-5.0.1.3006-linux.zip
-      # - export PATH=$PATH:./sonar-scanner-5.0.1.3006-linux/bin/
+      - echo "Executing pre-build phase"
+      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+      - unzip ./sonar-scanner-cli-5.0.1.3006-linux.zip
+      - export PATH=$PATH:./sonar-scanner-5.0.1.3006-linux/bin/
       - export PULLREQUEST_NUMBER=$(echo $CODEBUILD_WEBHOOK_TRIGGER | grep "pr/" | cut -d "/" -f2)
   build:
     commands:
       - echo "Executing build phase"
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
-      - export PATH=$PATH:/usr/local/go/bin && hugo --gc --minify -e production
+      - hugo --gc --minify
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;
         then

@@ -4,23 +4,26 @@ env:
   secrets-manager:
     SONAR_LOGIN: sonar:LOGIN
     SONAR_HOST: sonar:HOST
-    SONAR_ORGANIZATION: sonar:ORGANIZATION    
+    SONAR_ORGANIZATION: sonar:ORGANIZATION
   variables:
     SOURCE_SRC: "src"
-    SONAR_PROJECTKEY: "Cloud2gether_Cloud2Gether.WebSite"
+    SONAR_PROJECTKEY: "Cloud2gether_Cloud2Gether.Documentation"
+    HUGO_VERSION: "0.155.0"
 phases:
   install:
    runtime-versions:
       nodejs: 22
    commands:
+      - echo "Installing Hugo"
+      - wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
+      - dpkg -i hugo_extended_${HUGO_VERSION}_linux-amd64.deb
+      - hugo version
       - echo "Installing source dependencies"
-      - cd $SOURCE_SRC            
-      - npm install --force
-      - npm install -g @angular/cli
-      - npm install -g copy-files-from-to
+      - cd $SOURCE_SRC
+      - npm install
   pre_build:
     commands:
-      - echo "Executing pre-build phase"             
+      - echo "Executing pre-build phase"
       - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
       - unzip ./sonar-scanner-cli-5.0.1.3006-linux.zip
       - export PATH=$PATH:./sonar-scanner-5.0.1.3006-linux/bin/
@@ -28,19 +31,20 @@ phases:
   build:
     commands:
       - echo "Executing build phase"
-      - npm run build:${C2G_ENV}
+      - cd $SOURCE_SRC
+      - hugo --gc --minify
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;
         then
-          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/dist -Dsonar.exclusions=src/fonts/**,src/html/**,src/script/**,src/scss/** -Dsonar.coverage.exclusions=src/tools/gulp/**,src/tools/gulpfile.js;
+          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public;
         else
-          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/dist -Dsonar.exclusions=src/fonts/**,src/html/**,src/script/**,src/scss/** -Dsonar.coverage.exclusions=src/tools/gulp/**,src/tools/gulpfile.js -Dsonar.pullrequest.key=$PULLREQUEST_NUMBER ;
+          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public -Dsonar.pullrequest.key=$PULLREQUEST_NUMBER;
         fi
       - sleep 15
       - curl -u $SONAR_LOGIN:"" https://sonarcloud.io/api/qualitygates/project_status?projectKey=$SONAR_PROJECTKEY >result.json
-      - cat result.json      
+      - cat result.json
 artifacts:
   discard-paths: no
-  base-directory: $CODEBUILD_SRC_DIR/dist
+  base-directory: src/public
   files:
     - "**/*"

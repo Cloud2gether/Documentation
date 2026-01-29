@@ -25,9 +25,9 @@ phases:
       - go version
       - echo "Installing PostCSS locally (required by Docsy theme)"
       - cd $SOURCE_SRC
+      - echo "Fetching Hugo module dependencies (Docsy theme)"
       - npm install --save-dev autoprefixer
       - npm install --save-dev postcss-cli
-      - echo "Fetching Hugo module dependencies (Docsy theme)"
       - hugo mod get
       - echo "Installing npm dependencies"
       - npm install
@@ -41,7 +41,6 @@ phases:
   build:
     commands:
       - echo "Executing build phase"
-      - cd $SOURCE_SRC
       - hugo --gc --minify
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(tree:*)",
       "WebFetch(domain:www.cloud2gether.com)",
-      "Bash(hugo:*)"
+      "Bash(hugo:*)",
+      "WebFetch(domain:docs.datadoghq.com)"
     ]
   }
 }

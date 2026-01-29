@@ -11,26 +11,31 @@ env:
     HUGO_VERSION: "0.155.0"
 phases:
   install:
-   runtime-versions:
-      nodejs: 25
-   commands:
-      - echo "Installing Hugo"
-      - wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "=== Installing Hugo Extended ==="
+      - wget -q https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
       - dpkg -i hugo_extended_${HUGO_VERSION}_linux-amd64.deb
       - hugo version
-      - echo "Installing Go (required for Hugo modules)"
-      - wget https://go.dev/dl/go1.21.6.linux-amd64.tar.gz
-      - tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
+
+      - echo "=== Installing Go (required for Hugo modules) ==="
+      - wget -q https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz
+      - tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz
       - export PATH=$PATH:/usr/local/go/bin
       - go version
-      - echo "Installing PostCSS locally (required by Docsy theme)"
-      - cd $SOURCE_SRC
-      - echo "Fetching Hugo module dependencies (Docsy theme)"
-      - npm install --save-dev autoprefixer
-      - npm install --save-dev postcss-cli
-      - hugo mod get
-      - echo "Installing npm dependencies"
+
+      - echo "=== Installing npm dependencies (PostCSS, Docsy) ==="
+      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
       - npm install
+      - export PATH=$PATH:$(npm bin)
+
+      - echo "=== Verifying PostCSS ==="
+      - which postcss
+      - postcss --version
+
+      - echo "=== Fetching Hugo modules (Docsy) ==="
+      - hugo mod get
   pre_build:
     commands:
       - echo "Executing pre-build phase"
@@ -41,6 +46,7 @@ phases:
   build:
     commands:
       - echo "Executing build phase"
+      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
       - hugo --gc --minify
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;

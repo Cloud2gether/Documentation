@@ -1,3 +1,62 @@
 {{ define "main" }}
-{{ .Content }}
+<div class="home-hero">
+  <h1>Welcome to Cloud2Gether Docs!</h1>
+  <p class="home-subtitle">Find guides, references, and resources for the Agentic DevOps Platform.</p>
+  <div class="home-search">
+    <form action="/search/" method="get">
+      <div class="home-search__wrapper">
+        <i class="fas fa-search home-search__icon"></i>
+        <input
+          type="search"
+          name="q"
+          placeholder="Search documentation..."
+          class="home-search__input"
+          aria-label="Search documentation"
+        />
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="home-categories">
+  <div class="home-categories__grid">
+
+    <a href="/docs/getting-started/" class="home-card">
+      <div class="home-card__icon"><i class="fas fa-rocket"></i></div>
+      <h3 class="home-card__title">Getting Started</h3>
+      <p class="home-card__desc">Account setup, first steps, and core concepts.</p>
+    </a>
+
+    <a href="/docs/cloud_account/" class="home-card">
+      <div class="home-card__icon"><i class="fas fa-cloud"></i></div>
+      <h3 class="home-card__title">Cloud Account</h3>
+      <p class="home-card__desc">Manage your cloud accounts and configurations.</p>
+    </a>
+
+    <a href="/docs/cloud_analyzer/" class="home-card">
+      <div class="home-card__icon"><i class="fas fa-chart-bar"></i></div>
+      <h3 class="home-card__title">Cloud Analyzer</h3>
+      <p class="home-card__desc">Analyze your cloud infrastructure and optimize resources.</p>
+    </a>
+
+    <a href="/docs/integrations/" class="home-card">
+      <div class="home-card__icon"><i class="fas fa-plug"></i></div>
+      <h3 class="home-card__title">Integrations</h3>
+      <p class="home-card__desc">Connect with AWS, Azure, and GCP.</p>
+    </a>
+
+    <a href="/docs/lockin/" class="home-card">
+      <div class="home-card__icon"><i class="fas fa-lock-open"></i></div>
+      <h3 class="home-card__title">Lock-in Prevention</h3>
+      <p class="home-card__desc">Avoid vendor lock-in with multi-cloud strategies.</p>
+    </a>
+
+    <a href="/docs/marketplace/" class="home-card">
+      <div class="home-card__icon"><i class="fas fa-store"></i></div>
+      <h3 class="home-card__title">Marketplace</h3>
+      <p class="home-card__desc">Browse and deploy pre-built solutions.</p>
+    </a>
+
+  </div>
+</div>
 {{ end }}

@@ -5,18 +5,14 @@
 {{ $baseURL := urls.Parse $.Site.Params.Baseurl -}}
 
 <nav class="td-navbar js-navbar-scroll
-      {{- if $cover }} td-navbar-cover td-navbar-transparent {{- end }}"
-      {{- if eq (.Param "ui.navbar_theme") "dark" }} data-bs-theme="dark" {{- end }}>
+            {{- if $cover }} td-navbar-cover {{- end }}" data-bs-theme="dark">
 <div class="td-navbar-container container-fluid flex-column flex-md-row">
-  <a class="navbar-brand" href="https://www.cloud2gether.com">
+  <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
     {{- /**/ -}}
     <span class="navbar-brand__logo navbar-logo">
       {{- if ne .Site.Params.ui.navbar_logo false -}}
         {{ with resources.Get "icons/logo.svg" -}}
           {{ ( . | minify).Content | safeHTML -}}
-        {{ else }}
-          {{/* Fallback: check static folder */}}
-          <img src="/images/logo.svg" alt="{{ .Site.Title }}" height="32">
         {{ end -}}
       {{ end -}}
     </span>

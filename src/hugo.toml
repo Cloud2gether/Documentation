@@ -7,6 +7,12 @@ title = 'Cloud2Gether Documentation'
 defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
+[languages]
+  [languages.en]
+    languageName = "English"
+    weight = 1
+    contentDir = "content/en"
+
 # Syntax highlighting
 pygmentsCodeFences = true
 pygmentsUseClasses = false
@@ -100,25 +106,15 @@ pygmentsStyle = "tango"
 # Menu configuration
 [menu]
   [[menu.main]]
-    identifier = "product"
-    name = "Product"
-    url = "https://www.cloud2gether.com/product"
-    weight = 10
-  [[menu.main]]
-    identifier = "pricing"
-    name = "Pricing"
-    url = "https://www.cloud2gether.com/pricing"
-    weight = 20
-  [[menu.main]]
     identifier = "blog"
     name = "Blog"
     url = "https://www.cloud2gether.com/blog"
-    weight = 30
+    weight = 10
   [[menu.main]]
-    identifier = "docs"
-    name = "Docs"
-    url = "/"
-    weight = 40
+    identifier = "about"
+    name = "About"
+    url = "https://www.cloud2gether.com/about"
+    weight = 20
 
 # Outputs
 [outputs]

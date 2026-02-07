@@ -2,9 +2,7 @@
 title: "Cloud2Gether Documentation"
 linkTitle: "Getting Started"
 type: docs
-menu:
-  main:
-    weight: 40
+icon: fas fa-book-open
 ---
 
 # Getting Started

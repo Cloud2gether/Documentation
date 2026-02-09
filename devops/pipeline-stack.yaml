@@ -152,21 +152,17 @@ Resources:
              Version: 1
            InputArtifacts:
              - Name: SourceCode
-           OutputArtifacts:
-             - Name: PipelineStackOutput
            Configuration:
               ActionMode: CREATE_UPDATE
               Capabilities: CAPABILITY_NAMED_IAM
-              RoleArn: !Sub "arn:aws:iam::${DevAccountNumber}:role/CloudformationDeployer-Role"            
+              RoleArn: !Sub "arn:aws:iam::${DevAccountNumber}:role/CloudformationDeployer-Role"
               StackName: !Sub "${DeployStackName}"
-              TemplatePath: SourceCode::devops/cloudformation-stack.yaml                            
-              ParameterOverrides: | 
+              TemplatePath: SourceCode::devops/cloudformation-stack.yaml
+              ParameterOverrides: |
                 {
-                  "CertificateId": "4d873980-5fcc-447b-b8d3-b18a8f91fa58",
-                  "Environment": "dev"                
+                  "Environment": "dev"
                 }
            RunOrder: 3
-           Namespace: PipelineFormationVars           
            RoleArn: !Sub "arn:aws:iam::${DevAccountNumber}:role/DevOpsAcctCodePipelineCFRole"
          - Name: S3Deploy
            ActionTypeId:
@@ -195,33 +191,16 @@ Resources:
               Extract: true
               CannedACL: "bucket-owner-full-control"
            RunOrder: 5
-         - Name: CloudFront
-           ActionTypeId:
-             Category: Invoke
-             Owner: AWS
-             Provider: Lambda
-             Version: '1'      
-           InputArtifacts:
-              - Name: PipelineStackOutput            
-           Configuration: 
-             FunctionName: 'InvalidateCloudFront'                  
-             UserParameters:
-               Fn::ToJsonString: 
-                  - DistributionId : "#{PipelineFormationVars.DocsWebSiteDistrubutionId}"
-                    AccountId: !Sub "${DevAccountNumber}"
-                    ExecutionId: "#{codepipeline.PipelineExecutionId}"
-                    paths: [/*]
-           RunOrder: 6
          - Name: CloudFlare
            ActionTypeId:
               Category: Invoke
               Owner: AWS
               Provider: Lambda
-              Version: '1'                    
-           Configuration: 
+              Version: '1'
+           Configuration:
               FunctionName: 'InvalidateCloudFlare'
-              UserParameters: !Sub "{ \"paths\": [\"https://docs-dev.cloud2gether.com\"], \"executionId\": \"#{codepipeline.PipelineExecutionId}\" }"            
-           RunOrder: 7
+              UserParameters: !Sub "{ \"paths\": [\"https://docs-dev.cloud2gether.com\"], \"executionId\": \"#{codepipeline.PipelineExecutionId}\" }"
+           RunOrder: 6
 
 
 #####################################Production###############################################################
@@ -327,21 +306,17 @@ Resources:
              Version: 1
            InputArtifacts:
              - Name: SourceCode
-           OutputArtifacts:
-             - Name: PipelineStackOutput
            Configuration:
               ActionMode: CREATE_UPDATE
               Capabilities: CAPABILITY_NAMED_IAM
-              RoleArn: !Sub "arn:aws:iam::${ProdAccountNumber}:role/CloudformationDeployer-Role"            
+              RoleArn: !Sub "arn:aws:iam::${ProdAccountNumber}:role/CloudformationDeployer-Role"
               StackName: !Sub "${DeployStackName}"
-              TemplatePath: SourceCode::devops/cloudformation-stack.yaml                            
-              ParameterOverrides: | 
+              TemplatePath: SourceCode::devops/cloudformation-stack.yaml
+              ParameterOverrides: |
                 {
-                  "CertificateId": "09da5dd7-2d2b-48cb-a6fb-2a6aef5f4ed3",
-                  "Environment": "prod"                
+                  "Environment": "prod"
                 }
            RunOrder: 3
-           Namespace: PipelineFormationVars           
            RoleArn: !Sub "arn:aws:iam::${ProdAccountNumber}:role/DevOpsAcctCodePipelineCFRole"
          - Name: S3Deploy
            ActionTypeId:
@@ -370,33 +345,16 @@ Resources:
               Extract: true
               CannedACL: "bucket-owner-full-control"
            RunOrder: 5
-         - Name: CloudFront
-           ActionTypeId:
-             Category: Invoke
-             Owner: AWS
-             Provider: Lambda
-             Version: '1'      
-           InputArtifacts:
-              - Name: PipelineStackOutput            
-           Configuration: 
-             FunctionName: 'InvalidateCloudFront'                  
-             UserParameters:
-               Fn::ToJsonString: 
-                  - DistributionId : "#{PipelineFormationVars.DocsWebSiteDistrubutionId}"
-                    AccountId: !Sub "${ProdAccountNumber}"
-                    ExecutionId: "#{codepipeline.PipelineExecutionId}"
-                    paths: [/*]
-           RunOrder: 6
          - Name: CloudFlare
            ActionTypeId:
               Category: Invoke
               Owner: AWS
               Provider: Lambda
-              Version: '1'                    
-           Configuration: 
+              Version: '1'
+           Configuration:
               FunctionName: 'InvalidateCloudFlare'
-              UserParameters: !Sub "{ \"paths\": [\"https://docs.cloud2gether.com\"], \"executionId\": \"#{codepipeline.PipelineExecutionId}\" }"            
-           RunOrder: 7
+              UserParameters: !Sub "{ \"paths\": [\"https://docs.cloud2gether.com\"], \"executionId\": \"#{codepipeline.PipelineExecutionId}\" }"
+           RunOrder: 6
 
 
   ##########################Notifications ######################################################

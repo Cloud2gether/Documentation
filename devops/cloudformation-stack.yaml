@@ -6,17 +6,13 @@ Parameters:
     Type: String
     Description: "The enviroment can be: dev, prod"
     Default: dev
-    AllowedValues: 
+    AllowedValues:
       - dev
-      - prod    
-
-  CertificateId:
-    Type: String
-    Description: "The certificate name that will be used with cloud front."
+      - prod
 
 Conditions:
     CreateProdResources: !Equals [!Ref Environment, prod]
-  
+
 Resources:
   DocsWebSiteBucket:
     Type: AWS::S3::Bucket
@@ -24,8 +20,8 @@ Resources:
     UpdateReplacePolicy: Retain
     Properties:
         BucketName: !Sub cloud2gether-documentation-${Environment}
-        VersioningConfiguration: 
-          Status: Enabled           
+        VersioningConfiguration:
+          Status: Enabled
         BucketEncryption:
           ServerSideEncryptionConfiguration:
               - ServerSideEncryptionByDefault:
@@ -37,125 +33,35 @@ Resources:
             DestinationBucketName: !ImportValue "BasicLogBucketConfig-ServerAccessLoggingBucket"
             LogFilePrefix: "documentation-accesslog"
         PublicAccessBlockConfiguration:
-            BlockPublicAcls: true
-            BlockPublicPolicy: true
-            IgnorePublicAcls: true
-            RestrictPublicBuckets: true
+            BlockPublicAcls: false
+            BlockPublicPolicy: false
+            IgnorePublicAcls: false
+            RestrictPublicBuckets: false
+        WebsiteConfiguration:
+            IndexDocument: index.html
+            ErrorDocument: 404.html
         CorsConfiguration:
             CorsRules:
-              - AllowedHeaders: 
+              - AllowedHeaders:
                 - "*"
-                AllowedMethods: 
+                AllowedMethods:
                 - GET
-                - POST
-                - DELETE
                 AllowedOrigins:
                  - "https://*.cloud2gether.com"
-            
-  
+
+
 #************************************Web Site Cloud2Gether***************************************************
-  DocsWebSiteOriginAccessControl:
-    Type: AWS::CloudFront::OriginAccessControl
-    Properties: 
-      OriginAccessControlConfig:
-        Description: Default Origin Access Control for the documentation site 
-        Name: 'DocsWebSiteOriginAccessControl'
-        OriginAccessControlOriginType: s3
-        SigningBehavior: always
-        SigningProtocol: sigv4
-
-  DocsUrlRewriteFunction:
-    Type: AWS::CloudFront::Function
-    Properties:
-      Name: !Sub 'docs-url-rewrite-${Environment}'
-      AutoPublish: true
-      FunctionConfig:
-        Comment: 'Rewrites directory paths to append index.html for Hugo static site'
-        Runtime: cloudfront-js-2.0
-      FunctionCode: |
-        function handler(event) {
-          var request = event.request;
-          var uri = request.uri;
-          if (uri.endsWith('/')) {
-            request.uri += 'index.html';
-          } else if (!uri.includes('.')) {
-            request.uri += '/index.html';
-          }
-          return request;
-        }
-
-  DocsWebSiteCloudFrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        #WebACLId: !ImportValue WebFirewall-WebAclId
-        Comment: CloudFront Distribution for Web site cloud2gether
-        PriceClass: PriceClass_All
-        Origins:
-          - DomainName: !GetAtt 'DocsWebSiteBucket.DomainName'
-            Id: S3Origin
-            S3OriginConfig:
-              OriginAccessIdentity: ''
-            OriginAccessControlId: !GetAtt DocsWebSiteOriginAccessControl.Id
-        Enabled: true
-        Logging:
-           IncludeCookies: false
-           Bucket: !Join
-            - ""
-            - - !ImportValue "BasicLogBucketConfig-ServerAccessLoggingBucket"
-              - ".s3.amazonaws.com"
-           Prefix: "documentation-distribution"
-        HttpVersion: 'http2and3'
-        DefaultRootObject: index.html
-        Aliases:
-           - !If [CreateProdResources, docs.cloud2gether.com, !Sub 'docs-${Environment}.cloud2gether.com' ]
-        DefaultCacheBehavior:
-          ViewerProtocolPolicy: redirect-to-https
-          AllowedMethods:
-            - GET
-            - HEAD
-          Compress: true
-          TargetOriginId: S3Origin
-          CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6"
-          ResponseHeadersPolicyId: "67f7725c-6f97-4210-82d7-5512b31e9d03" #Default Security header Id
-          FunctionAssociations:
-            - EventType: viewer-request
-              FunctionARN: !GetAtt DocsUrlRewriteFunction.FunctionARN
-          ForwardedValues:
-            QueryString: false
-            Cookies:
-              Forward: none
-        CustomErrorResponses:
-          - ErrorCode: '403'
-            ResponsePagePath: "/404.html"
-            ResponseCode: '404'
-            ErrorCachingMinTTL: '10'
-          - ErrorCode: '404'
-            ResponsePagePath: "/404.html"
-            ResponseCode: '404'
-            ErrorCachingMinTTL: '10'
-        ViewerCertificate:
-          AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${CertificateId}
-          SslSupportMethod: sni-only
-          MinimumProtocolVersion: TLSv1.2_2021
-      Tags:
-        - Key: "Environment"
-          Value: !Sub ${Environment}
-
   DocsWebSiteReadPolicy:
     Type: 'AWS::S3::BucketPolicy'
     Properties:
       Bucket: !Ref DocsWebSiteBucket
       PolicyDocument:
         Statement:
-          - Action: 's3:GetObject'
+          - Sid: PublicReadGetObject
+            Action: 's3:GetObject'
             Effect: Allow
             Resource: !Sub 'arn:aws:s3:::${DocsWebSiteBucket}/*'
-            Principal: 
-              Service: cloudfront.amazonaws.com   
-            Condition:
-              StringEquals:
-                AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${DocsWebSiteCloudFrontDistribution}      
+            Principal: '*'
           - Sid: AllowSSLRequestsOnly
             Action: 's3:*'
             Effect: Deny
@@ -163,7 +69,7 @@ Resources:
             Principal: "*"
             Condition:
               Bool: { "aws:SecureTransport": "false" }
-          - Action: [ 's3:PutObject' ]          
+          - Action: [ 's3:PutObject' ]
             Effect: Allow
             Resource: !Sub 'arn:aws:s3:::${DocsWebSiteBucket}/*'
             Principal: {"AWS": "arn:aws:iam::000333743150:role/CodePipelineServiceRole"}
@@ -175,7 +81,7 @@ Resources:
           - Action: [ 's3:PutObjectAcl','s3:GetObjectAcl', 's3:GetObjectVersionAcl', 's3:PutObjectVersionAcl' ]
             Effect: Allow
             Resource:
-              - !Sub 'arn:aws:s3:::${DocsWebSiteBucket}' 
+              - !Sub 'arn:aws:s3:::${DocsWebSiteBucket}'
               - !Sub 'arn:aws:s3:::${DocsWebSiteBucket}/*'
             Principal:  {"AWS": "arn:aws:iam::000333743150:role/CodePipelineServiceRole"}
 
@@ -184,7 +90,6 @@ Outputs:
   DocsWebSiteBucket:
     Value: !Ref DocsWebSiteBucket
     Description: Name of the s3 landing pages bucket
-  DocsWebSiteDistrubutionId:
-    Value: !Ref DocsWebSiteCloudFrontDistribution
-    Description: The Web Site CloudFront distribution
-  
+  DocsWebSiteEndpoint:
+    Value: !GetAtt DocsWebSiteBucket.WebsiteURL
+    Description: The S3 website endpoint URL for Cloudflare DNS configuration

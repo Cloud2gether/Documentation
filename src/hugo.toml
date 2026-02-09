@@ -108,7 +108,7 @@ pygmentsStyle = "tango"
   [[menu.main]]
     identifier = "blog"
     name = "Blog"
-    url = "https://www.cloud2gether.com/blog"
+    url = "https://blog.cloud2gether.com"
     weight = 10
   [[menu.main]]
     identifier = "about"

@@ -410,7 +410,7 @@ Resources:
       RegisterWithThirdParty: 'true'
       Filters:
       - JsonPath: "$.ref"
-        MatchEquals: refs/heads/{Branch}
+        MatchEquals: !Sub "refs/heads/${GitHubDevBranch}"
       TargetPipeline: !Ref CodePipelineDev
       TargetAction: Source
       TargetPipelineVersion: !GetAtt CodePipelineDev.Version
@@ -455,7 +455,7 @@ Resources:
       RegisterWithThirdParty: 'true'
       Filters:
       - JsonPath: "$.ref"
-        MatchEquals: refs/heads/{Branch}
+        MatchEquals: !Sub "refs/heads/${GitHubProdBranch}"
       TargetPipeline: !Ref CodePipelineProd
       TargetAction: Source
       TargetPipelineVersion: !GetAtt CodePipelineProd.Version

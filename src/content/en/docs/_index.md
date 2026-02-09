@@ -1,8 +1,9 @@
 ---
 title: "Cloud2Gether Documentation"
-linkTitle: "Getting Started"
+linkTitle: "Docs"
 type: docs
 icon: fas fa-book-open
+url: /docs/
 ---
 
 # Getting Started

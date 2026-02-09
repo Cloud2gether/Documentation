@@ -116,9 +116,16 @@ pygmentsStyle = "tango"
     url = "https://www.cloud2gether.com/about"
     weight = 20
 
+# Permalinks — strip /docs/ prefix since subdomain already indicates docs
+[permalinks]
+  [permalinks.section]
+    docs = "/:sections[1:]/"
+  [permalinks.page]
+    docs = "/:sections[1:]/:filename/"
+
 # Outputs
 [outputs]
-  home = ["HTML", "JSON"]
+  home = ["HTML"]
   section = ["HTML"]
 
 # Taxonomies

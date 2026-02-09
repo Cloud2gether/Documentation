@@ -118,7 +118,7 @@ pygmentsStyle = "tango"
 
 # Outputs
 [outputs]
-  home = ["HTML"]
+  home = ["HTML", "JSON"]
   section = ["HTML"]
 
 # Taxonomies

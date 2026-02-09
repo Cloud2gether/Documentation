@@ -108,13 +108,20 @@ pygmentsStyle = "tango"
   [[menu.main]]
     identifier = "blog"
     name = "Blog"
-    url = "https://www.cloud2gether.com/blog"
+    url = "https://blog.cloud2gether.com"
     weight = 10
   [[menu.main]]
     identifier = "about"
     name = "About"
     url = "https://www.cloud2gether.com/about"
     weight = 20
+
+# Permalinks — strip /docs/ prefix since subdomain already indicates docs
+[permalinks]
+  [permalinks.section]
+    docs = "/:sections[1:]/"
+  [permalinks.page]
+    docs = "/:sections[1:]/:filename/"
 
 # Outputs
 [outputs]

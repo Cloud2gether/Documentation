@@ -178,7 +178,7 @@ Resources:
               - Name: BuildArtifact
            Configuration:
               BucketName: !Ref ArtifactsBucket
-              ObjectKey: !Sub "CodeDeploy/${GitHubRepo}/${GitHubDevBranch}/Latest"
+              ObjectKey: !Sub "CodeDeploy/${GitHubRepo}/${GitHubDevBranch}/#{codepipeline.PipelineExecutionId}"
               Extract: true
               CannedACL: "bucket-owner-full-control"
            RunOrder: 4        
@@ -207,8 +207,9 @@ Resources:
              FunctionName: 'InvalidateCloudFront'                  
              UserParameters:
                Fn::ToJsonString: 
-                  - DistributionId : "#{PipelineFormationVars.DocsWebSiteDistrubutionId}"                               
+                  - DistributionId : "#{PipelineFormationVars.DocsWebSiteDistrubutionId}"
                     AccountId: !Sub "${DevAccountNumber}"
+                    ExecutionId: "#{codepipeline.PipelineExecutionId}"
                     paths: [/*]
            RunOrder: 6
          - Name: CloudFlare
@@ -219,7 +220,7 @@ Resources:
               Version: '1'                    
            Configuration: 
               FunctionName: 'InvalidateCloudFlare'
-              UserParameters: !Sub "{ \"paths\": [\"https://docs-dev.cloud2gether.com\"] }"            
+              UserParameters: !Sub "{ \"paths\": [\"https://docs-dev.cloud2gether.com\"], \"executionId\": \"#{codepipeline.PipelineExecutionId}\" }"            
            RunOrder: 7
 
 
@@ -352,7 +353,7 @@ Resources:
               - Name: BuildArtifact
            Configuration:
               BucketName: !Ref ArtifactsBucket
-              ObjectKey: !Sub "CodeDeploy/${GitHubRepo}/${GitHubProdBranch}/Latest"
+              ObjectKey: !Sub "CodeDeploy/${GitHubRepo}/${GitHubProdBranch}/#{codepipeline.PipelineExecutionId}"
               Extract: true
               CannedACL: "bucket-owner-full-control"
            RunOrder: 4        
@@ -381,8 +382,9 @@ Resources:
              FunctionName: 'InvalidateCloudFront'                  
              UserParameters:
                Fn::ToJsonString: 
-                  - DistributionId : "#{PipelineFormationVars.DocsWebSiteDistrubutionId}"                               
+                  - DistributionId : "#{PipelineFormationVars.DocsWebSiteDistrubutionId}"
                     AccountId: !Sub "${ProdAccountNumber}"
+                    ExecutionId: "#{codepipeline.PipelineExecutionId}"
                     paths: [/*]
            RunOrder: 6
          - Name: CloudFlare
@@ -393,7 +395,7 @@ Resources:
               Version: '1'                    
            Configuration: 
               FunctionName: 'InvalidateCloudFlare'
-              UserParameters: !Sub "{ \"paths\": [\"https://docs.cloud2gether.com\"] }"            
+              UserParameters: !Sub "{ \"paths\": [\"https://docs.cloud2gether.com\"], \"executionId\": \"#{codepipeline.PipelineExecutionId}\" }"            
            RunOrder: 7
 
 

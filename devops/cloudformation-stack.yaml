@@ -64,11 +64,31 @@ Resources:
         SigningBehavior: always
         SigningProtocol: sigv4
 
+  DocsUrlRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub 'docs-url-rewrite-${Environment}'
+      AutoPublish: true
+      FunctionConfig:
+        Comment: 'Rewrites directory paths to append index.html for Hugo static site'
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var uri = request.uri;
+          if (uri.endsWith('/')) {
+            request.uri += 'index.html';
+          } else if (!uri.includes('.')) {
+            request.uri += '/index.html';
+          }
+          return request;
+        }
+
   DocsWebSiteCloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
-        #WebACLId: !ImportValue WebFirewall-WebAclId    
+        #WebACLId: !ImportValue WebFirewall-WebAclId
         Comment: CloudFront Distribution for Web site cloud2gether
         PriceClass: PriceClass_All
         Origins:
@@ -79,47 +99,46 @@ Resources:
             OriginAccessControlId: !GetAtt DocsWebSiteOriginAccessControl.Id
         Enabled: true
         Logging:
-           IncludeCookies: false  
-           Bucket: !Join 
-            - "" 
+           IncludeCookies: false
+           Bucket: !Join
+            - ""
             - - !ImportValue "BasicLogBucketConfig-ServerAccessLoggingBucket"
               - ".s3.amazonaws.com"
-           Prefix: "documentation-distribution"           
+           Prefix: "documentation-distribution"
         HttpVersion: 'http2and3'
         DefaultRootObject: index.html
         Aliases:
            - !If [CreateProdResources, docs.cloud2gether.com, !Sub 'docs-${Environment}.cloud2gether.com' ]
-        DefaultCacheBehavior:                            
+        DefaultCacheBehavior:
           ViewerProtocolPolicy: redirect-to-https
-          AllowedMethods:            
+          AllowedMethods:
             - GET
-            - HEAD            
+            - HEAD
           Compress: true
           TargetOriginId: S3Origin
           CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6"
           ResponseHeadersPolicyId: "67f7725c-6f97-4210-82d7-5512b31e9d03" #Default Security header Id
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt DocsUrlRewriteFunction.FunctionARN
           ForwardedValues:
             QueryString: false
             Cookies:
               Forward: none
         CustomErrorResponses:
-          - ErrorCode: '400'
-            ResponsePagePath: "/index.html"
-            ResponseCode: '200'
-            ErrorCachingMinTTL: '300'
-          - ErrorCode: '404'
-            ResponsePagePath: "/index.html"
-            ResponseCode: '200'
-            ErrorCachingMinTTL: '300'
           - ErrorCode: '403'
-            ResponsePagePath: "/index.html"
-            ResponseCode: '200'
-            ErrorCachingMinTTL: '300'
+            ResponsePagePath: "/404.html"
+            ResponseCode: '404'
+            ErrorCachingMinTTL: '10'
+          - ErrorCode: '404'
+            ResponsePagePath: "/404.html"
+            ResponseCode: '404'
+            ErrorCachingMinTTL: '10'
         ViewerCertificate:
           AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${CertificateId}
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.2_2021
-      Tags: 
+      Tags:
         - Key: "Environment"
           Value: !Sub ${Environment}
 
@@ -168,4 +187,3 @@ Outputs:
   DocsWebSiteDistrubutionId:
     Value: !Ref DocsWebSiteCloudFrontDistribution
     Description: The Web Site CloudFront distribution
-  

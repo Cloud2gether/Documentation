@@ -7,7 +7,6 @@ aws --region us-east-1 --profile c2g-devops cloudformation create-stack --stack-
 
 aws  --region us-east-1 --profile c2g-devops cloudformation update-stack --stack-name DocsWebSite-Pipeline --template-body file://devops/pipeline-stack.yaml --capabilities CAPABILITY_AUTO_EXPAND
 
-
 aws  --region us-east-1 --profile c2g-devops cloudformation delete-stack --stack-name DocsWebSite-Pipeline
 
 

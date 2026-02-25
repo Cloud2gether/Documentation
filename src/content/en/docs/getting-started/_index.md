@@ -7,8 +7,6 @@ description: >
   Get up and running with Cloud2Gether in minutes.
 ---
 
-# Getting Started
-
 ## What is Cloud2Gether?
 
 Cloud2Gether is an AI-first, agentic DevOps platform built to support every phase of your cloud journey — from architecture and creation to operations, migration, and beyond.

@@ -1,174 +1,216 @@
 ---
 title: "Azure"
 linkTitle: "Azure"
-weight: 20
-description: "Connect and manage your Microsoft Azure account."
-tags: ["aws", "integration", "manual", "access-key"]
+weight: 2
+description: "Connect and manage your Microsoft Azure subscription."
 ---
 
-# Connect an AWS Account (Manual Setup)
+Connecting your Azure subscription to Cloud2Gether allows the platform to discover and analyze your cloud resources, costs, and infrastructure. Cloud2Gether requires **read-only** access to your Azure subscription — it will never create, modify, or delete any resources.
 
-## Overview
-
-This guide explains how to manually connect an AWS account to Cloud2gether using IAM Access Key authentication.
-
-In this method, IAM permissions must be configured directly inside the AWS Console before completing the integration in Cloud2gether.
-
----
+The integration uses **Microsoft Entra ID (Azure AD) App Registration** with a client secret to authenticate. A service principal is created automatically when you register the app, and you assign it read-only roles on your subscription.
 
 ## Prerequisites
 
-Before starting, ensure you have:
+Before you begin, make sure you have:
 
-- An active AWS account
-- Permission to create IAM users and policies
-- Access to the AWS Management Console
-- Administrative or delegated IAM permissions
+- An active **Azure subscription**
+- Access to <a href="https://portal.azure.com" target="_blank" rel="noopener noreferrer">Azure Portal</a> with permissions to:
+  - Register applications in **Microsoft Entra ID** (Azure AD)
+  - Assign roles on the target **subscription** (requires Owner or User Access Administrator role)
+- A **Cloud2Gether account** — <a href="https://app.cloud2gether.com/signup" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
 
----
+## Information You Will Need
 
-# Part 1 — AWS Configuration
+At the end of this setup, you will have collected four values to enter in Cloud2Gether:
 
-## Step 1 — Create an IAM User
-
-1. Log in to the AWS Console.
-2. Navigate to **IAM**.
-3. Click **Users**.
-4. Click **Create user**.
-5. Enter a user name (example: `cloud2gether-integration`).
-6. Select:
-   - ✔ Programmatic access
-
-Click **Next**.
+| Value | Where to Find It |
+|-------|-------------------|
+| **Tenant ID** (Directory ID) | Microsoft Entra ID → Overview |
+| **Client ID** (Application ID) | App Registration → Overview |
+| **Client Secret** | App Registration → Certificates & secrets |
+| **Subscription ID** | Subscriptions → Overview |
 
 ---
 
-## Step 2 — Attach Required Permissions
+# Part 1 — Azure Configuration
 
-Cloud2gether requires read-only access to resources, billing information, and infrastructure metadata.
+## Step 1 — Register an Application in Microsoft Entra ID
 
-You may:
+An App Registration creates an identity that Cloud2Gether uses to authenticate with your Azure environment.
 
-### Option A — Attach an existing internal Cloud2gether policy (recommended if provided)
+1. Sign in to the <a href="https://portal.azure.com" target="_blank" rel="noopener noreferrer">Azure Portal</a>
+2. Navigate to **Microsoft Entra ID** (formerly Azure Active Directory)
+3. In the left sidebar, click **App registrations**
+4. Click **+ New registration**
 
-OR
+<!-- TODO: Add screenshot — /images/azure/entra-app-registrations.png -->
 
-### Option B — Create a custom policy with least privilege
+5. Fill in the registration form:
+   - **Name**: Enter a descriptive name, for example: `Cloud2Gether Integration`
+   - **Supported account types**: Select **Accounts in this organizational directory only** (Single tenant)
+   - **Redirect URI**: Leave blank (not required)
+6. Click **Register**
 
-At minimum, permissions should include read access to:
+<!-- TODO: Add screenshot — /images/azure/entra-register-app.png -->
 
-- EC2 (Describe*)
-- CloudFormation (Describe*)
-- CloudWatch (Describe*)
-- Cost Explorer (Get*, Describe*)
-- S3 (List*)
-- IAM (Get*, List*)
+After registration, you will be taken to the application's **Overview** page. Copy the following values:
 
-⚠️ Always follow your organization’s security and least-privilege standards.
+- **Application (client) ID** — this is your **Client ID**
+- **Directory (tenant) ID** — this is your **Tenant ID**
 
-Complete user creation.
+<!-- TODO: Add screenshot — /images/azure/entra-app-overview.png -->
 
----
-
-## Step 3 — Generate Access Keys
-
-1. Open the created IAM user.
-2. Go to the **Security credentials** tab.
-3. Click **Create access key**.
-4. Choose:
-   - Application running outside AWS
-5. Copy:
-   - Access Key ID
-   - Secret Access Key
-
-⚠️ The Secret Access Key is shown only once. Store it securely.
+{{< alert color="info" title="Finding Your Tenant ID" >}}
+The Tenant ID (Directory ID) is also available at **Microsoft Entra ID → Overview**. It is the same value across all app registrations in your directory.
+{{< /alert >}}
 
 ---
 
-# Part 2 — Cloud2gether Setup
+## Step 2 — Create a Client Secret
 
-Navigate to:
+A client secret is a password that Cloud2Gether uses to authenticate as the registered application.
 
-**Integrations → Cloud Accounts → Link new AWS cloud account**
+1. In the App Registration page, click **Certificates & secrets** in the left sidebar
+2. Select the **Client secrets** tab
+3. Click **+ New client secret**
 
-You will see the AWS connection form.
+<!-- TODO: Add screenshot — /images/azure/entra-certificates-secrets.png -->
+
+4. Fill in the details:
+   - **Description**: Enter a descriptive label, for example: `Cloud2Gether secret`
+   - **Expires**: Choose an expiration period (recommended: **24 months**)
+5. Click **Add**
+
+{{< alert color="danger" title="Important" >}}
+Copy the **Value** column immediately after creation. This is the **only time** you can view the client secret value. If you lose it, you will need to create a new one. The **Secret ID** is not the same as the secret value.
+{{< /alert >}}
+
+<!-- TODO: Add screenshot — /images/azure/entra-secret-created.png -->
+
+Store the **Client Secret Value** securely — you will need it when connecting in Cloud2Gether.
 
 ---
 
-## Step 4 — Fill Account Information
+## Step 3 — Assign Roles to the Application
+
+The application's service principal needs read-only access to your Azure subscription. You must assign two roles:
+
+| Role | Purpose |
+|------|---------|
+| **Reader** | Read-only access to all Azure resources in the subscription |
+| **Monitoring Data Reader** | Access to monitoring metrics and diagnostic data |
+
+### Assign the Reader Role
+
+1. In the Azure Portal, navigate to **Subscriptions**
+2. Select the subscription you want to connect to Cloud2Gether
+3. Click **Access control (IAM)** in the left sidebar
+4. Click **+ Add** → **Add role assignment**
+
+<!-- TODO: Add screenshot — /images/azure/subscription-iam.png -->
+
+5. In the **Role** tab, search for `Reader` and select the **Reader** role
+6. Click **Next**
+7. In the **Members** tab:
+   - Select **User, group, or service principal**
+   - Click **+ Select members**
+   - Search for your application name (e.g., `Cloud2Gether Integration`)
+   - Select the application and click **Select**
+8. Click **Review + assign**
+
+<!-- TODO: Add screenshot — /images/azure/subscription-role-assignment-reader.png -->
+
+### Assign the Monitoring Data Reader Role
+
+Repeat the same process for the Monitoring Data Reader role:
+
+1. In the same subscription's **Access control (IAM)**, click **+ Add** → **Add role assignment**
+2. Search for `Monitoring Data Reader` and select it
+3. Click **Next**
+4. In the **Members** tab, select the same application (`Cloud2Gether Integration`)
+5. Click **Review + assign**
+
+<!-- TODO: Add screenshot — /images/azure/subscription-role-assignment-monitoring.png -->
+
+### Verify Role Assignments
+
+1. In **Access control (IAM)**, click the **Role assignments** tab
+2. Confirm that your application appears with both roles:
+   - **Reader**
+   - **Monitoring Data Reader**
+
+<!-- TODO: Add screenshot — /images/azure/subscription-role-assignments-list.png -->
+
+{{< alert color="info" title="Multiple Subscriptions" >}}
+If you want Cloud2Gether to analyze multiple subscriptions, repeat Step 3 for each subscription. You can reuse the same App Registration — just assign the Reader and Monitoring Data Reader roles on each additional subscription.
+{{< /alert >}}
+
+---
+
+## Step 4 — Copy Your Subscription ID
+
+1. Navigate to **Subscriptions** in the Azure Portal
+2. Click on the subscription you assigned the roles to
+3. Copy the **Subscription ID** from the Overview page
+
+<!-- TODO: Add screenshot — /images/azure/subscription-overview.png -->
+
+---
+
+# Part 2 — Cloud2Gether Setup
+
+## Step 5 — Connect in Cloud2Gether
+
+1. Log in to <a href="https://app.cloud2gether.com" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
+2. In the left sidebar, click **Cloud Accounts**
+3. Click the **Add Account** button
+4. Select **Azure** as the cloud provider
+
+<!-- TODO: Add screenshot — /images/azure/c2g-azure-add-account.png -->
+
+## Step 6 — Enter Account Information
 
 ### 1. Account Name
 
-Enter a logical name to identify this AWS account inside Cloud2gether.
+Enter a logical name to identify this Azure subscription inside Cloud2Gether.
 
 Examples:
+- `Azure Production`
+- `Azure Dev/Test`
+- `Finance Subscription`
 
-- Production AWS
-- Finance Account
-- Dev Environment
+### 2. Azure Credentials
 
----
+Enter the four values you collected during the Azure configuration:
 
-### 2. AWS Region
+| Field | Value |
+|-------|-------|
+| **Tenant ID** | The Directory (tenant) ID from Microsoft Entra ID |
+| **Client ID** | The Application (client) ID from the App Registration |
+| **Client Secret** | The secret value you copied in Step 2 |
+| **Subscription ID** | The subscription ID from Step 4 |
 
-Select the AWS region.
+<!-- TODO: Add screenshot — /images/azure/c2g-azure-credentials-form.png -->
 
-This is the region used for primary integration reference. It does not limit global resource visibility but defines where integration validation occurs.
+{{< alert color="warning" title="Common Mistakes" >}}
+- Ensure there are **no extra spaces** when pasting values
+- Use the secret **Value**, not the **Secret ID**
+- The **Client ID** is the Application ID, not the Object ID
+{{< /alert >}}
 
-Example regions:
+## Step 7 — Add the Account
 
-- South America (São Paulo)
-- US East (N. Virginia)
-- Europe (Frankfurt)
-
----
-
-### 3. Required Documentation for Provider Integration
-
-Select:
-
-**Manually**
-
-This indicates IAM permissions were configured directly in AWS instead of using automated CloudFormation setup.
-
----
-
-### 4. Choose Authentication Method
-
-Select:
-
-**Access Key**
-
-This method authenticates using IAM credentials.
-
----
-
-### 5. Enter Credentials Information
-
-Fill in:
-
-- Access Key
-- Secret Key
-
-Ensure:
-
-- No extra spaces
-- Keys are active
-- Credentials belong to the intended IAM user
-
----
-
-## Step 5 — Add Account
-
-Click **Add account**.
-
-Cloud2gether will validate:
-
-- Credential authenticity
-- IAM permissions
-- Account accessibility
+1. Click **Add Account**
+2. Cloud2Gether will validate:
+   - Credential authenticity
+   - Role assignments and permissions
+   - Subscription accessibility
 
 If successful, the account will appear in your Cloud Accounts list.
+
+{{< alert color="success" title="Done!" >}}
+Your Azure subscription is now connected. Cloud2Gether will start scanning your resources and they will appear in your dashboard within a few minutes.
+{{< /alert >}}
 
 ---
 
@@ -176,33 +218,39 @@ If successful, the account will appear in your Cloud Accounts list.
 
 ## Invalid Credentials
 
-- Verify Access Key and Secret Key
-- Confirm keys are active in IAM
-- Ensure no leading or trailing whitespace
-
----
+- Verify the **Tenant ID**, **Client ID**, and **Client Secret** are correct
+- Confirm the client secret has not expired
+- Ensure no leading or trailing whitespace in the pasted values
+- Make sure you copied the secret **Value** (not the Secret ID)
 
 ## Insufficient Permissions
 
-- Review IAM policies attached to the user
-- Confirm read permissions for EC2, CloudFormation, Billing, IAM, and CloudWatch
+- Verify both **Reader** and **Monitoring Data Reader** roles are assigned on the subscription
+- Confirm the roles are assigned to the correct service principal (the app registration name)
+- Check that the role assignments are at the **subscription level**, not a resource group
 
----
+## Application Not Found
 
-## Region Validation Errors
+- Ensure the App Registration exists and has not been deleted
+- Verify you are using the correct Tenant ID for the directory where the app was registered
 
-- Confirm selected region exists in your AWS account
-- Ensure no SCP (Service Control Policy) restrictions apply
+## Expired Client Secret
+
+- Client secrets have an expiration date. If your secret has expired:
+  1. Go to the App Registration → **Certificates & secrets**
+  2. Create a new client secret
+  3. Update the secret in Cloud2Gether's Cloud Accounts settings
 
 ---
 
 # Security Best Practices
 
-- Use least-privilege IAM policies
-- Rotate Access Keys periodically
-- Avoid using root credentials
-- Store credentials securely (e.g., secret manager)
-- Disable unused keys immediately
+- Use the **minimum required roles** (Reader + Monitoring Data Reader)
+- Set a reasonable **secret expiration** and rotate before it expires
+- Avoid granting **Contributor** or **Owner** roles — Cloud2Gether only needs read access
+- Use **dedicated App Registrations** for third-party integrations instead of reusing existing ones
+- Monitor sign-in activity for the service principal in **Microsoft Entra ID → Enterprise applications → Sign-in logs**
+- Consider using **Conditional Access policies** to restrict where the service principal can authenticate from
 
 ---
 
@@ -210,19 +258,7 @@ If successful, the account will appear in your Cloud Accounts list.
 
 After successful integration, you can:
 
-- View infrastructure resources
-- Analyze billing data
-- Run lock-in analysis
-- Receive optimization recommendations
-- Monitor multi-account environments
-
----
-
-If you need documentation for:
-
-- AWS Role Delegation setup
-- Automatic integration using CloudFormation
-- IAM policy JSON template
-- Multi-account (Organizations) setup
-
-Let me know which one you want next.
+- Explore your resources in the [Resource Catalog](/solutions/resource-catalog/)
+- Analyze infrastructure costs
+- Run lock-in analysis across your multi-cloud environment
+- Set up additional cloud accounts ([AWS](../aws/), [GCP](../gcp/)) for a unified view

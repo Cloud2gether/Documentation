@@ -50,6 +50,10 @@ Parameters:
     Type: String
     Default: Documentation
 
+  CodeStarConnectionArn:
+    Type: String
+    Default: "arn:aws:codeconnections:us-east-1:000333743150:connection/dcc3ac67-a5db-499e-942a-03569669f6dc"
+
 Resources:
   CodeBuildDev:
     Type: AWS::CodeBuild::Project
@@ -113,17 +117,16 @@ Resources:
           InputArtifacts: []
           ActionTypeId:
             Category: Source
-            Owner: ThirdParty
+            Owner: AWS
             Version: 1
-            Provider: GitHub
+            Provider: CodeStarSourceConnection
           OutputArtifacts:
           - Name: SourceCode
           Configuration:
-            Owner: !Ref GitHubOwner
-            Repo: !Ref GitHubRepo
-            Branch: !Ref GitHubDevBranch
-            PollForSourceChanges: false
-            OAuthToken: '{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}' 
+            ConnectionArn: !Ref CodeStarConnectionArn
+            FullRepositoryId: !Sub "${GitHubOwner}/${GitHubRepo}"
+            BranchName: !Ref GitHubDevBranch
+            DetectChanges: true
           RunOrder: 1
       - Name: Build
         Actions:
@@ -288,17 +291,16 @@ Resources:
           InputArtifacts: []
           ActionTypeId:
             Category: Source
-            Owner: ThirdParty
+            Owner: AWS
             Version: 1
-            Provider: GitHub
+            Provider: CodeStarSourceConnection
           OutputArtifacts:
           - Name: SourceCode
           Configuration:
-            Owner: !Ref GitHubOwner
-            Repo: !Ref GitHubRepo
-            Branch: !Ref GitHubProdBranch
-            PollForSourceChanges: false
-            OAuthToken: '{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}' 
+            ConnectionArn: !Ref CodeStarConnectionArn
+            FullRepositoryId: !Sub "${GitHubOwner}/${GitHubRepo}"
+            BranchName: !Ref GitHubProdBranch
+            DetectChanges: true
           RunOrder: 1
       - Name: Build
         Actions:
@@ -401,20 +403,6 @@ Resources:
 
   ##########################Notifications ######################################################
 
-  GithubDevWebhook:
-    Type: 'AWS::CodePipeline::Webhook'
-    Properties:
-      Authentication: GITHUB_HMAC
-      AuthenticationConfiguration:
-        SecretToken: '{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}'
-      RegisterWithThirdParty: 'true'
-      Filters:
-      - JsonPath: "$.ref"
-        MatchEquals: !Sub "refs/heads/${GitHubDevBranch}"
-      TargetPipeline: !Ref CodePipelineDev
-      TargetAction: Source
-      TargetPipelineVersion: !GetAtt CodePipelineDev.Version
-    
   CodeBuildDevNotification:
     Type: 'AWS::CodeStarNotifications::NotificationRule'
     Properties:
@@ -445,21 +433,6 @@ Resources:
         - TargetType: SNS 
           TargetAddress: !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:CodeStarNotifications-Devops"
 
-#Production
-  GithubProdWebhook:
-    Type: 'AWS::CodePipeline::Webhook'
-    Properties:
-      Authentication: GITHUB_HMAC
-      AuthenticationConfiguration:
-        SecretToken: '{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}'
-      RegisterWithThirdParty: 'true'
-      Filters:
-      - JsonPath: "$.ref"
-        MatchEquals: !Sub "refs/heads/${GitHubProdBranch}"
-      TargetPipeline: !Ref CodePipelineProd
-      TargetAction: Source
-      TargetPipelineVersion: !GetAtt CodePipelineProd.Version
-    
   CodeBuildProdNotification:
     Type: 'AWS::CodeStarNotifications::NotificationRule'
     Properties:

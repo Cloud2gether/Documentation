@@ -16,7 +16,9 @@
       "Bash(npm install)",
       "Bash(git checkout:*)",
       "Bash(grep -r \"tabpane\" /Volumes/Backup/Projects/Cloud2Gether/Documentation/src/node_modules/@getkirby -type f)",
-      "Bash(grep -r \"tabpane\" /Volumes/Backup/Projects/Cloud2Gether/Documentation/src/node_modules -type f)"
+      "Bash(grep -r \"tabpane\" /Volumes/Backup/Projects/Cloud2Gether/Documentation/src/node_modules -type f)",
+      "Bash(npm run build)",
+      "Bash(git push origin dev)"
     ]
   }
 }

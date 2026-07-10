@@ -66,7 +66,7 @@ Resources:
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:7.0
+        Image: aws/codebuild/amazonlinux-x86_64-standard:6.0
         EnvironmentVariables:
           - Name: C2G_ENV
             Type: PLAINTEXT
@@ -85,10 +85,13 @@ Resources:
         Webhook: true
         FilterGroups:
           - - Type: EVENT
-              Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED
+              Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED,PULL_REQUEST_REOPENED
             - Type: BASE_REF
               Pattern: !Sub "^refs/heads/${GitHubDevBranch}$"
               ExcludeMatchedPattern: false       
+            - Type: HEAD_REF
+              Pattern: !Sub "^refs/heads/${GitHubProdBranch}$"
+              ExcludeMatchedPattern: false
   
   CodeBuildDevLogGroup:
     Type: AWS::Logs::LogGroup
@@ -240,7 +243,7 @@ Resources:
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:7.0
+        Image: aws/codebuild/amazonlinux-x86_64-standard:6.0
         EnvironmentVariables:
           - Name: C2G_ENV
             Type: PLAINTEXT
@@ -259,10 +262,13 @@ Resources:
         Webhook: true
         FilterGroups:
           - - Type: EVENT
-              Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED
+              Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED,PULL_REQUEST_REOPENED
             - Type: BASE_REF
               Pattern: !Sub "^refs/heads/${GitHubProdBranch}$"
               ExcludeMatchedPattern: false       
+            - Type: HEAD_REF
+              Pattern: !Sub "^refs/heads/${GitHubDevBranch}$"
+              ExcludeMatchedPattern: false
 
   CodeBuildProdLogGroup:
     Type: AWS::Logs::LogGroup

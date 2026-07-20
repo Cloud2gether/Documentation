@@ -121,7 +121,7 @@ pygmentsStyle = "tango"
   [permalinks.section]
     docs = "/:sections[1:]/"
   [permalinks.page]
-    docs = "/:sections[1:]/:filename/"
+    docs = "/:sections[1:]/:contentbasename/"
 
 # Outputs
 [outputs]

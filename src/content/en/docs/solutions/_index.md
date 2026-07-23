@@ -17,6 +17,7 @@ In the Organization App, these tools live under the **Analysis** section in the 
 | [Resource Catalog](resource-catalog/) | Resources catalog | Inventory, sync executions, compare, and cloud graph |
 | [Lock-In Analyzer](lockin-analyzer/) | Lock In Analyzer | Vendor lock-in risk and portability insights |
 | [IaC Analyzer](iac-analyzer/) | Infrastructure | IaC coverage, gaps, and continuous monitoring |
+| [Your Solutions](your-solutions/) | Your Solutions | Manage and deploy solutions acquired by your organization |
 
 ## Coming soon
 

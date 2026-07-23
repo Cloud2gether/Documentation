@@ -39,3 +39,5 @@ In the Organization App, Marketplace opens the **external catalog** experience. 
 - [Dashboard](../dashboard/)
 - [Getting Started](../)
 - [Cloud Accounts](../cloud-accounts/)
+- [Your Solutions](../../solutions/your-solutions/)
+- [Orders](../../orders/)

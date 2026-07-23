@@ -197,7 +197,7 @@ Ordenação sugerida alinhada ao que o usuário encontra primeiro no app:
 | 4 AI Agents | ✅ | Índice + Available/Installed + Chat/Resource/IaC/Lock-In |
 | 5 Company | ✅ | Profile, Users, Teams, Billing, Plans |
 | 6 Solutions comerciais | ✅ | Your Solutions + Orders + Expert Help (Service Hub) |
-| 7 Account / About / Register | ⏳ | |
+| 7 Account / About / Register | ✅ | Register + Account/User profile + About |
 | 8 Screenshots + polish | ⏳ | TODOs de screenshot deixados nas páginas novas |
 
 ### Atualizado nesta execução (2026-07-20)
@@ -221,3 +221,6 @@ Ordenação sugerida alinhada ao que o usuário encontra primeiro no app:
 | `solutions/your-solutions` | ❌ Ausente | ✅ |
 | `orders/` | ❌ Ausente | ✅ |
 | `expert-help/` (+ job-request, hire-an-expert) | ❌ Ausente | ✅ |
+| `getting-started/register` | ❌ Ausente | ✅ |
+| `account/` (+ profile) | ❌ Ausente | ✅ |
+| `about/_index` | 🟡 Stub | ✅ |

@@ -27,3 +27,12 @@ The table below lists the services available in the platform. Each service has i
 | Stack Evolution | Monitors the evolution of your infrastructure stacks, tracking versioning, dependencies, and changes across deployments. Helps you understand how your technology stack is maturing over time. |
 | IaC Adoption | Measures how much of your infrastructure is managed through Infrastructure as Code versus manually provisioned. Identifies gaps and provides a roadmap to increase IaC coverage across your environments. |
 | Costs Analyzer | Analyzes cloud spending across providers and surfaces optimization recommendations. Helps you identify waste, right-size resources, and forecast future costs. |
+
+## Next steps in the docs
+
+| Guide | Description |
+|-------|-------------|
+| [Register](register/) | Finish organization setup after signup |
+| [Dashboard](dashboard/) | Home screen and first steps |
+| [Cloud Accounts](cloud-accounts/) | Link providers for analysis |
+| [Marketplace](marketplace/) | Browse pre-built solutions |

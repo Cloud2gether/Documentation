@@ -195,7 +195,7 @@ Ordenação sugerida alinhada ao que o usuário encontra primeiro no app:
 | 2 Cloud Accounts gaps | ✅ | Managing Accounts + Oracle + Alibaba |
 | 3 Solutions / Analysis | ✅ | Resource Catalog (+ subpáginas), Lock-In, IaC, Stack placeholder |
 | 4 AI Agents | ✅ | Índice + Available/Installed + Chat/Resource/IaC/Lock-In |
-| 5 Company | ⏳ | |
+| 5 Company | ✅ | Profile, Users, Teams, Billing, Plans |
 | 6 Solutions comerciais | ⏳ | |
 | 7 Account / About / Register | ⏳ | |
 | 8 Screenshots + polish | ⏳ | TODOs de screenshot deixados nas páginas novas |
@@ -217,3 +217,4 @@ Ordenação sugerida alinhada ao que o usuário encontra primeiro no app:
 | `cloud-accounts/oracle` | ❌ Ausente | ✅ (nova) |
 | `cloud-accounts/alibaba` | ❌ Ausente | ✅ (nova) |
 | `ai-agents/_index` + available/installed + 4 agent types | 🟡 / ❌ | ✅ |
+| `company/` (+ profile, users, teams, billing, plans) | ❌ Ausente | ✅ (nova seção) |

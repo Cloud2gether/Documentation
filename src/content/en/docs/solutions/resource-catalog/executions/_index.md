@@ -24,9 +24,9 @@ Open a specific run at `/resources-catalog/executions/<id>` for sync-run details
 2. Open an execution to inspect sync runs and outcomes
 3. Return to **Catalog** after a successful sync to see updated inventory
 
-{{< alert color="info" title="Tip" >}}
+{{% alert color="info" title="Tip" %}}
 If the catalog looks empty, check Sync executions first and confirm your [cloud accounts](../../../cloud-accounts/) are connected and syncing.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

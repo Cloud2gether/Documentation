@@ -56,9 +56,9 @@ Depending on your role and the target user, **Options** may include:
 - **Resend invite** — for invited users who have not joined yet
 - **Remove user** — remove a user from the organization (with confirmation)
 
-{{< alert color="warning" title="Owner role" >}}
+{{% alert color="warning" title="Owner role" %}}
 Some actions (including changing Company Profile) require the **Owner** role. Use this Users list to review who has which role.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

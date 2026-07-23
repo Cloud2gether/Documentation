@@ -22,9 +22,9 @@ Unlike marketplace agents under **Agents → Available / Installed**, Chat Agent
 
 <!-- TODO: Add screenshot — /images/agents/chat-agent.png -->
 
-{{< alert color="info" title="Availability" >}}
+{{% alert color="info" title="Availability" %}}
 If you do not see the chat assistant, it may be disabled for your environment or plan. Use the **Agents** marketplace for installable specialist agents such as Resource, IaC, and Lock-In.
-{{< /alert >}}
+{{% /alert %}}
 
 ## What you can do
 

@@ -15,9 +15,9 @@ Subtitle: *Update your company information and address.*
 - An active Cloud2Gether organization
 - The **Owner** role — only Owners can change Company Profile information
 
-{{< alert color="info" title="Permissions" >}}
+{{% alert color="info" title="Permissions" %}}
 The app shows: *Only the user with the "Owner" role can change the Company Profile information.* Check roles on the [Users](../users/) list.
-{{< /alert >}}
+{{% /alert %}}
 
 ## How to access
 

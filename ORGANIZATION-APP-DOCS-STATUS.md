@@ -198,7 +198,7 @@ Ordenação sugerida alinhada ao que o usuário encontra primeiro no app:
 | 5 Company | ✅ | Profile, Users, Teams, Billing, Plans |
 | 6 Solutions comerciais | ✅ | Your Solutions + Orders + Expert Help (Service Hub) |
 | 7 Account / About / Register | ✅ | Register + Account/User profile + About |
-| 8 Screenshots + polish | ⏳ | TODOs de screenshot deixados nas páginas novas |
+| 8 Screenshots + polish | ⏳ | Em aberto — alerts já migrados para `{{% alert %}}` (Markdown) |
 
 ### Atualizado nesta execução (2026-07-20)
 

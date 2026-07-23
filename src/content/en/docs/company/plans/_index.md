@@ -44,9 +44,9 @@ Plan cards list included features (with checkmarks and short descriptions when p
 
 <!-- TODO: Add screenshot — /images/company/plan-change-modal.png -->
 
-{{< alert color="info" title="Modules and access" >}}
+{{% alert color="info" title="Modules and access" %}}
 Your active plan controls which Analysis modules and capabilities are available. After changing plans, revisit Analysis tools (Resource Catalog, Lock-In, IaC) if access was previously gated.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Custom plan
 

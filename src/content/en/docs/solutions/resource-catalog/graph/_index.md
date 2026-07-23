@@ -22,9 +22,9 @@ URL: `/resources-catalog/graph`
 - Investigate blast radius or dependency clusters
 - Complement the tabular **Resources** inventory with a visual map
 
-{{< alert color="info" title="Data dependent" >}}
+{{% alert color="info" title="Data dependent" %}}
 The graph reflects resources already synced into the catalog. If the canvas is empty, confirm [Sync executions](../executions/) completed successfully.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

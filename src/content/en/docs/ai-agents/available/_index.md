@@ -37,9 +37,9 @@ If the list is empty, you will see: *No agents available at this time.*
 
 <!-- TODO: Add screenshot — /images/agents/install-dialog.png -->
 
-{{< alert color="info" title="After install" >}}
+{{% alert color="info" title="After install" %}}
 Installed agents unlock capabilities in the areas listed under **Works in**. Make sure related modules (for example Resource Catalog or Lock-In Analyzer) are available on your plan and that cloud accounts are syncing.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

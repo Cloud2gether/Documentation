@@ -64,17 +64,17 @@ Cloud2Gether authenticates with an OCI **API signing key** pair.
 
 <!-- TODO: Add screenshot — /images/oracle/api-keys.png -->
 
-{{< alert color="danger" title="Important" >}}
+{{% alert color="danger" title="Important" %}}
 The **private key (PEM)** is shown or downloaded only when you create it. Store it securely and never commit it to source control or share it in chat. You will paste the PEM content into Cloud2Gether.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Step 4 — Confirm read access for discovery
 
 Ensure the OCI user (or a group the user belongs to) has policies that allow **read/inspect** access to the resources you want Cloud2Gether to analyze.
 
-{{< alert color="info" title="Least privilege" >}}
+{{% alert color="info" title="Least privilege" %}}
 Prefer policies that grant inspect/read on compartments you care about, rather than broad manage permissions. If your organization uses a dedicated automation user, create the API key on that user and use its OCID in Cloud2Gether.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 
@@ -110,9 +110,9 @@ Complete the steps in the app:
 2. Wait while Cloud2Gether validates the credentials
 3. On success, you are returned to the Cloud Accounts list — open **View Account** to manage Overview, Configuration, Credentials, and Logs
 
-{{< alert color="warning" title="Validation failed?" >}}
+{{% alert color="warning" title="Validation failed?" %}}
 If you see **We couldn't verify your Oracle credentials**, double-check the User OCID, Tenancy OCID, fingerprint, and that the private key matches the uploaded public key. Also confirm the user has policy access to the tenancy/compartments you expect.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

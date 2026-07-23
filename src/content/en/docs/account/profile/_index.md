@@ -34,9 +34,9 @@ The page loads your user profile with **contacts** enabled. Typical actions incl
 
 Save changes using the controls provided by the profile component in the UI.
 
-{{< alert color="info" title="User vs Company" >}}
+{{% alert color="info" title="User vs Company" %}}
 This page is **your** personal profile. Organization name, address, and logo are managed under [Company → Profile](../../company/profile/) (Owner role).
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

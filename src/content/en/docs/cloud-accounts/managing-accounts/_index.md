@@ -70,9 +70,9 @@ Use Configuration to keep the account organized and control what Cloud2Gether sy
    - **Sync Settings** — toggles for each available capability (what data to collect and keep updated)
 3. Click **Update** to save
 
-{{< alert color="info" title="Sync capabilities" >}}
+{{% alert color="info" title="Sync capabilities" %}}
 If no capabilities appear, the provider may not expose sync options yet for this account. Check back after the connection is healthy, or contact support.
-{{< /alert >}}
+{{% /alert %}}
 
 <!-- TODO: Add screenshot — /images/cloud-accounts/configuration-tab.png -->
 
@@ -82,9 +82,9 @@ If no capabilities appear, the provider may not expose sync options yet for this
 
 The **Credentials** tab shows the credential form for the account’s provider (AWS, Azure, GCP, Oracle, or Alibaba). Use it when you need to rotate keys, update roles, or fix an authentication failure.
 
-{{< alert color="warning" title="Security" >}}
+{{% alert color="warning" title="Security" %}}
 Treat credentials as secrets. Prefer short-lived or role-based access when your provider supports it (for example, AWS Role Delegation). Never share credentials in tickets or chat.
-{{< /alert >}}
+{{% /alert %}}
 
 For initial setup guides, see:
 

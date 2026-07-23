@@ -63,9 +63,9 @@ Using the root AccessKey is strongly discouraged. Create a dedicated RAM user fo
    - A custom policy that grants read/list/describe on the services you want analyzed
 4. Confirm the permission grant
 
-{{< alert color="info" title="Least privilege" >}}
+{{% alert color="info" title="Least privilege" %}}
 Grant only the read permissions required for the resources Cloud2Gether should inventory. Avoid AdministratorAccess or other write-capable policies.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Step 4 — Create an AccessKey
 
@@ -76,9 +76,9 @@ Grant only the read permissions required for the resources Cloud2Gether should i
 
 <!-- TODO: Add screenshot — /images/alibaba/create-access-key.png -->
 
-{{< alert color="danger" title="Important" >}}
+{{% alert color="danger" title="Important" %}}
 The **Access Key Secret** is shown only once. Store it securely. If you lose it, create a new AccessKey and update Credentials in Cloud2Gether.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 
@@ -113,9 +113,9 @@ Complete the steps in the app:
 2. Wait while Cloud2Gether validates the credentials
 3. On success, return to the Cloud Accounts list and open **View Account** to manage Overview, Configuration, Credentials, and Logs
 
-{{< alert color="warning" title="Validation failed?" >}}
+{{% alert color="warning" title="Validation failed?" %}}
 If you see **We couldn't verify your Alibaba credentials**, confirm the Account ID, region, Access Key ID/Secret, and that the RAM user still has an active AccessKey with sufficient read permissions.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

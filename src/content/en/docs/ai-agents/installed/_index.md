@@ -29,9 +29,9 @@ If nothing is installed yet, you will see: *No agents installed yet. Browse the 
 3. On success, Cloud2Gether shows **Agent uninstalled successfully**
 4. The agent returns to [Available](../available/) for reinstall if needed
 
-{{< alert color="warning" title="Impact" >}}
+{{% alert color="warning" title="Impact" %}}
 Uninstalling an agent may disable the specialized skills that agent provided in related modules. Reinstall from Available when you need those capabilities again.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

@@ -67,9 +67,9 @@ Use **Back to your solutions** to return to the list. The side panel includes **
 4. Review the success confirmation when deployment completes
 5. Use **Exit to solutions** or **Back** as needed during the flow
 
-{{< alert color="info" title="Marketplace vs Your Solutions" >}}
+{{% alert color="info" title="Marketplace vs Your Solutions" %}}
 Browse and buy from **Marketplace**. Manage and deploy what you own under **Your Solutions**.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

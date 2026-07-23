@@ -7,9 +7,9 @@ description: "Connect your AWS account using cross-account IAM role delegation."
 
 This guide walks you through connecting your AWS account to Cloud2Gether using **IAM Role Delegation**. This is the **recommended** method for production environments because it uses temporary credentials and does not require storing long-lived access keys.
 
-{{< alert color="success" title="Recommended Method" >}}
+{{% alert color="success" title="Recommended Method" %}}
 Role Delegation follows AWS security best practices. Cloud2Gether assumes a role in your account using temporary credentials that are automatically rotated, eliminating the risk of leaked long-lived keys.
-{{< /alert >}}
+{{% /alert %}}
 
 ## How It Works
 
@@ -97,9 +97,9 @@ If you prefer full control or your organization restricts CloudFormation usage, 
 
 <!-- TODO: Add screenshot of trusted entity config — /images/aws/iam-role-trust-policy.png -->
 
-{{< alert color="info" title="External ID" >}}
+{{% alert color="info" title="External ID" %}}
 The External ID provides an additional layer of security against the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html" target="_blank" rel="noopener noreferrer">confused deputy problem</a>. You can find the External ID in the Cloud2Gether platform when adding a new AWS account.
-{{< /alert >}}
+{{% /alert %}}
 
 #### Step 3: Attach Permissions
 
@@ -154,18 +154,18 @@ The External ID provides an additional layer of security against the <a href="ht
 2. Enter your **AWS Account ID** (12-digit number found in the top-right corner of the AWS Console)
 3. Enter the **AWS Role ARN** you copied earlier
 
-{{< alert color="info" title="Where to find your Account ID" >}}
+{{% alert color="info" title="Where to find your Account ID" %}}
 Your AWS Account ID is a 12-digit number. You can find it by clicking your account name in the top-right corner of the AWS Management Console, or by running `aws sts get-caller-identity` in the AWS CLI.
-{{< /alert >}}
+{{% /alert %}}
 
 ### Step 4: Add the Account
 
 1. Click **Add Account**
 2. Cloud2Gether will validate the role assumption and begin discovering your AWS resources
 
-{{< alert color="success" title="Done!" >}}
+{{% alert color="success" title="Done!" %}}
 Your AWS account is now connected via Role Delegation. Cloud2Gether will start scanning your resources and they will appear in your dashboard within a few minutes.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 

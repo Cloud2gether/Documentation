@@ -23,9 +23,9 @@ description: "Search and browse cloud professionals to support your organization
 3. Use **Load more** when additional experts are available
 4. If nothing matches, the empty state indicates no expert was found
 
-{{< alert color="info" title="Related flow" >}}
+{{% alert color="info" title="Related flow" %}}
 Prefer a structured request with budget and expertise tags? Start a [New Job Request](../job-request/) instead of (or in addition to) browsing experts.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

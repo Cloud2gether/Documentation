@@ -57,9 +57,9 @@ When setup completes, continue to the [Dashboard](../dashboard/) and:
 2. Explore [Marketplace](../marketplace/) or Analysis tools
 3. Invite teammates under [Company → Users](../../company/users/)
 
-{{< alert color="info" title="Company Profile later" >}}
+{{% alert color="info" title="Company Profile later" %}}
 Owners can update organization details anytime under **Company → Profile**. See [Company Profile](../../company/profile/).
-{{< /alert >}}
+{{% /alert %}}
 
 ## Related
 

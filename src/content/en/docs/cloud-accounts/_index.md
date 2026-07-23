@@ -25,8 +25,8 @@ Quick start in Getting Started: [Cloud Accounts overview](../getting-started/clo
 | [AWS](aws/) | Access Key, Role Delegation, Access Key + Role | Ready |
 | [Azure](azure/) | Entra ID app registration + client secret | Ready |
 | [GCP](gcp/) | Service account JSON key | Ready |
-| Oracle | Linking available in the app | Guide coming soon |
-| Alibaba | Linking available in the app | Guide coming soon |
+| [Oracle](oracle/) | API Key Authentication (OCID + PEM) | Ready |
+| [Alibaba](alibaba/) | Access Key ID + Secret | Ready |
 
 ## Managing linked accounts
 

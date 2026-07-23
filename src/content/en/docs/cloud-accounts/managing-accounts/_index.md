@@ -91,6 +91,8 @@ For initial setup guides, see:
 - [AWS](../aws/)
 - [Azure](../azure/)
 - [GCP](../gcp/)
+- [Oracle](../oracle/)
+- [Alibaba](../alibaba/)
 
 <!-- TODO: Add screenshot — /images/cloud-accounts/credentials-tab.png -->
 
@@ -112,4 +114,4 @@ If the table is empty, no logs are available yet for this account.
 
 - [Cloud Accounts overview](../)
 - [Getting Started — Cloud Accounts](../../getting-started/cloud-accounts/)
-- [AWS](../aws/) · [Azure](../azure/) · [GCP](../gcp/)
+- [AWS](../aws/) · [Azure](../azure/) · [GCP](../gcp/) · [Oracle](../oracle/) · [Alibaba](../alibaba/)

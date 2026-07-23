@@ -48,8 +48,8 @@ If you have no accounts yet, an empty state invites you to link your first accou
 | **AWS** | [Connect AWS](../../cloud-accounts/aws/) |
 | **Azure** | [Connect Azure](../../cloud-accounts/azure/) |
 | **Google Cloud (GCP)** | [Connect GCP](../../cloud-accounts/gcp/) |
-| **Oracle** | Guide coming soon — linking is available in the app |
-| **Alibaba** | Guide coming soon — linking is available in the app |
+| **Oracle** | [Connect Oracle](../../cloud-accounts/oracle/) |
+| **Alibaba** | [Connect Alibaba](../../cloud-accounts/alibaba/) |
 
 ## Manage an existing account
 

@@ -192,9 +192,9 @@ Ordenação sugerida alinhada ao que o usuário encontra primeiro no app:
 |------|--------|-------|
 | 0 Setup | ✅ | Template em `docs/plans/DOC-PAGE-TEMPLATE.md` |
 | 1 Getting Started | ✅ | Dashboard, Cloud Accounts overview, Marketplace |
-| 2 Cloud Accounts gaps | 🔄 | Managing Accounts ✅ · Oracle/Alibaba ainda pendentes |
+| 2 Cloud Accounts gaps | ✅ | Managing Accounts + Oracle + Alibaba |
 | 3 Solutions / Analysis | ✅ | Resource Catalog (+ subpáginas), Lock-In, IaC, Stack placeholder |
-| 4 AI Agents | ⏳ | |
+| 4 AI Agents | ✅ | Índice + Available/Installed + Chat/Resource/IaC/Lock-In |
 | 5 Company | ⏳ | |
 | 6 Solutions comerciais | ⏳ | |
 | 7 Account / About / Register | ⏳ | |
@@ -214,3 +214,6 @@ Ordenação sugerida alinhada ao que o usuário encontra primeiro no app:
 | `solutions/lockin-analyzer` (+ analysis, compare) | 🟡 / ❌ | ✅ |
 | `solutions/iac-analyzer` (+ analysis) | 🟡 / ❌ | ✅ |
 | `solutions/stack-analyzer` | 🟡 Stub | ✅ (Coming soon) |
+| `cloud-accounts/oracle` | ❌ Ausente | ✅ (nova) |
+| `cloud-accounts/alibaba` | ❌ Ausente | ✅ (nova) |
+| `ai-agents/_index` + available/installed + 4 agent types | 🟡 / ❌ | ✅ |

@@ -2,7 +2,7 @@ module github.com/cloud2gether/documentation
 
 go 1.21
 
-require github.com/google/docsy v0.13.0
+require github.com/google/docsy v0.15.0
 
 require (
 	github.com/FortAwesome/Font-Awesome v0.0.0-20241216213156-af620534bfc3 // indirect

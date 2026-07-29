@@ -60,9 +60,9 @@ After registration, you will be taken to the application's **Overview** page. Co
 
 <!-- TODO: Add screenshot — /images/azure/entra-app-overview.png -->
 
-{{< alert color="info" title="Finding Your Tenant ID" >}}
+{{% alert color="info" title="Finding Your Tenant ID" %}}
 The Tenant ID (Directory ID) is also available at **Microsoft Entra ID → Overview**. It is the same value across all app registrations in your directory.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 
@@ -81,9 +81,9 @@ A client secret is a password that Cloud2Gether uses to authenticate as the regi
    - **Expires**: Choose an expiration period (recommended: **24 months**)
 5. Click **Add**
 
-{{< alert color="danger" title="Important" >}}
+{{% alert color="danger" title="Important" %}}
 Copy the **Value** column immediately after creation. This is the **only time** you can view the client secret value. If you lose it, you will need to create a new one. The **Secret ID** is not the same as the secret value.
-{{< /alert >}}
+{{% /alert %}}
 
 <!-- TODO: Add screenshot — /images/azure/entra-secret-created.png -->
 
@@ -141,9 +141,9 @@ Repeat the same process for the Monitoring Data Reader role:
 
 <!-- TODO: Add screenshot — /images/azure/subscription-role-assignments-list.png -->
 
-{{< alert color="info" title="Multiple Subscriptions" >}}
+{{% alert color="info" title="Multiple Subscriptions" %}}
 If you want Cloud2Gether to analyze multiple subscriptions, repeat Step 3 for each subscription. You can reuse the same App Registration — just assign the Reader and Monitoring Data Reader roles on each additional subscription.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 
@@ -192,11 +192,11 @@ Enter the four values you collected during the Azure configuration:
 
 <!-- TODO: Add screenshot — /images/azure/c2g-azure-credentials-form.png -->
 
-{{< alert color="warning" title="Common Mistakes" >}}
+{{% alert color="warning" title="Common Mistakes" %}}
 - Ensure there are **no extra spaces** when pasting values
 - Use the secret **Value**, not the **Secret ID**
 - The **Client ID** is the Application ID, not the Object ID
-{{< /alert >}}
+{{% /alert %}}
 
 ## Step 7 — Add the Account
 
@@ -208,9 +208,9 @@ Enter the four values you collected during the Azure configuration:
 
 If successful, the account will appear in your Cloud Accounts list.
 
-{{< alert color="success" title="Done!" >}}
+{{% alert color="success" title="Done!" %}}
 Your Azure subscription is now connected. Cloud2Gether will start scanning your resources and they will appear in your dashboard within a few minutes.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 

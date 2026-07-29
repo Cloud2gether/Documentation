@@ -7,9 +7,9 @@ description: "Connect your AWS account using IAM user access keys."
 
 This guide walks you through connecting your AWS account to Cloud2Gether using an **IAM Access Key and Secret Key**. This is the simplest connection method, ideal for quick setups and development environments.
 
-{{< alert color="warning" title="Security Note" >}}
+{{% alert color="warning" title="Security Note" %}}
 Access keys are long-lived credentials. For production environments, consider using [Role Delegation](../role-delegation/) instead, which uses temporary credentials and is more secure.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Part 1: Create an IAM User in AWS
 
@@ -38,9 +38,9 @@ Access keys are long-lived credentials. For production environments, consider us
 
 <!-- TODO: Add screenshot of permissions page — /images/aws/iam-create-user-permissions.png -->
 
-{{< alert color="info" title="About ReadOnlyAccess" >}}
+{{% alert color="info" title="About ReadOnlyAccess" %}}
 The `ReadOnlyAccess` policy grants read-only access to all AWS services. This allows Cloud2Gether to discover and analyze all your cloud resources without being able to modify anything.
-{{< /alert >}}
+{{% /alert %}}
 
 ### Step 4: Review and Create
 
@@ -70,9 +70,9 @@ The `ReadOnlyAccess` policy grants read-only access to all AWS services. This al
 
 You will see your **Access Key ID** and **Secret Access Key**. Copy both values and store them securely.
 
-{{< alert color="danger" title="Important" >}}
+{{% alert color="danger" title="Important" %}}
 This is the **only time** you can view or copy the Secret Access Key. If you lose it, you will need to create a new access key. Store these credentials securely and never share them publicly.
-{{< /alert >}}
+{{% /alert %}}
 
 <!-- TODO: Add screenshot of access key created page — /images/aws/iam-access-key-created.png -->
 
@@ -104,9 +104,9 @@ This is the **only time** you can view or copy the Secret Access Key. If you los
 1. Click **Add Account**
 2. Cloud2Gether will validate your credentials and begin discovering your AWS resources
 
-{{< alert color="success" title="Done!" >}}
+{{% alert color="success" title="Done!" %}}
 Your AWS account is now connected. Cloud2Gether will start scanning your resources and they will appear in your dashboard within a few minutes.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 

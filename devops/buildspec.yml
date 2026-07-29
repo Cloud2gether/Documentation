@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   secrets-manager:
-    SONAR_LOGIN: sonar:LOGIN
+    SONAR_TOKEN: sonar:TOKEN
     SONAR_HOST: sonar:HOST
     SONAR_ORGANIZATION: sonar:ORGANIZATION
   variables:
@@ -45,12 +45,12 @@ phases:
       - echo $PULLREQUEST_NUMBER
       - if [ -z "$PULLREQUEST_NUMBER" ] ;
         then
-          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public;
+          sonar-scanner -Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public;
         else
-          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public -Dsonar.pullrequest.key=$PULLREQUEST_NUMBER;
+          sonar-scanner -Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public -Dsonar.pullrequest.key=$PULLREQUEST_NUMBER;
         fi
       - sleep 15
-      - curl -u $SONAR_LOGIN:"" https://sonarcloud.io/api/qualitygates/project_status?projectKey=$SONAR_PROJECTKEY >result.json
+      - curl -u $SONAR_TOKEN:"" https://sonarcloud.io/api/qualitygates/project_status?projectKey=$SONAR_PROJECTKEY >result.json
       - cat result.json
 artifacts:
   discard-paths: no

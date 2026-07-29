@@ -87,9 +87,6 @@ Resources:
       TimeoutInMinutes: 20
       Triggers:
         Webhook: true
-        # T4 / BUG FIX: dev filter had HEAD_REF = main (include), so it only built
-        # main -> dev back-merges and IGNORED normal feature -> dev PRs. Removed the
-        # HEAD_REF condition so ANY PR targeting dev is validated.
         FilterGroups:
           - - Type: EVENT
               Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED,PULL_REQUEST_REOPENED

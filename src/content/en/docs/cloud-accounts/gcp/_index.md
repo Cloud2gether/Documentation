@@ -71,9 +71,9 @@ After creating the service account, you need to assign roles that grant read-onl
 
 <!-- TODO: Add screenshot — /images/gcp/gcp-service-account-roles.png -->
 
-{{< alert color="info" title="About the Viewer Role" >}}
+{{% alert color="info" title="About the Viewer Role" %}}
 The **Viewer** role grants read-only access to all resources in the project. This allows Cloud2Gether to discover and analyze your infrastructure without being able to modify anything. For a more granular approach, see the [Custom Role](#custom-role-optional) section below.
-{{< /alert >}}
+{{% /alert %}}
 
 6. The **Grant users access to this service account** step is optional — you can skip it
 7. Click **Done**
@@ -97,9 +97,9 @@ Cloud2Gether authenticates using a service account key file in JSON format.
 
 The JSON key file will be **automatically downloaded** to your computer.
 
-{{< alert color="danger" title="Important" >}}
+{{% alert color="danger" title="Important" %}}
 Store this JSON key file securely. It contains credentials that provide access to your GCP project. If you lose this file, you can generate a new key, but the old key cannot be recovered. Never commit this file to source control or share it publicly.
-{{< /alert >}}
+{{% /alert %}}
 
 The JSON key file will look similar to this:
 
@@ -136,7 +136,7 @@ Cloud2Gether needs certain Google Cloud APIs to be enabled in your project to di
 
 <!-- TODO: Add screenshot — /images/gcp/gcp-enabled-apis.png -->
 
-{{< alert color="info" title="Enabling APIs via gcloud CLI" >}}
+{{% alert color="info" title="Enabling APIs via gcloud CLI" %}}
 You can also enable APIs using the `gcloud` CLI:
 ```bash
 gcloud services enable cloudresourcemanager.googleapis.com \
@@ -146,7 +146,7 @@ gcloud services enable cloudresourcemanager.googleapis.com \
   cloudbilling.googleapis.com \
   --project=YOUR_PROJECT_ID
 ```
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 
@@ -183,9 +183,9 @@ Upload the JSON key file you downloaded in Step 3:
 - Click the **Upload File** button, or **drag and drop** the `.json` file into the upload area
 - Cloud2Gether will read the project ID and credentials from the file automatically
 
-{{< alert color="warning" title="File Validation" >}}
+{{% alert color="warning" title="File Validation" %}}
 Ensure you upload the correct `.json` key file. Cloud2Gether validates the file format and will display an error if the file is invalid or incomplete.
-{{< /alert >}}
+{{% /alert %}}
 
 ### 3. Organization ID (Optional)
 
@@ -193,13 +193,13 @@ If your GCP project belongs to a Google Cloud Organization and you want Cloud2Ge
 
 1. Enter your **Organization ID** (a numeric ID)
 
-{{< alert color="info" title="Finding Your Organization ID" >}}
+{{% alert color="info" title="Finding Your Organization ID" %}}
 You can find your Organization ID in the <a href="https://console.cloud.google.com/cloud-resource-manager" target="_blank" rel="noopener noreferrer">Resource Manager</a> page, or by running:
 ```bash
 gcloud organizations list
 ```
 The Organization ID is the numeric value in the `ID` column.
-{{< /alert >}}
+{{% /alert %}}
 
 ### 4. Add Role Override (Optional)
 
@@ -217,9 +217,9 @@ If you need to override the default role behavior for specific use cases, you ca
 
 If successful, the account will appear in your Cloud Accounts list.
 
-{{< alert color="success" title="Done!" >}}
+{{% alert color="success" title="Done!" %}}
 Your GCP project is now connected. Cloud2Gether will start scanning your resources and they will appear in your dashboard within a few minutes.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 

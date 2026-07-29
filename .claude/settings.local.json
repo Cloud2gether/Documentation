@@ -18,7 +18,10 @@
       "Bash(grep -r \"tabpane\" /Volumes/Backup/Projects/Cloud2Gether/Documentation/src/node_modules/@getkirby -type f)",
       "Bash(grep -r \"tabpane\" /Volumes/Backup/Projects/Cloud2Gether/Documentation/src/node_modules -type f)",
       "Bash(npm run build)",
-      "Bash(git push origin dev)"
+      "Bash(git push origin dev)",
+      "Bash(curl -s https://api.github.com/repos/gohugoio/hugo/releases/tags/v0.152.2)",
+      "Bash(curl -sI https://github.com/gohugoio/hugo/releases/download/v0.152.2/hugo_extended_0.152.2_linux-amd64.tar.gz -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(curl -sI -L https://github.com/gohugoio/hugo/releases/download/v0.152.2/hugo_extended_0.152.2_linux-amd64.tar.gz -o /dev/null -w \"%{http_code}\\\\n\")"
     ]
   }
 }

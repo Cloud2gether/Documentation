@@ -25,9 +25,9 @@ Cloud2Gether supports three methods to connect your AWS account. Choose the one 
 | [Role Delegation](role-delegation/) | **High** | Medium | **Production environments, multi-account setups (Recommended)** |
 | [Access Key + Role Name](access-key-with-role/) | High | Medium | Central account assuming roles across multiple accounts |
 
-{{< alert color="info" title="Recommendation" >}}
+{{% alert color="info" title="Recommendation" %}}
 For production environments, we strongly recommend using **Role Delegation**. It avoids storing long-lived credentials and follows AWS security best practices by using temporary credentials through IAM role assumption.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Required AWS Permissions
 
@@ -35,9 +35,9 @@ Regardless of the connection method you choose, Cloud2Gether needs **read-only a
 
 The simplest approach is to use the AWS managed policy **`ReadOnlyAccess`** (ARN: `arn:aws:iam::aws:policy/ReadOnlyAccess`). This policy grants read-only access to all AWS services.
 
-{{< alert color="warning" title="Custom Policies" >}}
+{{% alert color="warning" title="Custom Policies" %}}
 If your organization requires a more restrictive policy, you can create a custom IAM policy that grants read-only access only to the specific services you want Cloud2Gether to analyze. Contact our support team for guidance on minimum required permissions.
-{{< /alert >}}
+{{% /alert %}}
 
 ## Next Steps
 

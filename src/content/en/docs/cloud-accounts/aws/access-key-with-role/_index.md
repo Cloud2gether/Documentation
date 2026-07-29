@@ -95,7 +95,7 @@ Instead of attaching `ReadOnlyAccess` directly, this user only needs permission 
 
 Replace `<TARGET_ACCOUNT_ID>` with the AWS Account ID of the target account where the role was created.
 
-{{< alert color="info" title="Multiple Accounts" >}}
+{{% alert color="info" title="Multiple Accounts" %}}
 To assume roles in multiple target accounts, add each role ARN to the `Resource` array:
 ```json
 "Resource": [
@@ -103,7 +103,7 @@ To assume roles in multiple target accounts, add each role ARN to the `Resource`
   "arn:aws:iam::222222222222:role/Cloud2GetherReadOnlyRole"
 ]
 ```
-{{< /alert >}}
+{{% /alert %}}
 
 4. Click **Next**
 5. Name the policy, for example: `Cloud2GetherAssumeRolePolicy`
@@ -126,9 +126,9 @@ To assume roles in multiple target accounts, add each role ARN to the `Resource`
 5. Click **Next** → **Create access key**
 6. Copy the **Access Key ID** and **Secret Access Key**
 
-{{< alert color="danger" title="Important" >}}
+{{% alert color="danger" title="Important" %}}
 This is the **only time** you can view or copy the Secret Access Key. Store these credentials securely.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 
@@ -159,14 +159,14 @@ Ensure the role in the target account trusts the IAM user you created.
 
 Replace `<MANAGEMENT_ACCOUNT_ID>` with the Account ID where the IAM user resides.
 
-{{< alert color="info" title="Restricting Trust" >}}
+{{% alert color="info" title="Restricting Trust" %}}
 For tighter security, you can restrict the trust to the specific IAM user instead of the entire account:
 ```json
 "Principal": {
   "AWS": "arn:aws:iam::<MANAGEMENT_ACCOUNT_ID>:user/cloud2gether-assume-role"
 }
 ```
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 
@@ -197,9 +197,9 @@ For tighter security, you can restrict the trust to the specific IAM user instea
 1. Click **Add Account**
 2. Cloud2Gether will use the access keys to assume the specified role and begin discovering resources
 
-{{< alert color="success" title="Done!" >}}
+{{% alert color="success" title="Done!" %}}
 Your AWS account is now connected using Access Key + Role Name. Cloud2Gether will assume the specified role to scan your resources, and they will appear in your dashboard within a few minutes.
-{{< /alert >}}
+{{% /alert %}}
 
 ---
 

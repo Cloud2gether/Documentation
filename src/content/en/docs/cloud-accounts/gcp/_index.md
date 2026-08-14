@@ -23,10 +23,12 @@ Before you begin, make sure you have:
 
 At the end of this setup, you will have:
 
-| Item | Description |
-|------|-------------|
-| **Service Account JSON Key** | A downloaded `.json` key file used to authenticate |
-| **Organization ID** (optional) | Your Google Cloud Organization ID, if you want org-level visibility |
+| Item | Description | Where to find |
+|------|-------------|---------------|
+| **Account Name** | A descriptive display name in Cloud2Gether | Choose your own (e.g., `GCP Production`) |
+| **Client ID** | The unique numeric Client ID of your Service Account | In the JSON file (`"client_id"`) or GCP Console |
+| **Service Account JSON Key** | The downloaded `.json` key file | Generated in GCP Service Account Keys tab |
+| **Project ID** | Your Google Cloud project identifier | In the JSON file (`"project_id"`) or GCP Console |
 
 ---
 
@@ -101,7 +103,7 @@ The JSON key file will be **automatically downloaded** to your computer.
 Store this JSON key file securely. It contains credentials that provide access to your GCP project. If you lose this file, you can generate a new key, but the old key cannot be recovered. Never commit this file to source control or share it publicly.
 {{% /alert %}}
 
-The JSON key file will look similar to this:
+The JSON key file contains all the credentials and identifiers needed for the connection:
 
 ```json
 {
@@ -110,12 +112,19 @@ The JSON key file will look similar to this:
   "private_key_id": "key-id",
   "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
   "client_email": "cloud2gether-readonly@your-project-id.iam.gserviceaccount.com",
-  "client_id": "123456789",
+  "client_id": "108234567890123456789",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
   "token_uri": "https://oauth2.googleapis.com/token",
-  ...
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloud2gether-readonly%40your-project-id.iam.gserviceaccount.com"
 }
 ```
+
+{{% alert color="info" title="Key Fields in JSON" %}}
+- **`client_id`**: Used in Step 2 of Cloud2Gether setup.
+- **`project_id`**: Used in Step 4 of Cloud2Gether setup.
+- **`private_key` & `client_email`**: Automatically parsed when uploading the file in Step 3.
+{{% /alert %}}
 
 ---
 
@@ -156,10 +165,11 @@ gcloud services enable cloudresourcemanager.googleapis.com \
 
 1. Log in to <a href="https://app.cloud2gether.com" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
 2. In the left sidebar, click **Cloud Accounts**
-3. Click the **Add Account** button
+3. Click the **Link account** (or **Add Account**) button
 4. Select **GCP** (Google Cloud Platform) as the cloud provider
+5. On the **Link new Google Cloud account** page, ensure **Service Account Key (JSON)** is selected (selected by default)
 
-You will see the connection form:
+You will see the 4-step connection form:
 
 ![Cloud2Gether GCP Connection Form](/images/gcp/add_cloud_account_google.png)
 
@@ -167,55 +177,44 @@ You will see the connection form:
 
 ## Step 6 — Enter Account Information
 
-### 1. Account Name
+Follow the 4 numbered steps on the screen:
 
-Enter a logical name to identify this GCP project inside Cloud2Gether.
+### 1. Select an account name
+Enter a logical, descriptive name to identify this GCP project inside Cloud2Gether.
 
-Examples:
-- `GCP Production`
-- `GCP Dev/Staging`
-- `Data Analytics Project`
+- **Examples**: `GCP Production`, `GCP Dev/Staging`, `Data Analytics Project`
 
-### 2. Upload Service Account JSON
+### 2. Client ID
+Enter the **Client ID** associated with your Google Cloud Service Account.
 
-Upload the JSON key file you downloaded in Step 3:
+- **Where to find**: Open your downloaded Service Account `.json` file and copy the numeric value from the `"client_id"` field (e.g., `108234567890123456789`), or find the **Unique ID / Client ID** on the Service Account details page in the Google Cloud Console.
 
-- Click the **Upload File** button, or **drag and drop** the `.json` file into the upload area
-- Cloud2Gether will read the project ID and credentials from the file automatically
+### 3. Upload Service Account JSON
+Upload the Service Account JSON key file you downloaded in Step 3:
+
+- Click the **Upload file** button, or **drag and drop** the `.json` file into the upload zone.
+- Cloud2Gether automatically validates the JSON format and extracts credentials securely.
 
 {{% alert color="warning" title="File Validation" %}}
-Ensure you upload the correct `.json` key file. Cloud2Gether validates the file format and will display an error if the file is invalid or incomplete.
+Ensure you upload the correct `.json` key file. Cloud2Gether validates the JSON schema (`type: "service_account"`, `project_id`, `private_key_id`, `private_key`, `client_email`, `client_id`). If the file is invalid, missing required fields, or corrupted, validation error messages will be displayed.
 {{% /alert %}}
 
-### 3. Organization ID (Optional)
+### 4. Project ID
+Enter your Google Cloud **Project ID** (e.g., `my-cloud-project-123456`).
 
-If your GCP project belongs to a Google Cloud Organization and you want Cloud2Gether to have visibility into the organization structure:
-
-1. Enter your **Organization ID** (a numeric ID)
-
-{{% alert color="info" title="Finding Your Organization ID" %}}
-You can find your Organization ID in the <a href="https://console.cloud.google.com/cloud-resource-manager" target="_blank" rel="noopener noreferrer">Resource Manager</a> page, or by running:
-```bash
-gcloud organizations list
-```
-The Organization ID is the numeric value in the `ID` column.
-{{% /alert %}}
-
-### 4. Add Role Override (Optional)
-
-If you need to override the default role behavior for specific use cases, you can add a custom role or action in this field. For most setups, this can be left empty.
+- **Where to find**: Copy the project ID from the `"project_id"` field in your JSON key file, or from the GCP Console project selector.
 
 ---
 
-## Step 7 — Add the Account
+## Step 7 — Create Configuration
 
-1. Click **Add Account**
+1. Click **Create configuration** (or click **Cancel** if you need to discard changes).
 2. Cloud2Gether will validate:
-   - Service account key authenticity
+   - Service account key authenticity and private key signature
+   - Client ID and Project ID validity
    - IAM permissions on the project
    - API availability
-
-If successful, the account will appear in your Cloud Accounts list.
+3. If validation succeeds, your GCP account is linked and will appear in your **Cloud Accounts** list.
 
 {{% alert color="success" title="Done!" %}}
 Your GCP project is now connected. Cloud2Gether will start scanning your resources and they will appear in your dashboard within a few minutes.
@@ -282,32 +281,30 @@ Then add each project as a separate cloud account in Cloud2Gether using the same
 
 # Troubleshooting
 
-## Invalid Service Account Key
+## Invalid Service Account Key or JSON Validation Errors
 
-- Verify you uploaded the correct `.json` file (not a `.p12` or other format)
-- Ensure the JSON file has not been modified or corrupted
-- Generate a new key if the current one is compromised or lost
+- **Missing fields error**: Ensure your JSON key file was exported directly from GCP IAM. The file must contain `"type": "service_account"`, `"project_id"`, `"private_key_id"`, `"private_key"`, `"client_email"`, and `"client_id"`.
+- **Invalid JSON syntax**: Verify that the file has not been edited or truncated during download.
+- **Client ID mismatch**: Ensure the **Client ID** entered in Step 2 matches the numeric `"client_id"` present in the JSON file.
+- **Project ID mismatch**: Verify that the **Project ID** entered in Step 4 matches the `"project_id"` in the JSON file and your GCP project.
+- **Expired or revoked key**: If the service account key was deleted or rotated in GCP, generate a new key in the Google Cloud Console and update your credentials.
 
 ## Permission Denied Errors
 
-- Verify the service account has the **Viewer** and **Monitoring Viewer** roles on the project
-- Check that the roles are assigned at the **project level**, not just on individual resources
-- Ensure the service account belongs to (or has access to) the correct project
+- Verify the service account has the **Viewer** (`roles/viewer`) and **Monitoring Viewer** (`roles/monitoring.viewer`) roles on the project.
+- Check that the roles are assigned at the **project level**, not just on individual resources.
+- Ensure the service account belongs to (or has access to) the correct project.
 
 ## API Not Enabled
 
-- Navigate to **APIs & Services** → **Enabled APIs & services** and verify the required APIs are enabled
-- Some APIs take a few minutes to become active after enabling
+- Navigate to **APIs & Services** → **Enabled APIs & services** and verify the required APIs (Cloud Resource Manager, Compute Engine, Cloud Monitoring, Cloud Asset, Cloud Billing) are enabled.
+- Some APIs take a few minutes to become active after enabling.
 
 ## Resources Not Appearing
 
-- Allow a few minutes for the initial resource discovery to complete
-- Verify the project has active resources (empty projects will show no results)
-- Check that the Compute Engine API and Cloud Asset API are enabled
-
-## Organization-Level Issues
-
-- If you entered an Organization ID but see errors, ensure the service account has the **Organization Viewer** role (`roles/resourcemanager.organizationViewer`) at the organization level
+- Allow a few minutes for the initial resource discovery to complete.
+- Verify the project has active resources (empty projects will show no results).
+- Check that the Compute Engine API and Cloud Asset API are enabled.
 
 ---
 

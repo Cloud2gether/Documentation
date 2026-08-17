@@ -2,7 +2,6 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: DocsWebSite-Pipeline-Template
 Transform: 'AWS::LanguageExtensions'
 
-#Version 2020-10-13
 Parameters:
   GitHubOwner:
     Type: String
@@ -20,12 +19,12 @@ Parameters:
   ProdAccountNumber:
     Type: String
     Default: '792856841274'
-  
+
 
   GitHubDevBranch:
     Type: String
     Default: dev
-  
+
   GitHubProdBranch:
     Type: String
     Default: main
@@ -37,7 +36,7 @@ Parameters:
   PipelineBucket:
     Type: String
     Default: cloud2gether-pipeline
-  
+
   ArtifactsBucket:
     Type: String
     Default: cloud2gether-artifacts
@@ -63,6 +62,11 @@ Resources:
       ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/CodeBuildServiceRole"
       Artifacts:
           Type: NO_ARTIFACTS
+      # T5: source cache only - no PrivilegedMode here, so no Docker layer cache.
+      Cache:
+        Type: LOCAL
+        Modes:
+          - LOCAL_SOURCE_CACHE
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -78,7 +82,7 @@ Resources:
         BuildSpec: devops/buildspec.yml
         Type: GITHUB
         Location: !Sub "https://github.com/${GitHubOwner}/${GitHubRepo}.git"
-        GitCloneDepth: 0
+        GitCloneDepth: 0  # T7 SKIPPED: docs site may need git history (see header note)
         ReportBuildStatus: true
       TimeoutInMinutes: 20
       Triggers:
@@ -88,11 +92,8 @@ Resources:
               Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED,PULL_REQUEST_REOPENED
             - Type: BASE_REF
               Pattern: !Sub "^refs/heads/${GitHubDevBranch}$"
-              ExcludeMatchedPattern: false       
-            - Type: HEAD_REF
-              Pattern: !Sub "^refs/heads/${GitHubProdBranch}$"
               ExcludeMatchedPattern: false
-  
+
   CodeBuildDevLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -103,6 +104,8 @@ Resources:
     Type: AWS::CodePipeline::Pipeline
     DependsOn: CodeBuildDev
     Properties:
+      PipelineType: V2                          # was unset (V1); now V2 for triggers
+      ExecutionMode: SUPERSEDED                 # preserve V1 "latest wins" behavior
       ArtifactStore:
         Type: S3
         Location: !Ref PipelineBucket
@@ -110,9 +113,18 @@ Resources:
           Id:
             Fn::ImportValue: "KMSPipelineKeyArn"
           Type: KMS
-      RestartExecutionOnUpdate: true
+      RestartExecutionOnUpdate: true            # dev: left as-is (low risk). Flip to false if unwanted.
       Name: !Join [ '-', !Split [ '.', !Sub "${PipelineName}-${GitHubDevBranch}" ]]
       RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/CodePipelineServiceRole"
+      # T3: explicit V2 push trigger on dev (replaces DetectChanges).
+      Triggers:
+        - ProviderType: CodeStarSourceConnection
+          GitConfiguration:
+            SourceActionName: Source
+            Push:
+              - Branches:
+                  Includes:
+                    - !Ref GitHubDevBranch
       Stages:
       - Name: Source
         Actions:
@@ -129,7 +141,8 @@ Resources:
             ConnectionArn: !Ref CodeStarConnectionArn
             FullRepositoryId: !Sub "${GitHubOwner}/${GitHubRepo}"
             BranchName: !Ref GitHubDevBranch
-            DetectChanges: true
+            DetectChanges: false                # T3: trigger driven by Triggers block
+            OutputArtifactFormat: CODE_ZIP      # T3: made explicit
           RunOrder: 1
       - Name: Build
         Actions:
@@ -240,6 +253,11 @@ Resources:
       ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/CodeBuildServiceRole"
       Artifacts:
           Type: NO_ARTIFACTS
+      # T5: source cache only - no PrivilegedMode here, so no Docker layer cache.
+      Cache:
+        Type: LOCAL
+        Modes:
+          - LOCAL_SOURCE_CACHE
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -255,11 +273,12 @@ Resources:
         BuildSpec: devops/buildspec.yml
         Type: GITHUB
         Location: !Sub "https://github.com/${GitHubOwner}/${GitHubRepo}.git"
-        GitCloneDepth: 0
+        GitCloneDepth: 0  # T7 SKIPPED: docs site may need git history (see header note)
         ReportBuildStatus: true
       TimeoutInMinutes: 20
       Triggers:
         Webhook: true
+        # Correct as-is: only dev -> main PRs are validated.
         FilterGroups:
           - - Type: EVENT
               Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED,PULL_REQUEST_REOPENED
@@ -280,6 +299,8 @@ Resources:
     Type: AWS::CodePipeline::Pipeline
     DependsOn: CodeBuildProd
     Properties:
+      PipelineType: V2                          # was unset (V1); now V2 for triggers
+      ExecutionMode: SUPERSEDED                 # preserve V1 "latest wins" behavior
       ArtifactStore:
         Type: S3
         Location: !Ref PipelineBucket
@@ -287,9 +308,18 @@ Resources:
           Id:
             Fn::ImportValue: "KMSPipelineKeyArn"
           Type: KMS
-      RestartExecutionOnUpdate: true
+      RestartExecutionOnUpdate: false           # T2: stack updates no longer auto-trigger a PROD deploy
       Name: !Join [ '-', !Split [ '.', !Sub "${PipelineName}-${GitHubProdBranch}" ]]
       RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/CodePipelineServiceRole"
+      # T3: explicit V2 push trigger on main (= the approved PR merged).
+      Triggers:
+        - ProviderType: CodeStarSourceConnection
+          GitConfiguration:
+            SourceActionName: Source
+            Push:
+              - Branches:
+                  Includes:
+                    - !Ref GitHubProdBranch
       Stages:
       - Name: Source
         Actions:
@@ -306,7 +336,8 @@ Resources:
             ConnectionArn: !Ref CodeStarConnectionArn
             FullRepositoryId: !Sub "${GitHubOwner}/${GitHubRepo}"
             BranchName: !Ref GitHubProdBranch
-            DetectChanges: true
+            DetectChanges: false                # T3: trigger driven by Triggers block
+            OutputArtifactFormat: CODE_ZIP      # T3: made explicit
           RunOrder: 1
       - Name: Build
         Actions:
@@ -467,4 +498,4 @@ Resources:
         - codepipeline-pipeline-pipeline-execution-superseded
       Targets: 
         - TargetType: SNS 
-          TargetAddress: !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:CodeStarNotifications-Devops"    
+          TargetAddress: !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:CodeStarNotifications-Devops"

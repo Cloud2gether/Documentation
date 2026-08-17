@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   secrets-manager:
-    SONAR_LOGIN: sonar:LOGIN
+    SONAR_TOKEN: sonar:TOKEN
     SONAR_HOST: sonar:HOST
     SONAR_ORGANIZATION: sonar:ORGANIZATION
   variables:
@@ -17,7 +17,11 @@ phases:
     commands:
       - echo "=== Installing Hugo Extended ==="
       - wget -q https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz
+<<<<<<< HEAD
       - tar -C /usr/local/bin -xzf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz hugo
+=======
+      - tar -xzf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz -C /usr/local/bin hugo
+>>>>>>> 21e447ab112a629f7a8a2a3bb2e795784ca75286
       - hugo version
 
       - echo "=== Installing Go (required for Hugo modules) ==="
@@ -38,20 +42,29 @@ phases:
       - unzip -q ./sonar-scanner-cli-8.1.0.6389-linux-x64.zip -d /usr/local/
       - ln -sf /usr/local/sonar-scanner-8.1.0.6389-linux-x64/bin/sonar-scanner /usr/local/bin/sonar-scanner
       - export PULLREQUEST_NUMBER=$(echo $CODEBUILD_WEBHOOK_TRIGGER | grep "pr/" | cut -d "/" -f2)
+      # SonarCloud requires the source/target branch names on a PR analysis
+      - export SOURCE_BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's|^refs/heads/||')
+      - export TARGET_BRANCH=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's|^refs/heads/||')
+      - echo "PR=$PULLREQUEST_NUMBER SOURCE_BRANCH=$SOURCE_BRANCH TARGET_BRANCH=$TARGET_BRANCH"
   build:
     commands:
       - echo "Executing build phase"
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC
       - hugo --gc --minify
       - echo $PULLREQUEST_NUMBER
-      - if [ -z "$PULLREQUEST_NUMBER" ] ;
-        then
-          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public;
-        else
-          sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public -Dsonar.pullrequest.key=$PULLREQUEST_NUMBER;
+      - |
+        SONAR_ARGS="-Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=$SONAR_HOST -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.sources=$CODEBUILD_SRC_DIR/$SOURCE_SRC/public"
+        if [ -n "$PULLREQUEST_NUMBER" ]; then
+          SONAR_ARGS="$SONAR_ARGS -Dsonar.pullrequest.key=$PULLREQUEST_NUMBER -Dsonar.pullrequest.branch=$SOURCE_BRANCH -Dsonar.pullrequest.base=${TARGET_BRANCH:-main}"
         fi
+        sonar-scanner $SONAR_ARGS
       - sleep 15
-      - curl -u $SONAR_LOGIN:"" https://sonarcloud.io/api/qualitygates/project_status?projectKey=$SONAR_PROJECTKEY >result.json
+      - |
+        QG_URL="$SONAR_HOST/api/qualitygates/project_status?projectKey=$SONAR_PROJECTKEY"
+        if [ -n "$PULLREQUEST_NUMBER" ]; then
+          QG_URL="$QG_URL&pullRequest=$PULLREQUEST_NUMBER"
+        fi
+        curl -u $SONAR_TOKEN:"" "$QG_URL" >result.json
       - cat result.json
 artifacts:
   discard-paths: no

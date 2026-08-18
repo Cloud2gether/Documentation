@@ -13,29 +13,34 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: 24
+      nodejs: 20
     commands:
       - echo "=== Installing Hugo Extended ==="
       - wget -q https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz
+<<<<<<< HEAD
+      - tar -C /usr/local/bin -xzf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz hugo
+=======
       - tar -xzf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz -C /usr/local/bin hugo
+>>>>>>> 21e447ab112a629f7a8a2a3bb2e795784ca75286
       - hugo version
 
       - echo "=== Installing Go (required for Hugo modules) ==="
       - wget -q https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz
       - tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz
-      - export PATH=$PATH:/usr/local/go/bin && go version
+      - ln -sf /usr/local/go/bin/go /usr/local/bin/go
+      - go version
 
       - echo "=== Installing PostCSS dependencies ==="
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && npm install
 
       - echo "=== Fetching Hugo modules (Docsy) ==="
-      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && export PATH=$PATH:/usr/local/go/bin && hugo mod get
+      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && hugo mod get
   pre_build:
     commands:
       - echo "Executing pre-build phase"
-      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-8.1.0.6389-linux-x64.zip
-      - unzip ./sonar-scanner-cli-8.1.0.6389-linux-x64.zip
-      - export PATH=$PATH:./sonar-scanner-8.1.0.6389-linux-x64/bin/
+      - wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-8.1.0.6389-linux-x64.zip
+      - unzip -q ./sonar-scanner-cli-8.1.0.6389-linux-x64.zip -d /usr/local/
+      - ln -sf /usr/local/sonar-scanner-8.1.0.6389-linux-x64/bin/sonar-scanner /usr/local/bin/sonar-scanner
       - export PULLREQUEST_NUMBER=$(echo $CODEBUILD_WEBHOOK_TRIGGER | grep "pr/" | cut -d "/" -f2)
       # SonarCloud requires the source/target branch names on a PR analysis
       - export SOURCE_BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's|^refs/heads/||')

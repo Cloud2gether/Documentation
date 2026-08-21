@@ -75,8 +75,8 @@
       {{ with $lang -}}
         {{ $persistKey = . -}}
       {{ else -}}
-        {{ with findRE "```(\\S+)" $element.content 1 -}}
-          {{ $persistKey = index . 1 -}}
+        {{ with findRESubmatch "```(\\S+)" $element.content 1 -}}
+          {{ $persistKey = index . 0 1 -}}
         {{ end -}}
       {{ end -}}
     {{ else if eq $persistKeyKind "header" -}}
@@ -163,7 +163,7 @@
         {{- if $isActive -}}
           {{ $activeSet = true }} show active
         {{- end }}"
-        id="{{ $entryid }}" role="tabpanel" aria-labelled-by="{{ $tabid }}" tabindex="{{ $tabPaneOrdinal }}">
+        id="{{ $entryid }}" role="tabpanel" aria-labelledby="{{ $tabid }}" tabindex="0">
         {{ if $text -}}
           {{ index . "content" -}}
         {{ else -}}

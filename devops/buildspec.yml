@@ -30,7 +30,7 @@ phases:
       - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && npm install
 
       - echo "=== Fetching Hugo modules (Docsy) ==="
-      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && hugo mod download
+      - cd $CODEBUILD_SRC_DIR/$SOURCE_SRC && hugo mod tidy
   pre_build:
     commands:
       - echo "Executing pre-build phase"

@@ -1,0 +1,170 @@
+/**
+ * Cloud2Gether Design Tokens
+ * Standardized for Cloud2Gether platforms.
+ * Supports both Dark and Light themes seamlessly.
+ */
+
+/* ==========================================================================
+   Dark Theme (Default)
+   ========================================================================== */
+:root,
+[data-bs-theme="dark"] {
+  /* Backgrounds */
+  --c2g-bg: rgb(9, 9, 11);               /* #09090b - Page background. Every section sits on this */
+  --c2g-bg-elevated: rgb(12, 11, 17);    /* #0c0b11 - Panels lifted off the page background */
+  --c2g-surface: rgb(15, 14, 20);        /* #0f0e14 - Base card surface */
+  --c2g-surface-2: rgb(22, 22, 27);      /* #16161b - Cards that need to read above base surface */
+  --c2g-surface-3: rgb(19, 19, 24);      /* #131318 - Toggles, table bodies, inset rows */
+  --c2g-surface-4: rgb(13, 13, 17);      /* #0d0d11 - Deepest panel, used behind code/screenshots */
+  --c2g-surface-5: rgb(11, 11, 14);      /* #0b0b0e - Near-black fill for large flat areas */
+
+  /* Borders */
+  --c2g-border: rgb(35, 35, 44);         /* #23232c - Default hairline */
+  --c2g-border-strong: rgb(41, 41, 51);  /* #292933 - Hairline that must stay visible over lighter surface */
+  --c2g-border-subtle: rgb(30, 30, 38);  /* #1e1e26 - Divider inside a card */
+  --c2g-border-faint: rgb(24, 24, 30);   /* #18181e - Barely-there separator */
+  --c2g-border-accent: rgb(89, 66, 158); /* #59429e - Purple-tinted border for active/branded chrome */
+  --c2g-border-neutral: rgb(64, 64, 76); /* #40404c - Non-branded inset */
+
+  /* Brand Colors */
+  --c2g-primary: rgb(122, 92, 255);        /* #7a5cff - Core brand purple */
+  --c2g-primary-action: rgb(110, 80, 243); /* #6e50f3 - Purple to use behind text (buttons, CTAs - 4.71:1) */
+  --c2g-primary-alt: rgb(138, 92, 246);    /* #8a5cf6 - Secondary purple for gradients/hover */
+  --c2g-primary-soft: rgb(154, 134, 255);  /* #9a86ff - Lighter purple for text and small marks on dark */
+  --c2g-primary-hub: rgb(138, 110, 255);   /* #8a6eff - Purple used by hub chrome */
+  --c2g-link: rgb(194, 178, 255);          /* #c2b2ff - Links and focus rings */
+
+  /* Text Colors */
+  --c2g-text: rgb(245, 245, 250);          /* #f5f5fa - Primary text */
+  --c2g-text-body: rgb(191, 193, 205);     /* #bfc1cd - Body copy */
+  --c2g-text-muted: rgb(161, 163, 178);    /* #a1a3b2 - Supporting copy, captions */
+  --c2g-text-faint: rgb(120, 122, 136);    /* #787a88 - Least prominent text */
+  --c2g-text-dim: rgb(140, 142, 155);      /* #8c8e9b - Step between muted and faint */
+
+  /* Semantic Colors */
+  --c2g-success: rgb(72, 199, 142);        /* #48c78e - Positive state */
+  --c2g-success-soft: rgb(146, 227, 183);  /* #92e3b7 - Positive state, lighter */
+  --c2g-success-border: rgb(34, 84, 61);   /* #22543d - Border of a positive card */
+  --c2g-success-bg: rgb(11, 17, 14);       /* #0b110e - Background of a positive card */
+  --c2g-on-success: rgb(9, 9, 11);         /* High-contrast text on --c2g-success */
+
+  --c2g-warning: rgb(245, 158, 11);        /* #f59e0b - Warning amber */
+  --c2g-warning-soft: rgb(251, 191, 36);   /* #fbbf24 - Warning text */
+  --c2g-warning-border: rgb(120, 53, 15);  /* #78350f - Border of a warning card */
+  --c2g-warning-bg: rgb(26, 20, 11);       /* #1a140b - Background of a warning card */
+
+  --c2g-danger: rgb(239, 68, 68);          /* #ef4444 - Negative state */
+  --c2g-danger-soft: rgb(239, 100, 100);   /* #ef6464 - Negative state, lighter */
+  --c2g-danger-border: rgb(84, 32, 38);    /* #542026 - Border of a negative card */
+  --c2g-danger-bg: rgb(17, 13, 14);        /* #110d0e - Background of a negative card */
+
+  /* Typography */
+  --c2g-font-heading: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --c2g-font-body: 'Mulish', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Layout */
+  --c2g-max-width: 1440px;
+  --c2g-gutter-mobile: 16px;
+  --c2g-gutter-desktop: 120px;
+
+  /* Motion */
+  --c2g-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Brand Gradients */
+  --c2g-gradient-new: linear-gradient(180deg, rgb(91, 129, 255) 0%, rgb(158, 62, 255) 100%);
+  --c2g-gradient-plans-ce: linear-gradient(144.44deg, rgb(193, 52, 216) 11.18%, rgb(59, 0, 227) 92.33%);
+  --c2g-ambient-opacity: 0.12;
+
+  /* Bootstrap Theme Overrides */
+  --bs-body-bg: var(--c2g-bg);
+  --bs-body-color: var(--c2g-text-body);
+  --bs-emphasis-color: var(--c2g-text);
+  --bs-secondary-color: var(--c2g-text-muted);
+  --bs-tertiary-color: var(--c2g-text-faint);
+  --bs-border-color: var(--c2g-border);
+  --bs-border-color-translucent: var(--c2g-border);
+  --bs-link-color: var(--c2g-link);
+  --bs-link-hover-color: #ffffff;
+  --bs-heading-color: var(--c2g-text);
+  --bs-table-color: var(--c2g-text-body);
+  --bs-table-bg: var(--c2g-surface-3);
+  --bs-table-border-color: var(--c2g-border-subtle);
+  --bs-table-hover-bg: var(--c2g-surface-2);
+  --bs-table-hover-color: var(--c2g-text);
+}
+
+/* ==========================================================================
+   Light Theme
+   ========================================================================== */
+[data-bs-theme="light"] {
+  /* Backgrounds */
+  --c2g-bg: #f8f9fc;
+  --c2g-bg-elevated: #ffffff;
+  --c2g-surface: #ffffff;
+  --c2g-surface-2: #f1f3f9;
+  --c2g-surface-3: #e8ecf4;
+  --c2g-surface-4: #181822; /* Code blocks stay high-contrast dark */
+  --c2g-surface-5: #edf0f7;
+
+  /* Borders */
+  --c2g-border: #e2e5f0;
+  --c2g-border-strong: #cbd2e1;
+  --c2g-border-subtle: #eaedf5;
+  --c2g-border-faint: #f1f3f9;
+  --c2g-border-accent: #7a5cff;
+  --c2g-border-neutral: #d1d5e5;
+
+  /* Brand Colors */
+  --c2g-primary: #6e50f3;
+  --c2g-primary-action: #6e50f3;
+  --c2g-primary-alt: #5939db;
+  --c2g-primary-soft: #5b3ae0;
+  --c2g-primary-hub: #6e50f3;
+  --c2g-link: #5b3ae0;
+
+  /* Text Colors (High Contrast >= 6:1 for WCAG AA/AAA) */
+  --c2g-text: #0f0e17;
+  --c2g-text-body: #2d2f39;
+  --c2g-text-muted: #5b6076;
+  --c2g-text-faint: #59607a;
+  --c2g-text-dim: #4b5168;
+
+  /* Semantic Colors */
+  --c2g-success: #059669;
+  --c2g-success-soft: #047857;
+  --c2g-success-border: #a7f3d0;
+  --c2g-success-bg: #f0fdf4;
+  --c2g-on-success: #ffffff;
+
+  --c2g-warning: #d97706;
+  --c2g-warning-soft: #b45309;
+  --c2g-warning-border: #fde68a;
+  --c2g-warning-bg: #fffbeb;
+
+  --c2g-danger: #dc2626;
+  --c2g-danger-soft: #b91c1c;
+  --c2g-danger-border: #fecaca;
+  --c2g-danger-bg: #fef2f2;
+
+  /* Brand Gradients */
+  --c2g-gradient-new: linear-gradient(180deg, #4f46e5 0%, #7c3aed 100%);
+  --c2g-gradient-plans-ce: linear-gradient(144.44deg, rgba(193, 52, 216, 0.3) 11.18%, rgba(59, 0, 227, 0.3) 92.33%);
+  --c2g-ambient-opacity: 0.06;
+
+  /* Bootstrap Theme Overrides */
+  --bs-body-bg: var(--c2g-bg);
+  --bs-body-color: var(--c2g-text-body);
+  --bs-emphasis-color: var(--c2g-text);
+  --bs-secondary-color: var(--c2g-text-muted);
+  --bs-tertiary-color: var(--c2g-text-faint);
+  --bs-border-color: var(--c2g-border);
+  --bs-border-color-translucent: var(--c2g-border);
+  --bs-link-color: var(--c2g-link);
+  --bs-link-hover-color: var(--c2g-primary-action);
+  --bs-heading-color: var(--c2g-text);
+  --bs-table-color: var(--c2g-text-body);
+  --bs-table-bg: var(--c2g-surface);
+  --bs-table-border-color: var(--c2g-border);
+  --bs-table-hover-bg: var(--c2g-surface-2);
+  --bs-table-hover-color: var(--c2g-text);
+}

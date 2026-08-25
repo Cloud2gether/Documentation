@@ -7,20 +7,20 @@ $primary-light: $c2g-primary-soft;    // Lighter purple
 $secondary: $c2g-text-muted;          // Muted text
 $success: $c2g-success;               // Positive green
 $info: $c2g-primary-soft;             // Soft purple info
-$warning: #f59e0b;                    // Warning amber
+$warning: $c2g-warning;               // Warning amber
 $danger: $c2g-danger;                 // Negative red
 
 // Accent colors
 $accent-green: $c2g-success;
 $accent-purple: $c2g-primary;
 
-// Dark background colors mapping
+// Base Bootstrap semantic colors (keep $light light for Bootstrap utilities like .bg-light)
 $dark: $c2g-bg;                       // Main dark background #09090b
 $dark-secondary: $c2g-bg-elevated;    // Elevated panels #0c0b11
 $dark-box: $c2g-surface;              // Base card surface #0f0e14
 $grey-300: $c2g-border;               // Hairline border #23232c
 $grey-600: $c2g-surface-2;            // Elevated card surface #16161b
-$light: $c2g-surface-2;
+$light: #f8f9fa;                      // Standard light surface for light utilities
 
 // Body & Content colors
 $body-bg: $c2g-bg;
@@ -46,7 +46,7 @@ $td-sidebar-border-color: $c2g-border;
 // Content Width & Gutters
 $content-max-width: 960px;
 
-// Shadows (Subtle deep shadows for dark interface)
+// Shadows
 $enable-shadows: true;
 $box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
 $box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.5), 0 1px 3px 0 rgba(0, 0, 0, 0.3);

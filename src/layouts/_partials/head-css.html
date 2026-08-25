@@ -2,6 +2,10 @@
 {{ $css := resources.Get $scssMain
       | toCSS (dict "enableSourceMap" (not hugo.IsProduction) "targetPath" "css/main.css") -}}
 
+{{ if eq .Site.Language.LanguageDirection "rtl" -}}
+  {{ $css = $css | resources.Copy (replace $scssMain "." ".rtl.") -}}
+{{ end -}}
+
 {{ if hugo.IsProduction -}}
   {{ $css = $css | minify | fingerprint -}}
   <link rel="preload" href="{{ $css.RelPermalink }}" as="style" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">

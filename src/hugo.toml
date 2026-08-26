@@ -46,6 +46,9 @@ pygmentsStyle = "tango"
   description = "Official documentation for Cloud2Gether - The Agentic DevOps Platform"
   copyright = "Cloud2Gether"
 
+  # Google Tag Manager
+  gtm_id = "GTM-PGBG88DP"
+
   # Repository configuration for "Edit this page" links
   github_repo = "https://github.com/cloud2gether/documentation"
   github_branch = "main"

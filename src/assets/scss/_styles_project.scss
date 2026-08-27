@@ -173,7 +173,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   position: relative;
   min-height: 100vh;
-  transition: background-color 0.2s var(--c2g-ease), color 0.2s var(--c2g-ease);
 
   // Ambient glow using Plans CE gradient (atmosphere, not a fill)
   &::before {
@@ -231,7 +230,6 @@ a {
   height: $navbar-height;
   padding: 0 1.5rem;
   z-index: 1030;
-  transition: background-color 0.2s var(--c2g-ease), border-color 0.2s var(--c2g-ease);
 
   .navbar-brand {
     display: flex;
@@ -360,7 +358,6 @@ a {
 .td-sidebar {
   background: var(--c2g-bg-elevated);
   border-right: 1px solid var(--c2g-border);
-  transition: background-color 0.2s var(--c2g-ease), border-color 0.2s var(--c2g-ease);
 
   .td-sidebar__inner {
     padding: 0;
@@ -940,7 +937,6 @@ nav.foldable-nav {
   padding: 4rem 0 2rem;
   position: relative;
   z-index: 1;
-  transition: background-color 0.2s var(--c2g-ease), border-color 0.2s var(--c2g-ease);
 
   a {
     color: var(--c2g-text-muted);

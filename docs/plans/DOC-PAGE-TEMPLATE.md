@@ -21,7 +21,7 @@ Brief intro (1–2 paragraphs): what this screen does and when to use it.
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, go to **Menu > Item**
-3. Or open: `https://app.cloud2gether.com/<route>`
+3. Or open: `https://auth.cloud2gether.com/auth/login/password/<route>`
 
 ## What you see
 

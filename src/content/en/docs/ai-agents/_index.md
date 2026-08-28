@@ -1,4 +1,4 @@
----
+﻿---
 title: "AI Agents"
 linkTitle: "AI Agents"
 weight: 4
@@ -16,7 +16,7 @@ Separately, the **Chat Agent** (C2G AI) can appear in the app layout as a conver
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, click **Agents**
-3. Or open: <a href="https://app.cloud2gether.com/agents" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/agents</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 The page title is **Agents**, with the subtitle: *Install and manage agents to unlock capabilities and insights across your cloud environment.*
 

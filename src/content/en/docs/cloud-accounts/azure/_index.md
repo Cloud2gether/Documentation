@@ -17,7 +17,7 @@ Before you begin, make sure you have:
 - Access to <a href="https://portal.azure.com" target="_blank" rel="noopener noreferrer">Azure Portal</a> with permissions to:
   - Register applications in **Microsoft Entra ID** (Azure AD)
   - Assign roles on the target **subscription** (requires Owner or User Access Administrator role)
-- A **Cloud2Gether account** — <a href="https://app.cloud2gether.com/signup" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
+- A **Cloud2Gether account** — <a href="https://auth.cloud2gether.com/register/profile" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
 
 ## Information You Will Need
 
@@ -161,7 +161,7 @@ If you want Cloud2Gether to analyze multiple subscriptions, repeat Step 3 for ea
 
 ## Step 5 — Connect in Cloud2Gether
 
-1. Log in to <a href="https://app.cloud2gether.com" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
+1. Log in to <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
 2. In the left sidebar, click **Cloud Accounts**
 3. Click the **Add Account** button
 4. Select **Azure** as the cloud provider

@@ -13,7 +13,7 @@ Before you begin, make sure you have:
 
 - An active **AWS account** with access to the <a href="https://console.aws.amazon.com/iam/" target="_blank" rel="noopener noreferrer">IAM Console</a>
 - Permissions to **create IAM users and/or roles** in your AWS account
-- A **Cloud2Gether account** — <a href="https://app.cloud2gether.com/signup" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
+- A **Cloud2Gether account** — <a href="https://auth.cloud2gether.com/register/profile" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
 
 ## Connection Methods
 

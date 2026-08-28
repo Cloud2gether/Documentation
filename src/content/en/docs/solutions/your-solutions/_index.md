@@ -1,4 +1,4 @@
----
+﻿---
 title: "Your Solutions"
 linkTitle: "Your Solutions"
 weight: 5
@@ -19,7 +19,7 @@ In the app the list page title is **Deploy Solution**, with subtitle: *Browse an
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Solutions** → **Your Solutions**
-3. Or open: <a href="https://app.cloud2gether.com/your-solutions" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/your-solutions</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 <!-- TODO: Add screenshot — /images/solutions/your-solutions-list.png -->
 

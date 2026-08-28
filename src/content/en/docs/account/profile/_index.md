@@ -1,4 +1,4 @@
----
+﻿---
 title: "User Profile"
 linkTitle: "User Profile"
 weight: 1
@@ -21,7 +21,7 @@ In the app:
 
 1. Sign in to Cloud2Gether
 2. Open your user menu / profile entry in the app header (as provided by the layout)
-3. Or open: <a href="https://app.cloud2gether.com/user/profile" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/user/profile</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 <!-- TODO: Add screenshot — /images/account/user-profile.png -->
 

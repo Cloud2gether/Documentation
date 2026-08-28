@@ -1,4 +1,4 @@
----
+﻿---
 title: "Alibaba"
 linkTitle: "Alibaba"
 weight: 5
@@ -17,7 +17,7 @@ Before you begin, make sure you have:
 - Access to the <a href="https://www.alibabacloud.com/" target="_blank" rel="noopener noreferrer">Alibaba Cloud console</a> with permission to:
   - View your **Account ID**
   - Create **AccessKeys** (preferably on a RAM user)
-- A **Cloud2Gether account** — <a href="https://app.cloud2gether.com/signup" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
+- A **Cloud2Gether account** — <a href="https://auth.cloud2gether.com/register/profile" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
 
 ## Information You Will Need
 
@@ -89,7 +89,7 @@ The **Access Key Secret** is shown only once. Store it securely. If you lose it,
 1. Sign in to Cloud2Gether
 2. In the left sidebar, open **Cloud Accounts**
 3. Click **Link account** → **Alibaba**
-4. Or open: <a href="https://app.cloud2gether.com/cloud-accounts/link-account/alibaba" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/cloud-accounts/link-account/alibaba</a>
+4. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 The page title is **Link new Alibaba cloud account**.
 

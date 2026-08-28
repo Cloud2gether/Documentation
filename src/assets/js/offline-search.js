@@ -200,7 +200,7 @@
       });
 
       if (typeof bootstrap !== 'undefined' && bootstrap.Popover) {
-        const popover = new bootstrap.Popover($targetSearchInput, {
+        const popover = new bootstrap.Popover($targetSearchInput[0], {
           content: $html[0],
           html: true,
           customClass: 'td-offline-search-results',

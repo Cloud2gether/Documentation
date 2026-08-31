@@ -1,4 +1,4 @@
----
+﻿---
 title: "Billing"
 linkTitle: "Billing"
 weight: 4
@@ -16,7 +16,7 @@ description: "Review your subscription, payment method, invoices, and cancel or 
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Company** → **Billing**
-3. Or open: <a href="https://app.cloud2gether.com/billing-subscription" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/billing-subscription</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 <!-- TODO: Add screenshot — /images/company/billing.png -->
 

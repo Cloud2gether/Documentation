@@ -1,4 +1,4 @@
----
+﻿---
 title: "Lock-In Analyzer"
 linkTitle: "Lock-In Analyzer"
 weight: 2
@@ -18,7 +18,7 @@ Continuously monitor selected cloud accounts, identify lock-in drivers, and use 
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Analysis** and click **Lock In Analyzer**
-3. Or open: <a href="https://app.cloud2gether.com/lock-in-analyzer" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/lock-in-analyzer</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 First visit shows the **Cloud Lock-In Analyzer** welcome screen. Activate monitoring when prompted, then continue to analysis.
 

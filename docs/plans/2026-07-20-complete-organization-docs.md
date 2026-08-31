@@ -15,7 +15,7 @@
 1. Front matter mínimo: `title`, `linkTitle`, `weight`, `description`
 2. Idioma: **inglês** (site atual é `en-us`)
 3. Tom: how-to do usuário final (não API interna)
-4. Links para o app: `https://app.cloud2gether.com/...` quando fizer sentido
+4. Links para o app: `https://auth.cloud2gether.com/auth/login/password/...` quando fizer sentido
 5. Screenshots: placeholder HTML comment `<!-- TODO: Add screenshot — /images/... -->` (coleta de imagens em lote na Fase 8)
 6. Após cada página: `cd Documentation/src && npm run build` (ou `npm run serve` para preview)
 7. Atualizar checklist em `ORGANIZATION-APP-DOCS-STATUS.md` (🟡→✅ ou adicionar ✅ nas ausentes) ao fechar cada fase
@@ -68,7 +68,7 @@ Brief intro (1–2 paragraphs): what this screen does and when to use it.
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, go to **Menu > Item**
-3. Or open: `https://app.cloud2gether.com/<route>`
+3. Or open: `https://auth.cloud2gether.com/auth/login/password/<route>`
 
 ## What you see
 

@@ -25,14 +25,14 @@ Whether you manage a single cloud provider or orchestrate across multiple enviro
 
 ## Get started
 
-1. [Sign up](https://app.cloud2gether.com/signup) or log in
+1. [Sign up](https://auth.cloud2gether.com/register/profile) or [log in](https://auth.cloud2gether.com/auth/login/password)
 2. Finish [organization registration](../getting-started/register/) if prompted
 3. Follow [Getting Started](../getting-started/) — Dashboard, Cloud Accounts, and Marketplace
 
 ## Links
 
 - Website: <a href="https://www.cloud2gether.com" target="_blank" rel="noopener noreferrer">www.cloud2gether.com</a>
-- App: <a href="https://app.cloud2gether.com" target="_blank" rel="noopener noreferrer">app.cloud2gether.com</a>
+- App: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">auth.cloud2gether.com</a>
 - Documentation home: [Docs](../)
 
 ## Related

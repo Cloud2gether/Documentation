@@ -1,4 +1,4 @@
----
+﻿---
 title: "Company Profile"
 linkTitle: "Profile"
 weight: 1
@@ -23,7 +23,7 @@ The app shows: *Only the user with the "Owner" role can change the Company Profi
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Company** → **Profile**
-3. Or open: <a href="https://app.cloud2gether.com/company-profile" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/company-profile</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 <!-- TODO: Add screenshot — /images/company/profile.png -->
 

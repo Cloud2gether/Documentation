@@ -1,4 +1,4 @@
----
+﻿---
 title: "Teams"
 linkTitle: "Teams"
 weight: 3
@@ -19,7 +19,7 @@ Subtitle: *Manage and organize teams across your company.*
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Company** → **Teams**
-3. Or open: <a href="https://app.cloud2gether.com/teams" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/teams</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 <!-- TODO: Add screenshot — /images/company/teams.png -->
 

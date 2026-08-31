@@ -1,4 +1,4 @@
----
+﻿---
 title: "Cloud Accounts"
 linkTitle: "Cloud Accounts"
 weight: 2
@@ -18,7 +18,7 @@ Cloud2Gether uses **read-only** access wherever possible — it does not create,
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, click **Cloud Accounts**
-3. Or open: <a href="https://app.cloud2gether.com/cloud-accounts" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/cloud-accounts</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 4. From the Dashboard, you can also use the **Cloud Accounts** first-step card
 
 <!-- TODO: Add screenshot — /images/cloud-accounts/list.png -->

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Plans"
 linkTitle: "Plans"
 weight: 5
@@ -18,7 +18,7 @@ Page title in the app: **Plans**
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Company** → **Plans**
-3. Or open: <a href="https://app.cloud2gether.com/plans" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/plans</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 4. From **Billing**, click **Change plan**
 5. From the Dashboard, use **Upgrade Plan** / **See plan details** when shown
 

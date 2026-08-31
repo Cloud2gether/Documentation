@@ -17,7 +17,7 @@ Before you begin, make sure you have:
 - Access to the <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud Console</a> with permissions to:
   - Create **service accounts** (requires `iam.serviceAccounts.create` permission)
   - Manage **IAM roles** on the project (requires `resourcemanager.projects.setIamPolicy` permission)
-- A **Cloud2Gether account** — <a href="https://app.cloud2gether.com/signup" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
+- A **Cloud2Gether account** — <a href="https://auth.cloud2gether.com/register/profile" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
 
 ## Information You Will Need
 
@@ -163,7 +163,7 @@ gcloud services enable cloudresourcemanager.googleapis.com \
 
 ## Step 5 — Connect in Cloud2Gether
 
-1. Log in to <a href="https://app.cloud2gether.com" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
+1. Log in to <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
 2. In the left sidebar, click **Cloud Accounts**
 3. Click the **Link account** (or **Add Account**) button
 4. Select **GCP** (Google Cloud Platform) as the cloud provider

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Expert Help"
 linkTitle: "Expert Help"
 weight: 9
@@ -19,7 +19,7 @@ Page title on the hub: **Service Hub**
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Expert Help** → **Requests**
-3. Or open: <a href="https://app.cloud2gether.com/service-hub" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/service-hub</a> (defaults to the Service Hub dashboard)
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a> (defaults to the Service Hub dashboard)
 
 <!-- TODO: Add screenshot — /images/expert-help/service-hub.png -->
 

@@ -40,7 +40,7 @@ The easiest way to create the required IAM role is using Cloud2Gether's CloudFor
 
 #### Step 1: Start in Cloud2Gether
 
-1. Log in to <a href="https://app.cloud2gether.com" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
+1. Log in to <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
 2. Navigate to **Cloud Accounts** → **Add Account** → **AWS**
 3. Enter an **account name**
 4. Select the **AWS region** where the CloudFormation stack will be created
@@ -135,7 +135,7 @@ The External ID provides an additional layer of security against the <a href="ht
 
 ### Step 1: Navigate to Cloud Accounts
 
-1. Log in to <a href="https://app.cloud2gether.com" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
+1. Log in to <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
 2. In the left sidebar, click **Cloud Accounts**
 3. Click the **Add Account** button
 4. Select **AWS** as the cloud provider

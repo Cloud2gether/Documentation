@@ -1,4 +1,4 @@
----
+﻿---
 title: "Dashboard"
 linkTitle: "Dashboard"
 weight: 1
@@ -9,14 +9,14 @@ The **Dashboard** is your home screen in Cloud2Gether. It summarizes your organi
 
 ## Prerequisites
 
-- An active Cloud2Gether account — <a href="https://app.cloud2gether.com/signup" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
+- An active Cloud2Gether account — <a href="https://auth.cloud2gether.com/register/profile" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
 - Permission to view the organization profile (users without access see a permission message on the profile card)
 
 ## How to access
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, click **Dashboard**
-3. Or open: <a href="https://app.cloud2gether.com/home" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/home</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 <!-- TODO: Add screenshot — /images/dashboard/home-overview.png -->
 

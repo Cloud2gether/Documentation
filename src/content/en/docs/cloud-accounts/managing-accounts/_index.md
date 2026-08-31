@@ -19,7 +19,7 @@ After you link a cloud account, use the account detail page to review connection
 3. In the accounts table, click **View Account** for the account you want to manage
 4. Use **Back to Accounts** at the top to return to the list
 
-Direct URL pattern: `https://app.cloud2gether.com/cloud-accounts/<account-id>/overview`
+Sign in to access: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 <!-- TODO: Add screenshot — /images/cloud-accounts/account-detail-header.png -->
 

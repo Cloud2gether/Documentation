@@ -1,4 +1,4 @@
----
+﻿---
 title: "Register"
 linkTitle: "Register"
 weight: 4
@@ -12,14 +12,14 @@ Outside the main authenticated layout (logo + company profile form).
 
 ## Prerequisites
 
-- A Cloud2Gether identity created via signup/login (<a href="https://app.cloud2gether.com/signup" target="_blank" rel="noopener noreferrer">sign up</a> / auth portal as used by your environment)
+- A Cloud2Gether identity created via signup/login (<a href="https://auth.cloud2gether.com/register/profile" target="_blank" rel="noopener noreferrer">sign up</a> / auth portal as used by your environment)
 - Access to the register flow when the app redirects you to finish organization setup
 
 ## How to access
 
 1. Sign up or sign in through the Cloud2Gether authentication experience
 2. When prompted to finish account creation, you are taken to the register page  
-   Or open: <a href="https://app.cloud2gether.com/register" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/register</a> (when available for your session)
+   Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a> (when available for your session)
 
 <!-- TODO: Add screenshot — /images/account/register.png -->
 

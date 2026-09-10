@@ -1,49 +1,48 @@
-{{ $cover := and
-    (.HasShortcode "blocks/cover")
-    (not .Site.Params.ui.navbar_translucent_over_cover_disable)
--}}
-{{ $baseURL := urls.Parse $.Site.Params.Baseurl -}}
-
-<nav class="td-navbar js-navbar-scroll
-            {{- if $cover }} td-navbar-cover {{- end }}">
-<div class="td-navbar-container container-fluid flex-column flex-md-row">
-  <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
-    {{- /**/ -}}
-    <span class="navbar-brand__logo navbar-logo">
-      {{- if ne .Site.Params.ui.navbar_logo false -}}
-        {{ with resources.Get "icons/logo.svg" -}}
-          {{ ( . | minify).Content | safeHTML -}}
-        {{ end -}}
-      {{ end -}}
+{{/* Navigation bar (Figma: 1440x64) - Clean Mode & 100% Accessible */ -}}
+<nav class="js-navbar-scroll td-navbar" data-bs-theme="dark" aria-label="Main Navigation">
+<div class="container-fluid td-navbar-container">
+  <a class="navbar-brand me-4" href="{{ .Site.Home.RelPermalink }}" aria-label="Cloud2Gether">
+    <span class="navbar-logo" aria-hidden="true">
+      {{ $logo := resources.Get "icons/logo.svg" }}
+      {{ with $logo }}
+        {{ .Content | safeHTML }}
+      {{ else }}
+        <img src="{{ "images/logo.svg" | relURL }}" alt="Cloud2Gether" width="146" height="32" />
+      {{ end }}
     </span>
-    {{- /**/ -}}
+    <span class="visually-hidden">Cloud2Gether</span>
   </a>
-  <div class="td-navbar-nav-scroll td-navbar-nav-scroll--indicator" id="main_navbar">
-    <div class="scroll-indicator scroll-left"></div>
-    <ul class="navbar-nav">
+  <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#main_navbar" aria-controls="main_navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="main_navbar">
+    <ul class="navbar-nav me-auto">
       {{ $p := . -}}
       {{ range .Site.Menus.main -}}
       <li class="nav-item">
         {{ $active := or ($p.IsMenuCurrent "main" .) ($p.HasMenuCurrent "main" .) -}}
         {{ $href := "" -}}
         {{ with .Page -}}
-          {{ $active = or $active ( $.IsDescendant .) -}}
+          {{ $active = or $active (eq .RelPermalink $p.RelPermalink) -}}
           {{ $href = .RelPermalink -}}
         {{ else -}}
           {{ $href = .URL | relLangURL -}}
         {{ end -}}
-        {{ $isExternal := ne $baseURL.Host (urls.Parse .URL).Host -}}
-        <a {{/**/ -}}
-          class="nav-link {{- if $active }} active {{- end }}" {{/**/ -}}
-          href="{{ $href }}"
-          {{- if $isExternal }} target="_blank" rel="noopener" {{- end -}}
-        >
-            {{- .Pre -}}
-            <span>{{ .Name }}</span>
-            {{- .Post -}}
+        {{ if eq .Identifier "docs" -}}
+          {{ $active = true -}}
+        {{ end -}}
+        {{ $isExternal := or (strings.HasPrefix .URL "http://") (strings.HasPrefix .URL "https://") -}}
+        {{ $openNewTab := and $isExternal (ne .Identifier "docs") (ne .Identifier "blog") -}}
+        {{ with .Params.target -}}
+          {{ $openNewTab = eq . "_blank" -}}
+        {{ end -}}
+        <a class="nav-link {{- if $active }} active {{- end }}" href="{{ if $isExternal }}{{ .URL }}{{ else }}{{ $href }}{{ end }}" {{- if $openNewTab }} target="_blank" rel="noopener noreferrer" {{- end }}>
+          <span>{{ .Name }}</span>
         </a>
       </li>
       {{ end -}}
+    </ul>
+    <ul class="navbar-nav ms-auto align-items-center">
       {{ if .Site.Params.versions -}}
       <li class="nav-item dropdown d-none d-lg-block td-navbar__version-menu">
         {{ partial "navbar-version-selector.html" . -}}
@@ -71,7 +70,6 @@
       </li>
       {{ end -}}
     </ul>
-    <div class="scroll-indicator scroll-right"></div>
   </div>
 </div>
 </nav>

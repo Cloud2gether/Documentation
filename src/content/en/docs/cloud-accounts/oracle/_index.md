@@ -1,4 +1,4 @@
----
+﻿---
 title: "Oracle"
 linkTitle: "Oracle"
 weight: 4
@@ -17,7 +17,7 @@ Before you begin, make sure you have:
 - Access to the <a href="https://cloud.oracle.com/" target="_blank" rel="noopener noreferrer">OCI Console</a> with permission to:
   - View your **User OCID** and **Tenancy OCID**
   - Create or upload an **API signing key** for your user
-- A **Cloud2Gether account** — <a href="https://app.cloud2gether.com/signup" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
+- A **Cloud2Gether account** — <a href="https://auth.cloud2gether.com/register/profile" target="_blank" rel="noopener noreferrer">sign up here</a> if you don't have one
 
 ## Information You Will Need
 
@@ -85,7 +85,7 @@ Prefer policies that grant inspect/read on compartments you care about, rather t
 1. Sign in to Cloud2Gether
 2. In the left sidebar, open **Cloud Accounts**
 3. Click **Link account** → **Oracle**
-4. Or open: <a href="https://app.cloud2gether.com/cloud-accounts/link-account/oracle" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/cloud-accounts/link-account/oracle</a>
+4. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 The page title is **Link new Oracle Cloud account**. The authentication method is **API Key Authentication**.
 

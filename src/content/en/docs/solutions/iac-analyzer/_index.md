@@ -1,4 +1,4 @@
----
+﻿---
 title: "IaC Analyzer"
 linkTitle: "IaC Analyzer"
 weight: 3
@@ -18,7 +18,7 @@ Use continuous monitoring to find unmanaged resources, coverage gaps, configurat
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Analysis** and click **Infrastructure**
-3. Or open: <a href="https://app.cloud2gether.com/iac-analyzer" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/iac-analyzer</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 First visit shows the **IaC Analysis** welcome screen. Activate analysis when prompted, then continue to the hub.
 

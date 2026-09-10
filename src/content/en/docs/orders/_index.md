@@ -1,4 +1,4 @@
----
+﻿---
 title: "Orders"
 linkTitle: "Orders"
 weight: 8
@@ -20,7 +20,7 @@ Subtitle: *Review your previous orders and their status.*
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, click **Orders**
-3. Or open: <a href="https://app.cloud2gether.com/your-orders" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/your-orders</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 
 <!-- TODO: Add screenshot — /images/orders/orders-list.png -->
 

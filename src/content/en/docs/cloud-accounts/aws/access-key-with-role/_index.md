@@ -174,7 +174,7 @@ For tighter security, you can restrict the trust to the specific IAM user instea
 
 ### Step 1: Navigate to Cloud Accounts
 
-1. Log in to <a href="https://app.cloud2gether.com" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
+1. Log in to <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">Cloud2Gether</a>
 2. In the left sidebar, click **Cloud Accounts**
 3. Click the **Add Account** button
 4. Select **AWS** as the cloud provider

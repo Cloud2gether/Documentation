@@ -1,4 +1,4 @@
----
+﻿---
 title: "Users"
 linkTitle: "Users"
 weight: 2
@@ -18,7 +18,7 @@ Subtitle in the app: *Manage users and their roles in your organization.*
 
 1. Sign in to Cloud2Gether
 2. In the left sidebar, expand **Company** → **Users**
-3. Or open: <a href="https://app.cloud2gether.com/users" target="_blank" rel="noopener noreferrer">https://app.cloud2gether.com/users</a>
+3. Or open: <a href="https://auth.cloud2gether.com/auth/login/password" target="_blank" rel="noopener noreferrer">https://auth.cloud2gether.com/auth/login/password</a>
 4. From the Dashboard, open **Company users** → view all
 
 <!-- TODO: Add screenshot — /images/company/users-list.png -->

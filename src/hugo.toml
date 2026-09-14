@@ -56,12 +56,13 @@ pygmentsStyle = "tango"
   # Enable Lunr.js offline search
   offlineSearch = true
 
-  # Navbar CTA button (Get Started)
+  # Navbar CTA button (Get started)
   navbar_cta_url = "https://auth.cloud2gether.com/register/profile"
-  navbar_cta_text = "Get Started"
+  navbar_cta_text = "Get started"
 
   # Navbar login link
   navbar_login_url = "https://auth.cloud2gether.com/auth/login/password"
+  navbar_login_text = "Sign in"
 
   # Social links for footer
   [params.social]
@@ -110,14 +111,14 @@ pygmentsStyle = "tango"
 # Menu configuration
 [menu]
   [[menu.main]]
-    identifier = "docs"
-    name = "Docs"
-    url = "/"
-    weight = 5
-  [[menu.main]]
     identifier = "blog"
     name = "Blog"
     url = "https://blog.cloud2gether.com"
+    weight = 5
+  [[menu.main]]
+    identifier = "docs"
+    name = "Docs"
+    url = "/"
     weight = 10
   [[menu.main]]
     identifier = "about"

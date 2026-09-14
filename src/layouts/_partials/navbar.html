@@ -36,7 +36,7 @@
         {{ with .Params.target -}}
           {{ $openNewTab = eq . "_blank" -}}
         {{ end -}}
-        <a class="nav-link {{- if $active }} active {{- end }}" href="{{ if $isExternal }}{{ .URL }}{{ else }}{{ $href }}{{ end }}" {{- if $openNewTab }} target="_blank" rel="noopener noreferrer" {{- end }}>
+        <a class="nav-link{{ if $active }} active{{ end }}" href="{{ if $isExternal }}{{ .URL }}{{ else }}{{ $href }}{{ end }}"{{ if $active }} aria-current="page"{{ end }}{{ if $openNewTab }} target="_blank" rel="noopener noreferrer"{{ end }}>
           <span>{{ .Name }}</span>
         </a>
       </li>
@@ -61,12 +61,12 @@
       {{ end -}}
       {{ with .Site.Params.navbar_login_url -}}
       <li class="nav-item d-flex align-items-center">
-        <a class="nav-login" href="{{ . }}">Log In</a>
+        <a class="nav-login" href="{{ . }}">{{ $.Site.Params.navbar_login_text | default "Sign in" }}</a>
       </li>
       {{ end -}}
       {{ with .Site.Params.navbar_cta_url -}}
       <li class="nav-item ms-md-2 d-flex align-items-center">
-        <a class="btn btn-cta" href="{{ . }}">{{ $.Site.Params.navbar_cta_text | default "Get Started" }}</a>
+        <a class="btn btn-cta" href="{{ . }}">{{ $.Site.Params.navbar_cta_text | default "Get started" }}</a>
       </li>
       {{ end -}}
     </ul>

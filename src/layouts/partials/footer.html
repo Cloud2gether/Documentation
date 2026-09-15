@@ -1,47 +1,56 @@
-<footer class="c2g-footer" aria-label="Site Footer">
-  <div class="c2g-footer__container">
-    <div class="c2g-footer__grid">
+<footer class="c2g-ft" aria-label="Site Footer">
+  <div class="c2g-ft__inner">
+    <div class="c2g-ft__brand">
+      <a class="c2g-ft__logo" href="https://www.cloud2gether.com" aria-label="Cloud2Gether">
+        <img src="{{ "images/c2g-horizontal.svg" | relURL }}" alt="Cloud2Gether" width="242" height="55" />
+      </a>
+      <p class="c2g-ft__tagline">
+        <span>The Cloud Management Platform.</span>
+        <span>Driven by AI. Expanded by Humans.</span>
+      </p>
+    </div>
+
+    <nav class="c2g-ft__cols" aria-label="Footer links">
       {{/* Product Column */}}
-      <div class="c2g-footer__col">
-        <h4 class="c2g-footer__heading">{{ if eq .Site.Language.Lang "pt" }}PRODUTO{{ else }}PRODUCT{{ end }}</h4>
-        <ul class="c2g-footer__links">
-          <li><a href="https://www.cloud2gether.com/#challenge">{{ if eq .Site.Language.Lang "pt" }}Por que a Cloud2Gether{{ else }}Why Cloud2Gether{{ end }}</a></li>
-          <li><a href="https://www.cloud2gether.com/#how">{{ if eq .Site.Language.Lang "pt" }}Como Funciona{{ else }}How It Works{{ end }}</a></li>
-          <li><a href="https://www.cloud2gether.com/#hubs">{{ if eq .Site.Language.Lang "pt" }}Plataforma{{ else }}Platform{{ end }}</a></li>
-          <li><a href="https://www.cloud2gether.com/#agents">{{ if eq .Site.Language.Lang "pt" }}Agentes de IA{{ else }}AI Agents{{ end }}</a></li>
-          <li><a href="https://www.cloud2gether.com/#personas">{{ if eq .Site.Language.Lang "pt" }}Casos de Uso{{ else }}Use Cases{{ end }}</a></li>
-          <li><a href="https://www.cloud2gether.com/#pricing">{{ if eq .Site.Language.Lang "pt" }}Preços{{ else }}Pricing{{ end }}</a></li>
-        </ul>
+      <div class="c2g-ft__col">
+        <span class="c2g-ft__colTitle">Product</span>
+        <a class="c2g-ft__link" href="https://www.cloud2gether.com/#challenge">Why Cloud2Gether</a>
+        <a class="c2g-ft__link" href="https://www.cloud2gether.com/#how">How It Works</a>
+        <a class="c2g-ft__link" href="https://www.cloud2gether.com/#hubs">Platform</a>
+        <a class="c2g-ft__link" href="https://www.cloud2gether.com/#agents">AI Agents</a>
+        <a class="c2g-ft__link" href="https://www.cloud2gether.com/#personas">Use Cases</a>
+        <a class="c2g-ft__link" href="https://www.cloud2gether.com/#pricing">Pricing</a>
       </div>
 
       {{/* Access Column */}}
-      <div class="c2g-footer__col">
-        <h4 class="c2g-footer__heading">{{ if eq .Site.Language.Lang "pt" }}ACESSO{{ else }}ACCESS{{ end }}</h4>
-        <ul class="c2g-footer__links">
-          <li><a href="https://auth.cloud2gether.com/auth/login/password">{{ if eq .Site.Language.Lang "pt" }}Comece Grátis / Entrar{{ else }}Start Free / Sign in{{ end }}</a></li>
-          <li><a href="https://www.cloud2gether.com/#contact">{{ if eq .Site.Language.Lang "pt" }}Agende uma Demonstração{{ else }}Book a Demo{{ end }}</a></li>
-        </ul>
+      <div class="c2g-ft__col">
+        <span class="c2g-ft__colTitle">Access</span>
+        <a class="c2g-ft__link" href="https://auth.cloud2gether.com">Start Free / Sign in</a>
+        <a class="c2g-ft__link" href="https://2b6n7z.share-eu1.hsforms.com/2YR_BsEMUQPaVm3yFuZ29mQ" target="_blank" rel="noopener noreferrer">Book a Demo</a>
       </div>
+    </nav>
 
-      {{/* Resources Column */}}
-      <div class="c2g-footer__col">
-        <h4 class="c2g-footer__heading">{{ if eq .Site.Language.Lang "pt" }}RECURSOS{{ else }}RESOURCES{{ end }}</h4>
-        <ul class="c2g-footer__links">
-          <li><a href="{{ .Site.Home.RelPermalink }}">Docs</a></li>
-          <li><a href="https://blog.cloud2gether.com">Blog</a></li>
-        </ul>
-      </div>
-    </div>
+    <div class="c2g-ft__bottom">
+      <span class="c2g-ft__copy">
+        &copy; {{ now.Year }} Cloud2Gether. All rights reserved.
+      </span>
 
-    <div class="c2g-footer__bottom">
-      <div class="c2g-footer__copyright">
-        &copy; {{ now.Year }} Cloud2Gether. {{ if eq .Site.Language.Lang "pt" }}Todos os direitos reservados.{{ else }}All rights reserved.{{ end }}
-      </div>
-      <div class="c2g-footer__social">
-        <a href="https://www.linkedin.com/company/cloud2gether" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </div>
+      <details class="c2g-lang c2g-lang--up">
+        <summary class="c2g-lang__btn" aria-label="Language: English">
+          <img class="c2g-lang__flag" src="{{ "images/flags/us.svg" | relURL }}" alt="" width="20" height="14" />
+          <svg class="c2g-lang__caret" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
+            <path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </summary>
+        <ul class="c2g-lang__menu" aria-label="Language">
+          <li>
+            <a class="c2g-lang__item is-active" href="/" hreflang="en" lang="en" aria-current="true">
+              <img class="c2g-lang__flag" src="{{ "images/flags/us.svg" | relURL }}" alt="" width="20" height="14" />
+              <span>English</span>
+            </a>
+          </li>
+        </ul>
+      </details>
     </div>
   </div>
 </footer>

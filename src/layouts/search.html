@@ -138,28 +138,99 @@
 
     statusEl.textContent = 'Found ' + results.length + ' result' + (results.length === 1 ? '' : 's') + ' for "' + query + '"';
 
+    var SECTION_LABELS = {
+      'docs': 'Docs',
+      'getting-started': 'Getting Started',
+      'cloud-accounts': 'Cloud Accounts',
+      'ai-agents': 'AI Agents',
+      'solutions': 'Solutions',
+      'integrations': 'Integrations',
+      'expert-help': 'Expert Help',
+      'company': 'Company',
+      'account': 'Account',
+      'about': 'About',
+      'aws': 'AWS',
+      'gcp': 'GCP',
+      'azure': 'Azure',
+      'alibaba': 'Alibaba Cloud',
+      'oracle': 'Oracle Cloud',
+      'iac-analyzer': 'IaC Analyzer',
+      'lockin-analyzer': 'Lock-In Analyzer',
+      'resource-catalog': 'Resource Catalog',
+      'costs-analyzer': 'Costs Analyzer',
+      'stack-evolution': 'Stack Evolution',
+      'resources-evolution': 'Resources Evolution',
+      'role-delegation': 'Role Delegation',
+      'access-key': 'Access Key',
+      'access-key-with-role': 'Access Key with Role',
+      'managing-accounts': 'Managing Accounts',
+      'job-request': 'Job Request',
+      'hire-an-expert': 'Hire an Expert',
+      'chat-agent': 'Chat Agent',
+      'iac-agent': 'IaC Agent',
+      'lockin-agent': 'Lock-In Agent',
+      'resource-agent': 'Resource Agent',
+      'github': 'GitHub',
+      'jira': 'Jira',
+      'slack': 'Slack',
+      'dashboard': 'Dashboard',
+      'profile': 'Profile',
+      'billing': 'Billing',
+      'plans': 'Plans',
+      'users': 'Users',
+      'overview': 'Overview',
+      'compare': 'Compare',
+      'executions': 'Sync Executions',
+      'available': 'Available',
+      'installed': 'Installed',
+      'register': 'Register',
+      'orders': 'Orders',
+    };
+
+    function formatBreadcrumbs(ref) {
+      if (!ref) return [];
+      var clean = ref.replace(/^\/+|\/+$/g, '');
+      if (!clean) return [];
+      var parts = clean.split('/').filter(function(p) { return p && p !== 'en' && p !== 'docs'; });
+      return parts.map(function(seg) {
+        var lower = seg.toLowerCase();
+        if (SECTION_LABELS[lower]) {
+          return SECTION_LABELS[lower];
+        }
+        return seg.replace(/[-_]+/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+      });
+    }
+
+    function createBreadcrumbsHtml(ref) {
+      var crumbs = formatBreadcrumbs(ref);
+      if (crumbs.length === 0) return '';
+      var html = '<div class="c2g-search-breadcrumbs mb-2">';
+      html += '<span class="c2g-search-breadcrumbs__badge">' + escapeHtml(crumbs[0]) + '</span>';
+      for (var i = 1; i < crumbs.length; i++) {
+        html += '<span class="c2g-search-breadcrumbs__separator">&rsaquo;</span>';
+        var isLast = (i === crumbs.length - 1);
+        html += '<span class="c2g-search-breadcrumbs__item' + (isLast ? ' c2g-search-breadcrumbs__item--current' : '') + '">' + escapeHtml(crumbs[i]) + '</span>';
+      }
+      html += '</div>';
+      return html;
+    }
+
     results.forEach(function(r) {
       var doc = docsMap.get(r.ref);
       if (!doc) return;
       var card = document.createElement('div');
-      card.className = 'c2g-search-card mb-3';
+      card.className = 'c2g-search-card';
 
-      var path = document.createElement('div');
-      path.className = 'c2g-search-card__path text-body-secondary small mb-1';
-      path.textContent = doc.ref;
+      var breadcrumbsHtml = createBreadcrumbsHtml(doc.ref);
+      var excerptHtml = doc.excerpt || doc.description
+        ? '<p class="c2g-search-card__excerpt">' + escapeHtml(doc.excerpt || doc.description) + '</p>'
+        : '';
 
-      var title = document.createElement('a');
-      title.className = 'c2g-search-card__title h5 d-block mb-1';
-      title.href = doc.ref;
-      title.textContent = doc.title;
+      card.innerHTML =
+        breadcrumbsHtml +
+        '<a class="c2g-search-card__title" href="' + escapeHtml(doc.ref) + '">' + escapeHtml(doc.title) + '</a>' +
+        excerptHtml;
 
-      var excerpt = document.createElement('p');
-      excerpt.className = 'c2g-search-card__excerpt text-body-secondary small mb-0';
-      excerpt.textContent = doc.excerpt || doc.description || '';
-
-      card.appendChild(path);
-      card.appendChild(title);
-      card.appendChild(excerpt);
       resultsContainer.appendChild(card);
     });
   }

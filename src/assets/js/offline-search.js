@@ -278,48 +278,10 @@
         }
       }
 
-      const $html = $('<div>');
-
-      const $closeBtn = $('<button>')
-        .attr('type', 'button')
-        .addClass('td-offline-search-results__close-button')
-        .attr('title', 'Close search')
-        .attr('aria-label', 'Close')
-        .html('<i class="fas fa-times" aria-hidden="true"></i>')
-        .on('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          $targetSearchInput.val('');
-          disposePopover($targetSearchInput);
-        });
-
-      const $header = $('<div>')
-        .addClass('td-offline-search-results__header')
-        .append(
-          $('<div>')
-            .addClass('d-flex align-items-center')
-            .append($('<span>').text('Documentation Results'))
-            .append(
-              results.length > 0
-                ? $('<span>').addClass('results-count-badge').text(results.length)
-                : null
-            )
-        )
-        .append($closeBtn);
-
-      $html.append($header);
-
-      const offset = $targetSearchInput.offset() || { top: 0 };
-      const $searchResultBody = $('<div>')
-        .addClass('td-offline-search-results__body')
-        .css({
-          maxHeight: `calc(100vh - ${offset.top - $(window).scrollTop() + 180}px)`,
-          overflowY: 'auto',
-        });
-      $html.append($searchResultBody);
+      const $html = $('<div>').addClass('td-offline-search-results__body');
 
       if (results.length === 0) {
-        $searchResultBody.append(
+        $html.append(
           $('<div>')
             .addClass('text-center py-4 px-3')
             .append($('<i class="fas fa-search fa-2x mb-2 text-body-secondary d-block"></i>'))
@@ -358,22 +320,8 @@
             );
           }
 
-          $searchResultBody.append($entry);
+          $html.append($entry);
         });
-
-        const $footer = $('<div>')
-          .addClass('td-offline-search-results__footer')
-          .append(
-            $('<span>')
-              .html('Press <kbd>ESC</kbd> to exit')
-          )
-          .append(
-            $('<a>')
-              .addClass('td-offline-search-results__all-link')
-              .attr('href', cleanBase + 'search/?q=' + encodeURIComponent(searchQuery))
-              .html('View all results <i class="fas fa-arrow-right ms-1"></i>')
-          );
-        $html.append($footer);
       }
 
       if (typeof bootstrap !== 'undefined' && bootstrap.Popover) {

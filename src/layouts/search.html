@@ -1,0 +1,243 @@
+{{ define "main" }}
+{{ $offlineSearchIndex := resources.Get "json/offline-search-index.json" | resources.ExecuteAsTemplate "offline-search-index.json" . -}}
+{{ if hugo.IsProduction -}}
+  {{ $offlineSearchIndex = $offlineSearchIndex | fingerprint "md5" -}}
+{{ end -}}
+<div class="c2g-search-page container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-9">
+      <div class="c2g-search-page__header mb-4">
+        <h1 class="c2g-search-page__title">Search Documentation</h1>
+        <p class="c2g-search-page__subtitle text-body-secondary">
+          Find guides, tutorials, architecture references, and platform documentation.
+        </p>
+      </div>
+
+      <div class="c2g-search-page__bar mb-4">
+        <form class="c2g-search-page__form" onsubmit="return false;">
+          <div class="home-search__wrapper">
+            <i class="fas fa-search home-search__icon"></i>
+            <input
+              type="search"
+              id="page-search-input"
+              class="home-search__input form-control"
+              placeholder="Search documentation..."
+              aria-label="Search documentation"
+              autocomplete="off"
+            />
+          </div>
+        </form>
+      </div>
+
+      <div id="search-status" class="c2g-search-page__status text-body-secondary mb-3"></div>
+
+      <div id="search-results-container" class="c2g-search-page__results"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const indexUrl = {{ $offlineSearchIndex.RelPermalink }};
+  const searchInput = document.getElementById('page-search-input');
+  const statusEl = document.getElementById('search-status');
+  const resultsContainer = document.getElementById('search-results-container');
+
+  let idx = null;
+  const docsMap = new Map();
+
+  // Load Lunr search index
+  fetch(indexUrl)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!Array.isArray(data) && data && typeof data === 'object') {
+        data = Object.values(data);
+      }
+      idx = lunr(function() {
+        this.ref('ref');
+        this.field('title', { boost: 5 });
+        this.field('categories', { boost: 3 });
+        this.field('tags', { boost: 3 });
+        this.field('description', { boost: 2 });
+        this.field('body');
+
+        data.forEach(function(doc) {
+          this.add(doc);
+          docsMap.set(doc.ref, doc);
+        }, this);
+      });
+
+      // Check initial URL param ?q=
+      var initialQuery = new URLSearchParams(window.location.search).get('q') || '';
+      if (initialQuery) {
+        searchInput.value = initialQuery;
+        executeSearch(initialQuery);
+      } else {
+        statusEl.textContent = 'Type a query above to search documentation.';
+      }
+    })
+    .catch(function(err) {
+      console.error('Failed to load search index:', err);
+      statusEl.textContent = 'Could not load search index. Please refresh the page.';
+    });
+
+  var debounceTimer = null;
+  searchInput.addEventListener('input', function(e) {
+    var q = e.target.value.trim();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var url = new URL(window.location);
+      if (q) {
+        url.searchParams.set('q', q);
+      } else {
+        url.searchParams.delete('q');
+      }
+      window.history.replaceState({}, '', url);
+      executeSearch(q);
+    }, 150);
+  });
+
+  function executeSearch(query) {
+    resultsContainer.innerHTML = '';
+    if (!query) {
+      statusEl.textContent = 'Type a query above to search documentation.';
+      return;
+    }
+    if (!idx) {
+      statusEl.textContent = 'Loading search index...';
+      return;
+    }
+
+    var results = [];
+    try {
+      results = idx.query(function(q) {
+        var tokens = lunr.tokenizer(query.toLowerCase());
+        tokens.forEach(function(token) {
+          var term = token.toString();
+          q.term(term, { boost: 100 });
+          q.term(term, {
+            wildcard: lunr.Query.wildcard.LEADING | lunr.Query.wildcard.TRAILING,
+            boost: 10
+          });
+          q.term(term, { editDistance: 2 });
+        });
+      });
+    } catch (e) {
+      try {
+        results = idx.search(query);
+      } catch (err) {
+        console.warn('Search query error:', err);
+        results = [];
+      }
+    }
+
+    if (results.length === 0) {
+      statusEl.innerHTML = 'No results found for "<strong>' + escapeHtml(query) + '</strong>"';
+      return;
+    }
+
+    statusEl.textContent = 'Found ' + results.length + ' result' + (results.length === 1 ? '' : 's') + ' for "' + query + '"';
+
+    var SECTION_LABELS = {
+      'docs': 'Docs',
+      'getting-started': 'Getting Started',
+      'cloud-accounts': 'Cloud Accounts',
+      'ai-agents': 'AI Agents',
+      'solutions': 'Solutions',
+      'integrations': 'Integrations',
+      'expert-help': 'Expert Help',
+      'company': 'Company',
+      'account': 'Account',
+      'about': 'About',
+      'aws': 'AWS',
+      'gcp': 'GCP',
+      'azure': 'Azure',
+      'alibaba': 'Alibaba Cloud',
+      'oracle': 'Oracle Cloud',
+      'iac-analyzer': 'IaC Analyzer',
+      'lockin-analyzer': 'Lock-In Analyzer',
+      'resource-catalog': 'Resource Catalog',
+      'costs-analyzer': 'Costs Analyzer',
+      'stack-evolution': 'Stack Evolution',
+      'resources-evolution': 'Resources Evolution',
+      'role-delegation': 'Role Delegation',
+      'access-key': 'Access Key',
+      'access-key-with-role': 'Access Key with Role',
+      'managing-accounts': 'Managing Accounts',
+      'job-request': 'Job Request',
+      'hire-an-expert': 'Hire an Expert',
+      'chat-agent': 'Chat Agent',
+      'iac-agent': 'IaC Agent',
+      'lockin-agent': 'Lock-In Agent',
+      'resource-agent': 'Resource Agent',
+      'github': 'GitHub',
+      'jira': 'Jira',
+      'slack': 'Slack',
+      'dashboard': 'Dashboard',
+      'profile': 'Profile',
+      'billing': 'Billing',
+      'plans': 'Plans',
+      'users': 'Users',
+      'overview': 'Overview',
+      'compare': 'Compare',
+      'executions': 'Sync Executions',
+      'available': 'Available',
+      'installed': 'Installed',
+      'register': 'Register',
+      'orders': 'Orders',
+    };
+
+    function formatBreadcrumbs(ref) {
+      if (!ref) return [];
+      var clean = ref.replace(/^\/+|\/+$/g, '');
+      if (!clean) return [];
+      var parts = clean.split('/').filter(function(p) { return p && p !== 'en' && p !== 'docs'; });
+      return parts.map(function(seg) {
+        var lower = seg.toLowerCase();
+        if (SECTION_LABELS[lower]) {
+          return SECTION_LABELS[lower];
+        }
+        return seg.replace(/[-_]+/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+      });
+    }
+
+    function createBreadcrumbsHtml(ref) {
+      var crumbs = formatBreadcrumbs(ref);
+      if (crumbs.length === 0) return '';
+      var html = '<div class="c2g-search-breadcrumbs mb-2">';
+      html += '<span class="c2g-search-breadcrumbs__badge">' + escapeHtml(crumbs[0]) + '</span>';
+      for (var i = 1; i < crumbs.length; i++) {
+        html += '<span class="c2g-search-breadcrumbs__separator">&rsaquo;</span>';
+        var isLast = (i === crumbs.length - 1);
+        html += '<span class="c2g-search-breadcrumbs__item' + (isLast ? ' c2g-search-breadcrumbs__item--current' : '') + '">' + escapeHtml(crumbs[i]) + '</span>';
+      }
+      html += '</div>';
+      return html;
+    }
+
+    results.forEach(function(r) {
+      var doc = docsMap.get(r.ref);
+      if (!doc) return;
+      var card = document.createElement('div');
+      card.className = 'c2g-search-card';
+
+      var breadcrumbsHtml = createBreadcrumbsHtml(doc.ref);
+      var excerptHtml = doc.excerpt || doc.description
+        ? '<p class="c2g-search-card__excerpt">' + escapeHtml(doc.excerpt || doc.description) + '</p>'
+        : '';
+
+      card.innerHTML =
+        breadcrumbsHtml +
+        '<a class="c2g-search-card__title" href="' + escapeHtml(doc.ref) + '">' + escapeHtml(doc.title) + '</a>' +
+        excerptHtml;
+
+      resultsContainer.appendChild(card);
+    });
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+})();
+</script>
+{{ end }}

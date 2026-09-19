@@ -4,41 +4,186 @@
   'use strict';
 
   $(document).ready(function () {
-    const $searchInput = $('.td-search input');
+    const $searchInput = $('.td-search input, .home-search input, input.td-search__input, input.home-search__input');
 
     if ($searchInput.length === 0) {
       return;
     }
 
+    function disposePopover($target) {
+      if (typeof bootstrap !== 'undefined' && bootstrap.Popover && $target && $target.length) {
+        const popover = bootstrap.Popover.getInstance($target[0]);
+        if (popover !== null) {
+          popover.dispose();
+        }
+      }
+    }
+
     //
-    // Register handler
+    // Register handlers
     //
 
-    $searchInput.on('change', (event) => {
-      render($(event.target));
-
-      // Hide keyboard on mobile browser
-      $searchInput.blur();
+    let debounceTimeout = null;
+    $searchInput.on('input', (event) => {
+      const $target = $(event.target);
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        render($target);
+      }, 150);
     });
 
-    // Prevent reloading page by enter key on sidebar search.
-    $searchInput.closest('form').on('submit', () => {
+    $searchInput.on('change', (event) => {
+      clearTimeout(debounceTimeout);
+      render($(event.target));
+    });
+
+    // Close on Escape key
+    $(document).on('keydown', (event) => {
+      if (event.key === 'Escape') {
+        $searchInput.each(function () {
+          disposePopover($(this));
+        });
+      }
+    });
+
+    // Close when clicking outside
+    $(document).on('pointerdown', (event) => {
+      const $clicked = $(event.target);
+      if (!$clicked.closest('.td-offline-search-results').length && !$clicked.closest($searchInput).length) {
+        $searchInput.each(function () {
+          disposePopover($(this));
+        });
+      }
+    });
+
+    // Handle search form submissions (e.g. on Enter key)
+    $('.td-sidebar__search, .home-search__form').on('submit', function (e) {
+      e.preventDefault();
+      const $input = $(this).find('input');
+      const q = $input.val().trim();
+      if (q) {
+        window.location.href = '/search/?q=' + encodeURIComponent(q);
+      }
       return false;
     });
 
     //
-    // Lunr
+    // Breadcrumb formatting helper
     //
+    const SECTION_LABELS = {
+      'docs': 'Docs',
+      'getting-started': 'Getting Started',
+      'cloud-accounts': 'Cloud Accounts',
+      'ai-agents': 'AI Agents',
+      'solutions': 'Solutions',
+      'integrations': 'Integrations',
+      'expert-help': 'Expert Help',
+      'company': 'Company',
+      'account': 'Account',
+      'about': 'About',
+      'aws': 'AWS',
+      'gcp': 'GCP',
+      'azure': 'Azure',
+      'alibaba': 'Alibaba Cloud',
+      'oracle': 'Oracle Cloud',
+      'iac-analyzer': 'IaC Analyzer',
+      'lockin-analyzer': 'Lock-In Analyzer',
+      'resource-catalog': 'Resource Catalog',
+      'costs-analyzer': 'Costs Analyzer',
+      'stack-evolution': 'Stack Evolution',
+      'resources-evolution': 'Resources Evolution',
+      'role-delegation': 'Role Delegation',
+      'access-key': 'Access Key',
+      'access-key-with-role': 'Access Key with Role',
+      'managing-accounts': 'Managing Accounts',
+      'job-request': 'Job Request',
+      'hire-an-expert': 'Hire an Expert',
+      'chat-agent': 'Chat Agent',
+      'iac-agent': 'IaC Agent',
+      'lockin-agent': 'Lock-In Agent',
+      'resource-agent': 'Resource Agent',
+      'github': 'GitHub',
+      'jira': 'Jira',
+      'slack': 'Slack',
+      'dashboard': 'Dashboard',
+      'profile': 'Profile',
+      'billing': 'Billing',
+      'plans': 'Plans',
+      'users': 'Users',
+      'overview': 'Overview',
+      'compare': 'Compare',
+      'executions': 'Sync Executions',
+      'available': 'Available',
+      'installed': 'Installed',
+      'register': 'Register',
+      'orders': 'Orders',
+    };
 
-    let idx = null; // Lunr index
-    const resultDetails = new Map(); // Will hold the data for the search results (titles and summaries)
-
-    const searchIndexUrl = $searchInput.data('offline-search-index-json-src');
-    if (!searchIndexUrl) {
-      return;
+    function formatBreadcrumbs(ref) {
+      if (!ref) return [];
+      const clean = ref.replace(/^\/+|\/+$/g, '');
+      if (!clean) return [];
+      const parts = clean.split('/').filter((p) => p && p !== 'en' && p !== 'docs');
+      return parts.map((seg) => {
+        const lower = seg.toLowerCase();
+        if (SECTION_LABELS[lower]) {
+          return SECTION_LABELS[lower];
+        }
+        return seg
+          .replace(/[-_]+/g, ' ')
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+      });
     }
 
-    // Set up for an Ajax call to request the JSON data file that is created by Hugo's build process
+    function createBreadcrumbElement(ref) {
+      const crumbs = formatBreadcrumbs(ref);
+      const $container = $('<div>').addClass('c2g-search-breadcrumbs');
+      if (crumbs.length === 0) return $container;
+
+      // Badge for root section
+      $container.append(
+        $('<span>').addClass('c2g-search-breadcrumbs__badge').text(crumbs[0])
+      );
+
+      // Remaining crumbs
+      for (let i = 1; i < crumbs.length; i++) {
+        $container.append(
+          $('<span>').addClass('c2g-search-breadcrumbs__separator').html('&rsaquo;')
+        );
+        const isLast = (i === crumbs.length - 1);
+        $container.append(
+          $('<span>')
+            .addClass('c2g-search-breadcrumbs__item' + (isLast ? ' c2g-search-breadcrumbs__item--current' : ''))
+            .text(crumbs[i])
+        );
+      }
+      return $container;
+    }
+
+    //
+    // Lunr setup
+    //
+
+    let idx = null;
+    const resultDetails = new Map();
+
+    let searchIndexUrl = null;
+    $searchInput.each(function () {
+      const url = $(this).data('offline-search-index-json-src');
+      if (url && !searchIndexUrl) {
+        searchIndexUrl = url;
+      }
+    });
+
+    if (!searchIndexUrl) {
+      const $anyWithSrc = $('[data-offline-search-index-json-src]').first();
+      if ($anyWithSrc.length) {
+        searchIndexUrl = $anyWithSrc.data('offline-search-index-json-src');
+      } else {
+        searchIndexUrl = '/offline-search-index.json';
+      }
+    }
+
     $.ajax({
       url: searchIndexUrl,
       dataType: 'json'
@@ -79,130 +224,112 @@
         });
       });
 
-      $searchInput.trigger('change');
+      // If an input already has text, render results immediately
+      $searchInput.each(function () {
+        if ($(this).val().trim()) {
+          render($(this));
+        }
+      });
     }).catch((err) => {
       console.warn('[Docsy] Offline search index could not be loaded:', err);
     });
 
     const render = ($targetSearchInput) => {
-      //
-      // Dispose existing popover
-      //
-
-      if (typeof bootstrap !== 'undefined' && bootstrap.Popover) {
-        let popover = bootstrap.Popover.getInstance($targetSearchInput[0]);
-        if (popover !== null) {
-          popover.dispose();
-        }
-      }
-
-      //
-      // Search
-      //
+      disposePopover($targetSearchInput);
 
       if (idx === null) {
         return;
       }
 
-      const searchQuery = $targetSearchInput.val();
+      const searchQuery = $targetSearchInput.val().trim();
       if (searchQuery === '') {
         return;
       }
 
-      const results = idx
-        .query((q) => {
-          const tokens = lunr.tokenizer(searchQuery.toLowerCase());
-          tokens.forEach((token) => {
-            const queryString = token.toString();
-            q.term(queryString, {
-              boost: 100,
-            });
-            q.term(queryString, {
-              wildcard:
-                lunr.Query.wildcard.LEADING | lunr.Query.wildcard.TRAILING,
-              boost: 10,
-            });
-            q.term(queryString, {
-              editDistance: 2,
-            });
-          });
-        })
-        .slice(0, $targetSearchInput.data('offline-search-max-results'));
+      const maxResults = $targetSearchInput.data('offline-search-max-results') || 10;
+      let results = [];
 
-      //
-      // Make result html
-      //
-
-      const $html = $('<div>');
-
-      $html.append(
-        $('<div>')
-          .css({
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '1em',
+      try {
+        results = idx
+          .query((q) => {
+            const tokens = lunr.tokenizer(searchQuery.toLowerCase());
+            tokens.forEach((token) => {
+              const queryString = token.toString();
+              q.term(queryString, {
+                boost: 100,
+              });
+              q.term(queryString, {
+                wildcard:
+                  lunr.Query.wildcard.LEADING | lunr.Query.wildcard.TRAILING,
+                boost: 10,
+              });
+              q.term(queryString, {
+                editDistance: 2,
+              });
+            });
           })
-          .append(
-            $('<span>').text('Search results').css({ fontWeight: 'bold' })
-          )
-          .append(
-            $('<span>').addClass('td-offline-search-results__close-button')
-          )
-      );
+          .slice(0, maxResults);
+      } catch (err) {
+        try {
+          results = idx.search(searchQuery).slice(0, maxResults);
+        } catch (e) {
+          console.warn('[Docsy] Search query error:', e);
+          results = [];
+        }
+      }
 
-      const $searchResultBody = $('<div>').css({
-        maxHeight: `calc(100vh - ${
-          $targetSearchInput.offset().top - $(window).scrollTop() + 180
-        }px)`,
-        overflowY: 'auto',
-      });
-      $html.append($searchResultBody);
+      const $html = $('<div>').addClass('td-offline-search-results__body');
 
       if (results.length === 0) {
-        $searchResultBody.append(
-          $('<p>').text(`No results found for query "${searchQuery}"`)
+        $html.append(
+          $('<div>')
+            .addClass('text-center py-4 px-3')
+            .append($('<i class="fas fa-search fa-2x mb-2 text-body-secondary d-block"></i>'))
+            .append(
+              $('<p>')
+                .addClass('text-body-secondary mb-0 small')
+                .text(`No results found for "${searchQuery}"`)
+            )
         );
       } else {
+        const baseHref = $targetSearchInput.data('offline-search-base-href') || '/';
+        const cleanBase = baseHref.endsWith('/') ? baseHref : baseHref + '/';
+
         results.forEach((r) => {
           const doc = resultDetails.get(r.ref);
           if (!doc) return;
-          const href =
-            $searchInput.data('offline-search-base-href') +
-            r.ref.replace(/^\//, '');
+          const href = cleanBase + r.ref.replace(/^\//, '');
 
-          const $entry = $('<div>').addClass('mt-4');
+          const $entry = $('<a>')
+            .addClass('td-offline-search-results__entry')
+            .attr('href', href);
 
-          $entry.append(
-            $('<small>').addClass('d-block text-body-secondary').text(r.ref)
-          );
+          $entry.append(createBreadcrumbElement(r.ref));
 
           $entry.append(
-            $('<a>')
-              .addClass('d-block')
-              .css({
-                fontSize: '1.2rem',
-              })
-              .attr('href', href)
+            $('<div>')
+              .addClass('td-offline-search-results__title')
               .text(doc.title)
           );
 
-          $entry.append($('<p>').text(doc.excerpt));
+          if (doc.excerpt) {
+            $entry.append(
+              $('<p>')
+                .addClass('td-offline-search-results__excerpt')
+                .text(doc.excerpt)
+            );
+          }
 
-          $searchResultBody.append($entry);
+          $html.append($entry);
         });
       }
-
-      $targetSearchInput.one('shown.bs.popover', () => {
-        $('.td-offline-search-results__close-button').on('click', () => {
-          $targetSearchInput.val('');
-          $targetSearchInput.trigger('change');
-        });
-      });
 
       if (typeof bootstrap !== 'undefined' && bootstrap.Popover) {
         const popover = new bootstrap.Popover($targetSearchInput[0], {
           content: $html[0],
           html: true,
+          sanitize: false,
+          trigger: 'manual',
           customClass: 'td-offline-search-results',
           placement: 'bottom',
         });

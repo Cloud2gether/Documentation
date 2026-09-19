@@ -2,16 +2,26 @@
 <div class="home-hero">
   <h1>Welcome to <span class="gradient-text">Cloud2Gether Docs</span></h1>
   <p class="home-subtitle">Find guides, references, and resources for the Agentic DevOps Platform.</p>
-  <div class="home-search">
-    <form action="/search/" method="get">
+  <div class="home-search td-search td-search--offline">
+    <form action="/search/" method="get" class="home-search__form">
       <div class="home-search__wrapper">
         <i class="fas fa-search home-search__icon"></i>
         <input
           type="search"
           name="q"
           placeholder="Search documentation..."
-          class="home-search__input"
+          class="home-search__input td-search__input form-control"
           aria-label="Search documentation"
+          autocomplete="off"
+          {{- if .Site.Params.offlineSearch }}
+          {{- $offlineSearchIndex := resources.Get "json/offline-search-index.json" | resources.ExecuteAsTemplate "offline-search-index.json" . -}}
+          {{- if hugo.IsProduction -}}
+            {{- $offlineSearchIndex = $offlineSearchIndex | fingerprint "md5" -}}
+          {{- end }}
+          data-offline-search-index-json-src="{{ $offlineSearchIndex.RelPermalink }}"
+          data-offline-search-base-href="/"
+          data-offline-search-max-results="{{ .Site.Params.offlineSearchMaxResults | default 10 }}"
+          {{- end }}
         />
       </div>
     </form>

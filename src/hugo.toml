@@ -55,7 +55,7 @@ pygmentsStyle = "tango"
 
   # Navbar CTA button (Get started)
   navbar_cta_url = "https://auth.cloud2gether.com/register/profile"
-  navbar_cta_text = "Get started"
+  navbar_cta_text = "Start Free"
 
   # Navbar login link
   navbar_login_url = "https://auth.cloud2gether.com/auth/login/password"
@@ -108,14 +108,14 @@ pygmentsStyle = "tango"
 # Menu configuration
 [menu]
   [[menu.main]]
-    identifier = "blog"
-    name = "Blog"
-    url = "https://www.cloud2gether.com/blog"
-    weight = 5
-  [[menu.main]]
     identifier = "docs"
     name = "Docs"
     url = "/"
+    weight = 5
+  [[menu.main]]
+    identifier = "blog"
+    name = "Blog"
+    url = "https://www.cloud2gether.com/blog"
     weight = 10
   [[menu.main]]
     identifier = "about"

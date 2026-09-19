@@ -1,75 +1,202 @@
-{{/* Navigation bar (Figma: 1440x64) - Clean Mode & 100% Accessible */ -}}
-<nav class="js-navbar-scroll td-navbar" data-bs-theme="dark" aria-label="Main Navigation">
-<div class="container-fluid td-navbar-container">
-  <a class="navbar-brand me-4" href="{{ .Site.Home.RelPermalink }}" aria-label="Cloud2Gether">
-    <span class="navbar-logo" aria-hidden="true">
-      {{ $logo := resources.Get "icons/logo.svg" }}
-      {{ with $logo }}
-        {{ .Content | safeHTML }}
-      {{ else }}
-        <img src="{{ "images/logo.svg" | relURL }}" alt="Cloud2Gether" width="146" height="32" />
-      {{ end }}
-    </span>
-    <span class="visually-hidden">Cloud2Gether</span>
-  </a>
-  <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#main_navbar" aria-controls="main_navbar" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="main_navbar">
-    <ul class="navbar-nav me-auto">
-      {{ $p := . -}}
-      {{ range .Site.Menus.main -}}
-      <li class="nav-item">
-        {{ $active := or ($p.IsMenuCurrent "main" .) ($p.HasMenuCurrent "main" .) -}}
-        {{ $href := "" -}}
-        {{ with .Page -}}
-          {{ $active = or $active (eq .RelPermalink $p.RelPermalink) -}}
-          {{ $href = .RelPermalink -}}
-        {{ else -}}
-          {{ $href = .URL | relLangURL -}}
-        {{ end -}}
-        {{ if eq .Identifier "docs" -}}
-          {{ $active = true -}}
-        {{ end -}}
-        {{ $isExternal := or (strings.HasPrefix .URL "http://") (strings.HasPrefix .URL "https://") -}}
-        {{ $openNewTab := and $isExternal (ne .Identifier "docs") (ne .Identifier "blog") -}}
-        {{ with .Params.target -}}
-          {{ $openNewTab = eq . "_blank" -}}
-        {{ end -}}
-        <a class="nav-link{{ if $active }} active{{ end }}" href="{{ if $isExternal }}{{ .URL }}{{ else }}{{ $href }}{{ end }}"{{ if $active }} aria-current="page"{{ end }}{{ if $openNewTab }} target="_blank" rel="noopener noreferrer"{{ end }}>
-          <span>{{ .Name }}</span>
+{{- $brandHref := "https://www.cloud2gether.com" -}}
+{{- $loginHref := .Site.Params.navbar_login_url | default "https://auth.cloud2gether.com" -}}
+{{- $loginLabel := .Site.Params.navbar_login_text | default "Sign In" -}}
+{{- $ctaHref := .Site.Params.navbar_cta_url | default "https://auth.cloud2gether.com" -}}
+{{- $ctaLabel := .Site.Params.navbar_cta_text | default "Start Free" -}}
+{{- $toggleLabel := "Toggle navigation menu" -}}
+{{- $mainLabel := "Main navigation" -}}
+{{- $langLabel := "Language" -}}
+{{- $darkMode := partialCached "dark-mode-config.html" "dark-mode-global" -}}
+
+<header class="c2g-hdr">
+  <div class="c2g-hdr__bar">
+    <a href="{{ $brandHref }}" class="c2g-hdr__brand" aria-label="Cloud2Gether">
+      <img src="{{ "images/c2g-horizontal.svg" | relURL }}" alt="Cloud2Gether" width="242" height="55" />
+    </a>
+
+    <nav class="c2g-hdr__desktop" aria-label="{{ $mainLabel }}">
+      {{- $p := . -}}
+      {{- range .Site.Menus.main -}}
+        {{- $isExternal := or (strings.HasPrefix .URL "http://") (strings.HasPrefix .URL "https://") -}}
+        {{- $href := "" -}}
+        {{- with .Page -}}
+          {{- $href = .RelPermalink -}}
+        {{- else -}}
+          {{- if eq .Identifier "docs" -}}
+            {{- $href = site.Home.RelPermalink -}}
+          {{- else -}}
+            {{- $href = .URL | relLangURL -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $active := false -}}
+        {{- if not $isExternal -}}
+          {{- if eq .Identifier "docs" -}}
+            {{- $active = true -}}
+          {{- else -}}
+            {{- $active = or ($p.IsMenuCurrent "main" .) ($p.HasMenuCurrent "main" .) -}}
+            {{- with .Page -}}
+              {{- $active = or $active (eq .RelPermalink $p.RelPermalink) -}}
+            {{- else -}}
+              {{- $active = or $active (eq ($href | strings.TrimSuffix "/") ($p.RelPermalink | strings.TrimSuffix "/")) -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $target := "" -}}
+        {{- with .Params.target -}}
+          {{- $target = . -}}
+        {{- else -}}
+          {{- if and $isExternal (ne .Identifier "docs") (ne .Identifier "blog") -}}
+            {{- $target = "_blank" -}}
+          {{- end -}}
+        {{- end -}}
+        <a
+          href="{{ if $isExternal }}{{ .URL }}{{ else }}{{ $href }}{{ end }}"
+          class="c2g-hdr__link{{ if $active }} is-active{{ end }}"
+          data-label="{{ .Name }}"
+          {{ if $active }}aria-current="page"{{ end }}
+          {{ if $target }}target="{{ $target }}" rel="noopener noreferrer"{{ end }}
+        >
+          {{ .Name }}
         </a>
-      </li>
-      {{ end -}}
-    </ul>
-    <ul class="navbar-nav ms-auto align-items-center">
-      {{ if .Site.Params.versions -}}
-      <li class="nav-item dropdown d-none d-lg-block td-navbar__version-menu">
-        {{ partial "navbar-version-selector.html" . -}}
-      </li>
-      {{ end -}}
-      {{ if (gt (len .Site.Home.Translations) 0) -}}
-      <li class="nav-item td-navbar__lang-menu">
-        {{ partial "navbar-lang-selector.html" . -}}
-      </li>
-      {{ end -}}
-      {{- $darkMode := partialCached "dark-mode-config.html" "dark-mode-global" -}}
+      {{- end -}}
+    </nav>
+
+    <div class="c2g-hdr__actions">
+      <details class="c2g-lang c2g-lang--down c2g-hdr__lang">
+        <summary class="c2g-lang__btn" aria-label="{{ $langLabel }}: English">
+          <img class="c2g-lang__flag" src="{{ "images/flags/us.svg" | relURL }}" alt="" width="20" height="14" />
+          <svg class="c2g-lang__caret" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
+            <path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </summary>
+        <ul class="c2g-lang__menu" aria-label="{{ $langLabel }}">
+          <li>
+            <a class="c2g-lang__item is-active" href="/" hreflang="en" lang="en" aria-current="true">
+              <img class="c2g-lang__flag" src="{{ "images/flags/us.svg" | relURL }}" alt="" width="20" height="14" />
+              <span>English</span>
+            </a>
+          </li>
+        </ul>
+      </details>
+
       {{ if $darkMode.showMenu -}}
-      <li class="nav-item td-navbar__light-dark-menu">
+      <div class="c2g-hdr__theme">
         {{ partial "theme-toggler" . }}
-      </li>
+      </div>
       {{ end -}}
-      {{ with .Site.Params.navbar_login_url -}}
-      <li class="nav-item d-flex align-items-center">
-        <a class="nav-login" href="{{ . }}">{{ $.Site.Params.navbar_login_text | default "Sign in" }}</a>
-      </li>
-      {{ end -}}
-      {{ with .Site.Params.navbar_cta_url -}}
-      <li class="nav-item ms-md-2 d-flex align-items-center">
-        <a class="btn btn-cta" href="{{ . }}">{{ $.Site.Params.navbar_cta_text | default "Get started" }}</a>
-      </li>
-      {{ end -}}
-    </ul>
+
+      <a href="{{ $loginHref }}" class="c2g-hdr__signin">{{ $loginLabel }}</a>
+      <a href="{{ $ctaHref }}" class="c2g-hdr__cta">{{ $ctaLabel }}</a>
+
+      <button
+        class="c2g-hdr__burger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="hdr-menu"
+        aria-label="{{ $toggleLabel }}"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
-</div>
-</nav>
+
+  <div id="hdr-menu" class="c2g-hdr__menu">
+    {{- $p := . -}}
+    {{- range .Site.Menus.main -}}
+      {{- $isExternal := or (strings.HasPrefix .URL "http://") (strings.HasPrefix .URL "https://") -}}
+      {{- $href := "" -}}
+      {{- with .Page -}}
+        {{- $href = .RelPermalink -}}
+      {{- else -}}
+        {{- if eq .Identifier "docs" -}}
+          {{- $href = site.Home.RelPermalink -}}
+        {{- else -}}
+          {{- $href = .URL | relLangURL -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $active := false -}}
+      {{- if not $isExternal -}}
+        {{- if eq .Identifier "docs" -}}
+          {{- $active = true -}}
+        {{- else -}}
+          {{- $active = or ($p.IsMenuCurrent "main" .) ($p.HasMenuCurrent "main" .) -}}
+          {{- with .Page -}}
+            {{- $active = or $active (eq .RelPermalink $p.RelPermalink) -}}
+          {{- else -}}
+            {{- $active = or $active (eq ($href | strings.TrimSuffix "/") ($p.RelPermalink | strings.TrimSuffix "/")) -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $target := "" -}}
+      {{- with .Params.target -}}
+        {{- $target = . -}}
+      {{- else -}}
+        {{- if and $isExternal (ne .Identifier "docs") (ne .Identifier "blog") -}}
+          {{- $target = "_blank" -}}
+        {{- end -}}
+      {{- end -}}
+      <a
+        href="{{ if $isExternal }}{{ .URL }}{{ else }}{{ $href }}{{ end }}"
+        class="c2g-hdr__menuLink{{ if $active }} is-active{{ end }}"
+        {{ if $active }}aria-current="page"{{ end }}
+        {{ if $target }}target="{{ $target }}" rel="noopener noreferrer"{{ end }}
+      >
+        {{ .Name }}
+      </a>
+    {{- end -}}
+
+    <a href="{{ $loginHref }}" class="c2g-hdr__menuLink">{{ $loginLabel }}</a>
+
+    <div class="c2g-hdr__menuLang" role="group" aria-label="{{ $langLabel }}">
+      <a class="c2g-hdr__menuLangLink is-active" href="/" hreflang="en" lang="en" aria-current="true">
+        <img src="{{ "images/flags/us.svg" | relURL }}" alt="" width="20" height="14" />
+        <span>English</span>
+      </a>
+    </div>
+
+    {{ if $darkMode.showMenu -}}
+    <div class="c2g-hdr__menuTheme">
+      {{ partial "theme-toggler" . }}
+    </div>
+    {{ end -}}
+  </div>
+</header>
+
+<script>
+(function() {
+  var burger = document.querySelector('.c2g-hdr__burger');
+  var menu = document.getElementById('hdr-menu');
+  document.querySelectorAll('#bd-theme').forEach(function(btn) {
+    btn.setAttribute('data-bs-display', 'static');
+  });
+  if (burger && menu) {
+    burger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = menu.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  }
+
+  document.addEventListener('pointerdown', function(e) {
+    document.querySelectorAll('details.c2g-lang[open]').forEach(function(el) {
+      if (!el.contains(e.target)) el.removeAttribute('open');
+    });
+    if (menu && menu.classList.contains('is-open') && !menu.contains(e.target) && (!burger || !burger.contains(e.target))) {
+      menu.classList.remove('is-open');
+      if (burger) burger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('details.c2g-lang[open]').forEach(function(el) {
+        el.removeAttribute('open');
+      });
+      if (menu && menu.classList.contains('is-open')) {
+        menu.classList.remove('is-open');
+        if (burger) burger.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+})();
+</script>
